@@ -1,0 +1,205 @@
+@use 'variables' as var;
+
+$inputBorder: 1px solid lightgray;
+$inputValidBorder: 1px solid var.$primaryBgColor;
+$inputInvalidBorder: 1px solid rgb(221, 17, 17);
+
+$submitBorder: rgba(224, 224, 224, 1);
+$submitBgColor: rgb(59, 45, 45);
+$submitHoverColor: linear-gradient(52deg, rgba(69,98,162,1) 0%, rgba(58,86,186,1) 33%, rgba(17,172,221,1) 100%);
+
+$sentMessageSize: 50px;
+$sentMessageColor: var.$colorPrimary;
+
+body{
+    background: var.$gradientBgColor;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+/* Stile corpo principale - posizionamento del form */
+
+div#contactsWrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-height: 937px;
+    height: 100%;
+}
+div#contactsBg {
+    margin: 10px auto;
+    border: none;
+    border-radius: 5px;
+    width: 50%;
+    max-width: 600px;
+    padding: 10px 80px;
+    max-height: 937px;
+    background-color: var.$secondaryBgColor;
+
+    h1#formSentMessage {
+        color: $sentMessageColor;
+        font-size: $sentMessageSize;
+        text-align: center;
+    }
+}
+/* Titolo della pagina */
+h2#title {
+    text-align: center;
+    font-size: 40px;
+    margin-top: 0px;
+    color: var.$colorPrimary;
+    margin-bottom: 18px;
+}
+/* Stile Form */
+form#contactForm {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding: 30px 20px;
+    background-color: var.$secondaryBgColor;
+    
+    /* Stile input di testo e label */
+    div#name {
+        display: flex;
+        justify-content: space-between;
+
+        input#fname, input#lname {
+            width: calc((100% - 80px) / 2);
+            padding: 10px;
+            font-size: 18px;
+            border: $inputBorder;
+            transition: border 0.2s;
+            outline: none;
+
+            color: var.$colorSecondary;
+            background-color: var.$secondaryBgColor;
+        
+            &:focus {
+                border: $inputValidBorder; 
+            }
+            &:valid {
+                border: $inputValidBorder;
+            }
+            &:invalid:not(:placeholder-shown) {
+                border: $inputInvalidBorder;
+            }
+        }
+    }
+    input, textarea, select {
+        padding: 10px;
+        font-size: 18px;
+        margin-bottom: 30px;
+        border: $inputBorder;
+        outline: none;
+        transition: border 0.2s;
+
+        color: var.$colorSecondary;
+        background-color: var.$secondaryBgColor;
+
+        &:focus {
+            border: $inputValidBorder;
+        }
+        &:valid:not(select) {
+            border: $inputValidBorder;
+        }
+        &:invalid:not(:placeholder-shown) {
+            border: $inputInvalidBorder;
+        }
+    }
+    label, div#name > label {
+        margin-bottom: 2px;
+        color: var.$colorSecondary;
+    }
+    /* Stile input del messaggio */
+    textarea {
+        height: 105px;
+        resize: none;
+        overflow: auto;
+        &.valid {
+            border: $inputValidBorder;
+        }
+        &.invalid {
+            border: $inputInvalidBorder;
+        }
+    }
+    /* Stile bottone di invio */
+    button#submit {
+        align-self: center;
+        width: 100%;
+        height: 50px;
+        font-size: 18px;
+        justify-self: center;
+        border: none;
+        border-radius: 50px;
+        color: var.$colorTertiary; 
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        background: $submitBgColor;
+        transition: border, background 2s, color 2s, text-shadow 2s, opacity 2s; 
+        border: 2px solid;
+        border-color: $submitBorder;
+        
+        &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: $submitHoverColor;
+            opacity: 0;
+            transition: opacity 0.5s;
+            z-index: 1;
+        }
+        &:hover { 
+            > {
+                span#buttonText {
+                    z-index: 2;
+                    position: relative;
+                    color: var.$colorTertiary; 
+                }
+            }
+            &::before {
+                opacity: 1;
+                color: var.$secondaryBgColor; 
+            } 
+        }
+    }
+}
+
+/* Stile Messaggi di Errore */
+.error {
+    border: $inputInvalidBorder !important;
+}
+
+@media screen and (max-width: 920px) {
+    div#contactsBg h1#formSentMessage {
+        font-size: 30px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    h2#title {
+        font-size: 20px;
+    }
+    div#name {
+        flex-direction: column;
+        input#lname, input#fname {
+            width: 100% !important;
+        }
+    }
+}
+
+@media screen and (max-width: 650px) {
+    div#contactsBg {
+        padding: 10px 0;
+    }  
+}
+@media screen and (max-width: 375px) {
+    div#contactsBg h1#formSentMessage {
+        font-size: 20px;
+    }
+}

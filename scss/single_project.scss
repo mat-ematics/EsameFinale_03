@@ -1,0 +1,67 @@
+@use 'variables' as var;
+
+/* Stile del main */
+main {
+    position: relative;
+    align-items: stretch;
+}
+/* Stile immagine progetto principale */
+div.preview {
+    position: relative;
+    overflow: hidden;
+    img {
+        height: 500px;
+        width: 100%;
+        transition: all 0.8s ease;
+    }
+}
+/* Stile overlay del progetto principale */
+div.overlay {
+    position: absolute;
+    top: 0;
+    z-index: 21;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.8s ease;
+    opacity: 0;
+    background-color: rgba(128, 128, 128, 0.315);
+    &:hover {
+        opacity: 1;
+        ~ {
+            img {
+                filter: blur(3px);
+                transform: scaleX(1.01);
+            }
+        }
+    }
+}
+/* Stile del bottone di visita progetto  */
+button#visitProject {
+    font-size: 20px;
+    font-weight: bold;
+    background: none;
+    border: white 2px solid;
+    padding: 10px;
+    border-radius: 50px;
+    width: 200px;
+    cursor: pointer;
+    background-color: black;
+    color: white;
+}
+
+/* Stile descrizione del progetto */
+div.projectInfo {
+    padding: 0px 20px;
+    color: white;
+    h1 {
+        font-size: 50px;
+    }
+    p {
+        font-size: 20px;
+    }
+}
+
+

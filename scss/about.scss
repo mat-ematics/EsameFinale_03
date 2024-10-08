@@ -1,0 +1,267 @@
+@use 'variables' as var;
+@use 'sass:map';
+
+/* Variabili Immagine Main */
+$mainImageSize: 500px;
+
+/* Variabili Barre */
+$usageBar: #71aaeb;
+$usageBarComp: gainsboro;
+$langCircleDiameter: 140px;
+$bars: (
+    "html": 100%,
+    "css": 100%,
+    "sass": 100%,
+    "php": 100%,
+    "javascript": 20%,
+    "figma": 50%
+);
+
+/* Stile primopiano principale Main */
+main { 
+    box-shadow: var.$mainBoxShadow;
+}
+div#columnWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 0px 0px;
+    width: 100%;
+    margin-top: 0px;
+}
+div.mainColumns {
+    width: 100%;
+    margin: 50px;
+}
+/* Stile testo laterale */
+div#title {
+    font-size: 40px;
+    color: var.$colorTertiary;
+    
+    h1 {
+        display: flex;
+        flex-direction: column;
+        margin: 0px;
+    }
+    
+    p {
+        font-family: var.$fontPrimary;
+        margin-top: 50px;
+        font-size: 20px;
+        font-weight: bold;
+    }
+}
+/* Stile immagine */
+div#image {
+    display: flex;
+    align-items: center;
+    justify-content:space-evenly;
+    img {
+        height: $mainImageSize;
+        width: $mainImageSize;
+    }
+}
+
+/* Stile parte inferiore */
+div#lowerHalf {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 10px 20px;
+}
+
+/* Stile barre dei linguaggi */
+div#langCards {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 50%;
+    margin-left: 0px;
+    height: 1000px;
+    
+    div.lang {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        overflow: hidden;
+    }
+}
+/* Stile cerchi */
+div.hexagon {
+    background-color: var.$primaryBgColor;
+    width: $langCircleDiameter;
+    height: $langCircleDiameter;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+/* Testo e icona linguaggio e strumento */
+p.hexText {
+    color: var.$colorTertiary;
+    font-weight: bold;
+    font-size: 20px;
+    margin: 0;
+    font-family: var.$fontPrimary;
+    text-align: center;
+    z-index: 3;
+}
+/* Barre di utilizzo */
+div.useBar {
+    height: 100%;
+    width: calc(100% - $langCircleDiameter);
+    display: flex;
+    align-items: center;
+}
+div.blueBar {
+    height: 80px;
+    width: 100%;
+    background-color: $usageBar;
+    z-index: -3;
+}
+div.grayBar {
+    height: 80px;
+    width: 100%;
+    background-color: $usageBarComp;
+}
+@each $lang, $percentage in $bars {
+    div.bluebar.#{$lang} {
+        width: $percentage;
+    }
+    div.grayBar.#{$lang} {
+        width: 100% - $percentage;
+    }
+}
+
+/* Caratteristiche dei miei siti */
+div#indepthMe {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    /* Stile titolo */
+    h1 {
+        font-size: 50px;
+        font-weight: bold;
+        color: var.$colorPrimary;
+        margin-left: 20px;
+        text-align: center;
+    }
+}
+/* Stile icone */
+div#icons {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    width: 100%;
+    height: 100%;
+}
+div.iconRow{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 100%;
+}
+div.icon {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    width: 20%;
+    align-items: center;
+
+    i {
+        color: var.$colorPrimary;
+        font-size: 7em;
+    }
+    /* Stile sottotitoli icone */
+    p {
+        font-family: var.$fontPrimary;
+        color: var.$colorPrimary;
+        font-weight: bold;
+        font-size: 30px;
+    }
+}
+
+@media screen and (max-width: 1020px) {
+    div#columnWrapper {
+        flex-direction: column;
+    }
+    div#title {
+        text-align: center;
+    }
+}
+
+@media screen and (max-width: 750px) {
+    div#lowerHalf {
+        flex-direction: column-reverse;
+        align-items: center;
+    }
+    div#langCards, div#indepthMe {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    div#image img {
+        height: 350px;
+        width: 350px;
+    }
+
+    div#title {
+        h1 {
+            font-size: 30px;
+        }
+        p {
+            font-size: 15px;
+        }
+    }
+
+    div#indepthMe {
+        h1 {
+            font-size: 25px;
+        }
+    }
+
+    div.icon {
+        i {
+            font-size: 3em;
+        }
+
+        p {
+            font-size: 15px;
+        }
+    }
+
+    div.hexagon {
+        width: calc($langCircleDiameter / 2);
+        height: calc($langCircleDiameter / 2);
+        p.hexText {
+            font-size: 10px;
+        }
+        i {
+            font-size: 3em;
+        }
+    }
+}
+
+@media screen and (max-width: 450px) {
+    div#image {
+        img {
+            width: 200px;
+            height: 200px;
+        }
+    }
+}
+
+@media screen and (max-width: 300px) {
+    div#image {
+        img {
+            width: 150px;
+            height: 150px;
+        }
+    }
+}

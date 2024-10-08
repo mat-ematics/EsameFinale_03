@@ -1,0 +1,328 @@
+{
+    "header" : {
+        "logo" : { 
+            "image" : "Matt.devs",
+            "link" : "index.php"
+            },
+        "navbar" : {
+            "Home": "index.php",
+            "Services": "services.php",
+            "Projects": "projects.php",
+            "About": "about.php",
+            "Contacts": "contacts.php"
+        }
+    },
+
+    "footer": {
+        "icon_style": "fa-2x",
+        "socials": {
+            "instagram": {
+                "link": "https://www.instagram.com",
+                "icon": "instagram",
+                "title": "Instagram"
+            },
+            "facebook": {
+                "link": "https://www.facebook.com",
+                "icon": "facebook",
+                "title": "Facebook"
+            },
+            "youtube": {
+                "link": "https://www.youtube.com",
+                "icon": "youtube",
+                "title": "Youtube"
+            },
+            "linkedin": {
+                "link": "https://www.linkedin.com",
+                "icon": "linkedin",
+                "title": "LinkedIn"
+            },
+            "twitter": {
+                "link": "https://www.twitter.com",
+                "icon": "twitter",
+                "title": "Twitter"
+            }
+        }
+    },
+
+    "index" : {
+        "page_title" : "Home",
+        "style_sheet": "index.min.css",
+        "main" : {
+            "title": [
+                "I'm Matt",
+                "a Hard Worker"
+            ],
+            "subtitle": [
+                "Certified Full Stack Developer"
+            ],
+            "logo": {
+                "image": "C.devs",
+                "id": "logo"
+            },
+            "button_down": {
+                "location": "#workSection",
+                "content": {
+                    "text": "Works",
+                    "icon": {
+                        "symbol": "fa-arrow-down",
+                        "style": "fa-solid"
+                    }
+                }
+            }
+        },
+        "work_section": {
+            "section_title": "Recent Projects",
+            "project_count": 4
+        }
+    },
+
+    "projects": {
+        "page_title": "Projects",
+        "style_sheet": "projects.min.css",
+        "bubbles": 20,
+        "project_list": {
+            "project_1": {
+                "project_id": "work_1",
+                "image": {
+                    "link": "https://pmstudycircle.com/wp-content/uploads/2022/12/project-plan-examples.png",
+                    "alt_text": "Image of the Project",
+                    "title": "Work 1"
+                },
+                "project_title": "Work 1",
+                "project_summary": "A short summary of the Project",
+                "project_description_short": "Incididunt ea sint occaecat reprehenderit do in officia pariatur enim. Ex aute do eu id velit pariatur velit reprehenderit incididunt irure elit occaecat veniam. Duis commodo esse in consectetur duis pariatur aliqua dolor irure reprehenderit laboris commodo. Irure occaecat culpa anim sit magna deserunt anim sunt velit.",
+                "project_description_long": "Voluptate id nisi cupidatat esse dolor culpa est ut proident incididunt. Culpa nostrud cupidatat eu ea id aliqua aliqua commodo quis cupidatat enim Lorem. Duis quis id est veniam ea nostrud ipsum aliqua aliqua amet velit. Laboris eu sunt reprehenderit officia velit deserunt sint cupidatat. Reprehenderit in aliqua adipisicing pariatur aute in aliqua pariatur ipsum elit pariatur ex ad. Aliqua sunt fugiat veniam labore.",
+                "langs": "Javascript, Ruby",
+                "project_date": "20/04/2024"          
+            },
+            "project_2": {
+                "project_id": "work_2",
+                "image": {
+                    "link": "https://media.licdn.com/dms/image/D4D12AQErV5S_buj95w/article-cover_image-shrink_600_2000/0/1662363673907?e=2147483647&v=beta&t=FLqEHqQ_zKwj_8qH6Thrac6b2KhPN9yLjxHf0bOxw1A",
+                    "alt_text": "Image of the Project",
+                    "title": "Work 2"
+                },
+                "project_title": "Work 2",
+                "project_summary": "A short summary of the Project",
+                "project_description_short": "Id amet et quis duis Lorem tempor consequat do amet incididunt. Laboris in eiusmod anim cillum culpa voluptate irure sint. Cupidatat exercitation aliquip cupidatat amet enim pariatur esse exercitation ad sunt nisi cillum. Occaecat labore voluptate adipisicing non officia ut duis ipsum.",
+                "project_description_long": "Quis officia ullamco quis in dolor ex esse pariatur id. Mollit sint esse nisi esse consequat. Sit pariatur labore laboris excepteur eiusmod sint eu officia aute enim consectetur in adipisicing. Id ex labore eu sit quis enim non duis veniam. Nisi duis mollit nostrud non ea nulla deserunt in do ullamco. Magna magna nostrud nulla elit in aliqua. Adipisicing ex proident adipisicing aute.",
+                "langs": "R, Java",
+                "project_date": "18/06/2024"
+            },
+            "project_3": {
+                "project_id": "work_3",
+                "image": {
+                    "link": "https://media.geeksforgeeks.org/wp-content/uploads/20220325175226/WebDevelopmentProjects2.png",
+                    "alt_text": "Image of the Project",
+                    "title": "Work 3"
+                },
+                "project_title": "Work 3",
+                "project_summary": "A short summary of the Project",
+                "project_description_short": "Laborum do labore aute duis nulla labore ipsum amet consequat sunt officia. Incididunt do Lorem sunt duis cillum veniam fugiat sunt fugiat. Sunt ipsum sit sit sit anim ipsum exercitation ut qui ea ea nulla cillum aute. Elit aliquip mollit sint eu laboris ut laborum labore in fugiat quis pariatur nulla.",
+                "project_description_long": "Occaecat consectetur velit et irure aliqua quis ipsum quis. Dolor enim qui veniam nisi ut dolore aliqua voluptate ipsum laboris. Amet consectetur sit pariatur id voluptate magna reprehenderit ipsum commodo commodo ex do. Cillum quis sint eu cupidatat reprehenderit. Aliquip proident consectetur cillum duis. Consequat sint et eu sint in in in irure aliqua est incididunt tempor duis. Exercitation occaecat dolore minim incididunt duis aute.Dolor aliqua veniam elit irure voluptate consequat proident exercitation minim id magna amet. Reprehenderit sit officia sit adipisicing quis velit incididunt irure eiusmod non proident id amet incididunt. Proident dolore laboris aliquip ut. Mollit cupidatat nisi dolor fugiat.",
+                "langs": "Go, C++",
+                "project_date": "8/05/2024"
+            },
+            "project_4": {
+                "project_id": "work_4",
+                "image": {
+                    "link": "https://images.squarespace-cdn.com/content/v1/5e68bdb646e8372aff3f2fa2/1619432499989-N7H9MGLACW205JBXBGP9/LIAD+CALENDAR.png",
+                    "alt_text": "Image of the Project",
+                    "title": "Work 4"
+                },
+                "project_title": "Work 4",
+                "project_summary": "A short summary of the Project",
+                "project_description_short": "Ad tempor sunt commodo in labore ea anim nulla ullamco esse ullamco excepteur nostrud excepteur. Laboris tempor anim eiusmod ad amet quis officia mollit nulla commodo non anim. Veniam veniam sunt et irure minim nostrud laboris consectetur pariatur amet cupidatat eu consectetur. Laboris in amet mollit irure. Eiusmod veniam culpa enim officia pariatur voluptate laboris consectetur excepteur culpa ipsum dolore. Est mollit voluptate incididunt sit amet ut sint commodo non velit anim duis quis. Aliqua esse minim ad velit.",
+                "project_description_long": "Velit quis sit eiusmod cupidatat non. Esse in excepteur sunt in veniam incididunt Lorem proident tempor adipisicing adipisicing labore excepteur. Incididunt duis sunt id officia. Dolore consequat labore consectetur labore culpa ipsum mollit nulla amet et cillum in aliqua laboris.Nostrud nulla nostrud labore aute non quis enim ut officia id mollit eiusmod ut. Anim occaecat magna ullamco aute. Minim aute fugiat labore voluptate pariatur reprehenderit velit reprehenderit magna dolor fugiat laboris consequat quis. Aliqua eu nostrud amet culpa sit fugiat eu in. Reprehenderit elit amet magna amet exercitation cupidatat velit sunt.",
+                "langs": "Typescript, Perl",
+                "project_date": "5/05/2024"      
+            }
+        }
+    },
+
+    "single_project": {
+        "page_title": "Single project",
+        "style_sheet": "single_project.min.css",
+        "project_title": "Project",
+        "image": {
+            "link": "images/grey.jpg",
+            "alt_text":"Placeholder Image"
+        },
+        "project_description_long": "Long Description",
+        "langs": "Language 1, Language 2",
+        "project_date": "dd/mm/yyyy"
+    },
+
+    "services": {
+        "page_title": "Services",
+        "style_sheet": "services.min.css",
+        "bubbles": {
+            "front_end": {
+                "title": "Front-End",
+                "description": "Designing your Dreams into an Interactable and Responsive Reality"
+            },
+            "back_end": {
+                "title": "Back-End",
+                "description": "Powering your Applications with efficient Data Management"
+            }
+        }
+    },
+
+    "contacts": {
+        "page_title": "Contacts",
+        "style_sheet": "contacts.min.css",
+        "action": "contacts.php",
+        "title": "Contacts",
+        "form_sent_message": "Form Sent Succesfully",
+        "name": {
+            "label": "Insert Name:",
+            "first_name": {
+                "placeholder": "First Name",
+                "pattern": ".{1,25}",
+                "title": "Name must be at most 25 characters",
+                "max_length": "25",
+                "min_length": "1",
+                "error_message": "Name must be composed of only, at most 25, letters and whitespaces"
+            },
+            "last_name": {
+                "placeholder": "Last Name",
+                "pattern": ".{1,25}",
+                "title": "Name must be at most 25 characters",
+                "max_length": "25",
+                "min_length": "1",
+                "error_message": "Surname must be composed of only, at most 25, letters and whitespaces"
+
+            }
+        },
+        "email": {
+            "label": "E-mail address:",
+            "placeholder": "example@email.com",
+            "pattern": "[a-z0-9._%+\\-]+@[a-z0-9.\\-]+\\.[a-z]{2,}$",
+            "title": "E-mail must be between 10 and 40 characters",
+            "error_message": "E-mail is incorrect"
+        },
+        "phone_number": {
+            "label": "Phone Number:",
+            "placeholder": "+00 000 000 0000",
+            "pattern": "(\\+\\d{1,3} )?\\d{3} \\d{3} \\d{4}",
+            "title": "Phone number doesn't fit the pattern (prefix can be excluded)",
+            "error_message": "Phone number must be in the format (+00) 123 456 7890"
+        },
+        "subject": {
+            "label": "Subject",
+            "error_message": "Select a valid option",
+            "options": {
+                "option_1": {
+                    "name": "Generic",
+                    "value": "generico"
+                },
+                "option_2": {
+                    "name": "Product",
+                    "value": "prodotto"
+                },
+                "option_3": {
+                    "name": "Support",
+                    "value": "supporto"
+                }
+            }
+        },
+        "object": {
+            "label": "Object of the Message",
+            "placeholder": "Object",
+            "pattern": ".{4,100}",
+            "min_length": 4,
+            "max_length": 100,
+            "error_message": "Object must be between 4 and 100 letters or whitespaces"
+        },
+        "message": {
+            "label": "Message:",
+            "placeholder": "Write here your message...",
+            "min_length": "11",
+            "max_length": "499",
+            "error_message": "Object must be between 11 and 499 characters"
+        },
+        "submit_button": {
+            "text": "Submit"
+        }
+    },
+
+    "about": {
+        "page_title": "About",
+        "style_sheet": "about.min.css",
+        "main": {
+            "image": {
+                "link": "images/computer.png",
+                "alt_text": "My great Coding Capabilities"
+            },
+            "title": "Astonishing Websites tailored for You",
+            "subtitle": "The Pro you've been searching for, Code Academy certified Fullstack Developer"
+        },
+        "lang_cards": {
+            "icon_style": "fa-5x",
+            "icon_color": "#ffffff",
+            "langs": {
+                "html": {
+                    "name": "HTML",
+                    "icon": "fa-html5",
+                    "blueBar": "100%",
+                    "grayBar": "0%"
+                },
+                "css": {
+                    "name": "CSS",
+                    "icon": "fa-css3-alt",
+                    "blueBar": "100%",
+                    "grayBar": "0%"
+                },
+                "sass": {
+                    "name": "SASS",
+                    "icon": "fa-sass",
+                    "blueBar": "100%",
+                    "grayBar": "0%"
+                },
+                "php": {
+                    "name": "PHP",
+                    "icon": "fa-php",
+                    "blueBar": "100%",
+                    "grayBar": "0%"
+                },
+                "javascript": {
+                    "name": "JavaScript",
+                    "icon": "fa-square-js",
+                    "blueBar": "100%",
+                    "grayBar": "0%"
+                },
+                "figma": {
+                    "name": "Figma",
+                    "icon": "fa-figma",
+                    "blueBar": "100%",
+                    "grayBar": "0%"
+                }
+            }
+        },
+        "indepth": {
+            "title": "My Projects are Powered with:",
+            "icons": {
+                "speed": {
+                    "icon": "fa-gauge-high",
+                    "icon_supp_style": "fa-solid",
+                    "title": "Speed"
+                },
+                "ease": {
+                    "icon": "fa-gears",
+                    "icon_supp_style": "fa-solid",
+                    "title": "Ease of Use"
+                },
+                "innovation": {
+                    "icon": "fa-lightbulb",
+                    "icon_supp_style": "fa-regular",
+                    "title": "Innovation"
+                },
+                "passion": {
+                    "icon": "fa-heart",
+                    "icon_supp_style": "fa-regular",
+                    "title": "Passion"
+                }
+            }
+        }
+    }
+}

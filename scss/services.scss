@@ -1,0 +1,228 @@
+@use 'variables' as var;
+@use 'sass:map';
+
+$serviceBubbleSize: 250px;
+$bubbleAnimation: 1s cubic-bezier(0.65, 0.05, 0.36, 1);
+$descriptionAnimation: 1s cubic-bezier(0.65, 0.05, 0.36, 1);
+$bubbleHoverRadius: 30%;
+$bubbleColors: (
+    'front_end': #2f00ff,
+    'back_end': #e33590,
+);
+
+/* Stile Animazione Sfondo */
+.bg {
+    animation: slide 3s ease-in-out infinite alternate;
+    background: linear-gradient(-60deg, #59b2ea 50%, #3683db 50%);
+    bottom: 0;
+    left: -50%;
+    opacity: .5;
+    position: fixed;
+    right: -50%;
+    top: 0;
+    z-index: -1;
+}
+  
+.bg2 {
+    animation-direction: alternate-reverse;
+    animation-duration: 4s;
+}
+  
+.bg3 {
+    animation-duration: 5s;
+}
+
+/* Animazione Sfondo */
+@keyframes slide {
+    0% {
+      transform:translateX(-25%);
+    }
+    100% {
+      transform:translateX(25%);
+    }
+}
+
+//Stile del Main
+main {
+    height: calc(100vh - var.$navHeight - var.$footHeight);
+    overflow: hidden;
+    background-color: transparent;
+    background: transparent;
+}
+/* Titolo Pagina */
+div#title {
+    h1 {
+        margin: 0; 
+        color: var.$colorTertiary;
+        font-size: 90px;
+    }
+}
+/* Posizionamento Boller */
+div#columns {
+    height: 100%;
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .column {
+        height: 100%;
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+
+        /* Stile Bolle */
+        .bubble {
+            width: $serviceBubbleSize;
+            height: $serviceBubbleSize;
+            border-radius: 50%;
+            transition: $bubbleAnimation;
+            transform-origin: top;
+            position: absolute;
+            top: 20%;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow: hidden;
+
+            /* Stile Titolo Bolla */
+            div.title {
+                h1 {
+                    color: var.$colorTertiary;
+                    font-weight: bold;
+                    word-wrap: normal;
+                    text-wrap:nowrap;
+                    text-overflow: clip;
+                    font-size: 30px;
+                    transition: $bubbleAnimation;
+                    margin: 0;
+                }
+            }
+
+            /* Stile Descrizione Bolla */
+            div.description {
+                position: absolute;
+                width: 100%;
+                height: auto;
+                bottom: -100%;
+                overflow: hidden;
+                transition: $descriptionAnimation;
+
+                p {
+                    text-align: center;
+                    text-overflow: clip;
+                    white-space: pre-wrap;
+                    overflow: hidden;
+                    color: var.$colorTertiary;
+                    font-family: var.$fontPrimary;
+                    font-size: 20px;
+                    font-weight: bold;
+                }
+            }
+
+            /* Stile al passaggio del mouse */
+            @media (min-width: 1024px) {
+            &:hover {
+                border-bottom-left-radius: $bubbleHoverRadius;
+                border-bottom-right-radius: $bubbleHoverRadius;
+                height: 100%; 
+                width: 80%;
+                
+                /* Titolo */
+                div.title {
+                    h1 {
+                        font-size: 70px;
+                        margin-top: -30%;
+                    }
+                }
+
+                /* Descrizione */
+                div.description {
+                    bottom: 30%;
+                }
+            }
+            }
+            
+            /* Colori Bolle */
+            @each $bubble, $color in $bubbleColors {
+                &##{$bubble} {
+                    background: $color;
+                }
+            }
+        }
+    }
+}
+
+@media (min-width: 1700px) and (min-height: 900px) {
+    div#columns .column .bubble {
+        width: 400px;
+        height: 400px;
+
+        div.title h1 {
+            font-size: 50px;
+        }
+
+        div.description p {
+            font-size: 30px;
+        }
+        
+        &:hover { 
+            div.title h1{
+                font-size: 130px;
+            }
+
+            div.description p {
+                padding: 20px;
+            }
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+    div#columns .column .bubble {
+        width: 200px;
+        height: 200px;
+
+        div.title h1 {
+            font-size: 30px;
+        }
+
+        div.description p {
+            font-size: 15px;
+            padding: 5%;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    div#columns .column .bubble {
+        width: 150px;
+        height: 150px;
+
+        div.title h1 {
+            font-size: 25px;
+        }
+
+        div.description p {
+            font-size: 12px;
+            padding: 5%;
+        }
+    }
+}
+
+@media screen and (max-width: 420px) {
+    div#title h1 {
+        font-size: 60px;
+    }
+    div#columns {
+        flex-direction: column;
+
+        .column {
+            width: 100%;
+        }
+    }
+}
