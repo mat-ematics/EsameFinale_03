@@ -11,7 +11,8 @@ $submitBgColor: rgb(59, 45, 45);
 $submitHoverColor: linear-gradient(52deg, rgba(69,98,162,1) 0%, rgba(58,86,186,1) 33%, rgba(17,172,221,1) 100%);
 
 $sentMessageSize: 50px;
-$sentMessageColor: var.$colorPrimary;
+$loginSuccess: var.$colorPrimary;
+$loginError: $errorMessageColor;
 
 body{
     background: var.$gradientBgColor;
@@ -43,10 +44,16 @@ div#contactsBg {
     max-height: 937px;
     background-color: var.$secondaryBgColor;
 
-    h1#formSentMessage {
-        color: $sentMessageColor;
+    h1#formSentLogin {
         font-size: $sentMessageSize;
         text-align: center;
+        
+        &.success {
+            color: $loginSuccess;
+        }
+        &.error {
+            color: $loginError;
+        }
     }
 }
 /* Titolo della pagina */
@@ -184,7 +191,7 @@ form#contactForm {
 }
 
 @media screen and (max-width: 920px) {
-    div#contactsBg h1#formSentMessage {
+    div#contactsBg h1#formSentLogin {
         font-size: 30px;
     }
 }
@@ -207,7 +214,7 @@ form#contactForm {
     }  
 }
 @media screen and (max-width: 375px) {
-    div#contactsBg h1#formSentMessage {
+    div#contactsBg h1#formSentLogin {
         font-size: 20px;
     }
 }

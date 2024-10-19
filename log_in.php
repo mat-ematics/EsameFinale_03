@@ -7,7 +7,17 @@ $flag = 0;
 
 /* Validazione Lato Server */
 if (!empty($_POST)) {
-    if (true);
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $test_username = preg_match($data['regex_username'], $username);
+    $test_password = preg_match($data['regex_password'], $password);
+    if ($test_username === 1 && $test_password === 1) {
+        $flag = 201;
+    } elseif ($test_username === 0 || $test_password === 0) {
+        $flag = 400;
+    } else {
+        $flag = 500;
+    }
 }
 
 ?>
@@ -24,7 +34,11 @@ if (!empty($_POST)) {
             <div id="contactsWrapper">
                 <div id="contactsBg">
                     <?php if ($flag === 201) { ?>
-                        <h1 id="formSentMessage"><?php echo $data['form_sent_message'] ?></h1>
+                        <h1 id="formSentLogin" class="success"><?php echo $data['login_success'] ?></h1>
+                    <?php } elseif ($flag === 400) { ?>
+                        <h1 id="formSentLogin" class="error"><?php echo $data['login_error_client'] ?></h1>
+                    <?php } elseif ($flag === 500) { ?>
+                        <h1 id="formSentLogin" class="error"><?php echo $data['login_error_server'] ?></h1>
                     <?php } else { ?>
                         <!-- Form vero e proprio -->
                         <form action="log_in.php" method="post" id="contactForm" novalidate>

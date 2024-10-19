@@ -331,76 +331,10 @@
         "style_sheet": "log_in.min.css",
         "action": "contacts.php",
         "title": "Contacts",
-        "form_sent_message": "Form Sent Succesfully",
-        "name": {
-            "label": "Insert Name:",
-            "first_name": {
-                "placeholder": "First Name",
-                "pattern": ".{1,25}",
-                "title": "Name must be at most 25 characters",
-                "max_length": "25",
-                "min_length": "1",
-                "error_message": "Name must be composed of only, at most 25, letters and whitespaces"
-            },
-            "last_name": {
-                "placeholder": "Last Name",
-                "pattern": ".{1,25}",
-                "title": "Name must be at most 25 characters",
-                "max_length": "25",
-                "min_length": "1",
-                "error_message": "Surname must be composed of only, at most 25, letters and whitespaces"
-
-            }
-        },
-        "email": {
-            "label": "E-mail address:",
-            "placeholder": "example@email.com",
-            "pattern": "[a-z0-9._%+\\-]+@[a-z0-9.\\-]+\\.[a-z]{2,}$",
-            "title": "E-mail must be between 10 and 40 characters",
-            "error_message": "E-mail is incorrect"
-        },
-        "phone_number": {
-            "label": "Phone Number:",
-            "placeholder": "+00 000 000 0000",
-            "pattern": "(\\+\\d{1,3} )?\\d{3} \\d{3} \\d{4}",
-            "title": "Phone number doesn't fit the pattern (prefix can be excluded)",
-            "error_message": "Phone number must be in the format (+00) 123 456 7890"
-        },
-        "subject": {
-            "label": "Subject",
-            "error_message": "Select a valid option",
-            "options": {
-                "option_1": {
-                    "name": "Generic",
-                    "value": "generico"
-                },
-                "option_2": {
-                    "name": "Product",
-                    "value": "prodotto"
-                },
-                "option_3": {
-                    "name": "Support",
-                    "value": "supporto"
-                }
-            }
-        },
-        "object": {
-            "label": "Object of the Message",
-            "placeholder": "Object",
-            "pattern": ".{4,100}",
-            "min_length": 4,
-            "max_length": 100,
-            "error_message": "Object must be between 4 and 100 letters or whitespaces"
-        },
-        "message": {
-            "label": "Message:",
-            "placeholder": "Write here your message...",
-            "min_length": "11",
-            "max_length": "499",
-            "error_message": "Object must be between 11 and 499 characters"
-        },
-        "submit_button": {
-            "text": "Submit"
-        }
+        "regex_username": "/^[a-zA-Z_]{6,32}$/",
+        "regex_password": "/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@$!%*?&])[A-Za-z0-9@$!%*?&]{8,32}$/",
+        "login_success": "Form Sent Succesfully",
+        "login_error_client": "ERROR: Invalid Credentials",
+        "login_error_server": "ERROR: Failure of Server Processing"
     }
 }
