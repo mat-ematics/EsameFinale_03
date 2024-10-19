@@ -4,6 +4,8 @@ $inputBorder: 1px solid lightgray;
 $inputValidBorder: 1px solid var.$primaryBgColor;
 $inputInvalidBorder: 1px solid rgb(221, 17, 17);
 
+$errorMessageColor: rgb(201, 30, 30);
+
 $submitBorder: rgba(224, 224, 224, 1);
 $submitBgColor: rgb(59, 45, 45);
 $submitHoverColor: linear-gradient(52deg, rgba(69,98,162,1) 0%, rgba(58,86,186,1) 33%, rgba(17,172,221,1) 100%);
@@ -68,9 +70,9 @@ form#contactForm {
     input {
         padding: 10px;
         font-size: 18px;
-        margin-bottom: 30px;
         border: $inputBorder;
         outline: none;
+        width: 100%;
         transition: border 0.2s;
 
         color: var.$colorSecondary;
@@ -79,17 +81,52 @@ form#contactForm {
         &:focus {
             border: $inputValidBorder;
         }
-        &:valid:not(:placeholder-shown) {
+        &.valid {
             border: $inputValidBorder;
         }
-        &:invalid:not(:placeholder-shown) {
-            border: $inputInvalidBorder;
+        &.invalid {
+            border: $inputInvalidBorder !important;
         }
     }
+    /* Show Password Button */
+    .password-container {
+        display:inline-block;
+        position: relative;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+    }
+    .iconShowPassword {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 2;
+        cursor: pointer;
+        
+        i.show {
+            color: var.$colorPrimary;
+        }
+        i.hide {
+            color: var.$colorDisabled;
+        }
+    }
+
     label {
         margin-bottom: 2px;
         color: var.$colorSecondary;
     }
+
+    /* Stile Messaggi di Errore */
+    ul.errors-container {
+        text-decoration: none;
+        list-style: none;
+        padding: 0;
+        margin-top: 10px;
+        font-size: 13px;
+        color: $errorMessageColor;
+    }
+
     /* Stile bottone di invio */
     button#buttonLogIn {
         align-self: center;
@@ -144,11 +181,6 @@ form#contactForm {
             transition: background 0.5s;
         }        
     }
-}
-
-/* Stile Messaggi di Errore */
-.error {
-    border: $inputInvalidBorder !important;
 }
 
 @media screen and (max-width: 920px) {
