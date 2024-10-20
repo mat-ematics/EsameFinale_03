@@ -12,19 +12,20 @@ if (!empty($_POST)) {
     $test_username = preg_match($data['regex_username'], $username);
     $test_password = preg_match($data['regex_password'], $password);
     if ($test_username === 1 && $test_password === 1) {
-        $flag = 201;
+        // Check presence of Account
+        $connection = strumenti::create_connection(EXTENSION_MYSQLI, "localhost", "portfolio", "root");
+        $result = strumenti::check_credentials($connection, $username, $password);
+        if ($result) {
+            // Account Found
+            $flag = 201;
+        } else {
+            // Account Not Found
+            $flag = 400;
+        }
     } elseif ($test_username === 0 || $test_password === 0) {
         $flag = 400;
     } else {
         $flag = 500;
-    }
-
-    $connection = strumenti::create_connection(EXTENSION_MYSQLI, "localhost", "portfolio", "root");
-    $result = strumenti::check_credentials($connection, $username, $password);
-    if ($result) {
-
-    } else {
-        $flag = 400;
     }
 }
 
@@ -42,7 +43,15 @@ if (!empty($_POST)) {
             <div id="contactsWrapper">
                 <div id="contactsBg">
                     <?php if ($flag === 201) { ?>
+                        <!-- Success Message -->
                         <h1 id="formSentLogin" class="success"><?php echo $data['login_success'] ?></h1>
+                        <h3 id="formRedirectMessage">Ridericting...</h3>
+                        <!-- Timeout Before Redirection -->
+                        <script>
+                            setTimeout(() => {
+                                window.location.replace("backend.php");
+                            }, 5000);
+                        </script>
                     <?php } elseif ($flag === 400) { ?>
                         <h1 id="formSentLogin" class="error"><?php echo $data['login_error_client'] ?></h1>
                     <?php } elseif ($flag === 500) { ?>
