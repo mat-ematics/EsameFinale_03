@@ -2,6 +2,13 @@
 
 namespace assets;
 
+use InvalidArgumentException;
+use mysqli;
+use PDO;
+
+define('EXTENSION_MYSQLI', 'MYSQLI');
+define('EXTENSION_PDO', 'PDO');
+
 /**
  * Classe contente strumenti utili
  * 
@@ -218,5 +225,97 @@ class strumenti {
         // Resource closing
         fclose($handle);
         return true;
+    }
+
+    /**
+     * Creates a new Connection with a Database 
+     * 
+     * @param string $extension Determine what extension to use using an Extension Costant
+     * @param string $host Defines the name of the host of the database
+     * @param string $database Defines the name of the database
+     * @param string|null $user [optional] Defines the User for the database. Defaults to null
+     * @param string|null $password [optional] Defines the Password for the Database's User. Defaults to null
+     * 
+     * @return class Returns a Connection of the Selected Type
+     */
+    static public function create_connection(string $extension = EXTENSION_PDO, string $host, string $database, string $user = null, string $password = null) {
+        /**
+       * Public variable that Stores the Connection 
+       */
+        $connection = null;
+        if ($extension == EXTENSION_MYSQLI) {
+            $connection = new \mysqli($host, $user, $password, $database);
+            if ($connection->connect_error) {
+                throw new \Exception("MySQLi Connection failed: " . $connection->connect_error);
+            }
+        } elseif ($extension == EXTENSION_PDO) {
+            try {
+                $connection = new \PDO("mysql:host=".$host.";dbname=".$database, $user, $password);
+                $connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+            } catch (\PDOException $e) {
+                throw new \Exception("PDO Connection Failed: " . $e->getMessage());
+            }
+        } else {
+            throw new \Error("ERROR: select a correct Extension Constant");
+        }
+        return $connection;
+    }
+
+    /**
+     * Checks if given username and password are present on a given Database
+     * 
+     * @param object $connection The Connection Object with the Database
+     * @param string $username The Username to check
+     * @param string $database The Password to check
+     * 
+     * @return bool True if a match is found, false otherwise
+     */
+
+    static public function check_credentials(object $connection, string $username, string $password) {
+        $is_present = 0; // Flag of the Account presence
+
+        // Try with MySQLi
+        if ($connection instanceof mysqli) {
+            // SQL Statement with MySQLi parameters that performs the match
+            $sql_check_login = "SELECT `password` FROM admins WHERE username = ?";
+            // Execution of the statement
+            $query_check_login = $connection->prepare($sql_check_login);
+            $query_check_login->bind_param("s", $username);
+            $query_check_login->execute();
+
+            // Store the Login Result
+            $query_check_login->store_result();
+
+            // Check if it is empty
+            if ($query_check_login->num_rows() > 0) {
+                // Binding of the Result
+                $query_check_login->bind_result($hash_password);
+                $query_check_login->fetch();
+            } else {
+                return false;
+            }
+
+        } elseif ($connection instanceof PDO) {
+            // SQL Statement with PDO parameters
+            $sql_check_login = "SELECT `password` FROM admins WHERE username = :inputUsername";
+            // Execution of the statement
+            $query_check_login = $connection->prepare($sql_check_login);
+            $query_check_login->bindParam(":inputUsername", $username, PDO::PARAM_STR); // Username Binding
+            $query_check_login->execute();
+            // Binding of the Result
+            if ($query_check_login->rowCount() > 0) {
+                $is_present = $query_check_login->fetch();
+            } else {
+                return false;
+            }
+        } else {
+            throw new InvalidArgumentException("ERROR: Invalid Connection Type");
+        }
+        // Boolean Return
+        if (password_verify($password, $hash_password)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

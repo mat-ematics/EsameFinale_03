@@ -7,8 +7,8 @@ $flag = 0;
 
 /* Validazione Lato Server */
 if (!empty($_POST)) {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+    $username = trim($_POST['username']);
+    $password = trim($_POST['password']);
     $test_username = preg_match($data['regex_username'], $username);
     $test_password = preg_match($data['regex_password'], $password);
     if ($test_username === 1 && $test_password === 1) {
@@ -17,6 +17,14 @@ if (!empty($_POST)) {
         $flag = 400;
     } else {
         $flag = 500;
+    }
+
+    $connection = strumenti::create_connection(EXTENSION_MYSQLI, "localhost", "portfolio", "root");
+    $result = strumenti::check_credentials($connection, $username, $password);
+    if ($result) {
+
+    } else {
+        $flag = 400;
     }
 }
 

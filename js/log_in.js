@@ -11,7 +11,7 @@ buttonLogIn.setAttribute('disabled', 'disabled');
 
 /* Regex di Validazione */
 const regexUsername = /^[a-zA-Z_]{6,32}$/; // Username
-const regexPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,32}$/; // Password
+const regexPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/; // Password
 
 /* Container degli Errori */
 const errorContainers = document.querySelectorAll(".errors-container");

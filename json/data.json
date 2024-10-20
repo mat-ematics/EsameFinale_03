@@ -332,7 +332,7 @@
         "action": "contacts.php",
         "title": "Contacts",
         "regex_username": "/^[a-zA-Z_]{6,32}$/",
-        "regex_password": "/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@$!%*?&])[A-Za-z0-9@$!%*?&]{8,32}$/",
+        "regex_password": "/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@$!%*?&])[A-Za-z0-9@$!%*?&]{8,}$/",
         "login_success": "Form Sent Succesfully",
         "login_error_client": "ERROR: Invalid Credentials",
         "login_error_server": "ERROR: Failure of Server Processing"
