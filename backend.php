@@ -1,5 +1,8 @@
 <?php 
 
+/* File di Configurazione */
+require_once("config/config.php");
+
 session_start(); // Inizializzazione della Sessione
 
 // Importazione Sicurezza della Sessione

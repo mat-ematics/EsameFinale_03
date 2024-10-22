@@ -1,0 +1,2 @@
+# Accesso Negato alla Directory Config
+RedirectMatch 403 ^/config/
