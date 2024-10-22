@@ -2,6 +2,9 @@
 
 session_start(); // Inizializzazione della Sessione
 
+// Importazione Sicurezza della Sessione
+require_once("inclusioni/session_security.php");
+
 /* Controllo dell'Autenticazione */
 if (!isset($_SESSION) || !isset($_SESSION['is_auth']) || $_SESSION['is_auth'] != true) {
     session_unset(); // Dissociazione Dati della Sessione Corrente
