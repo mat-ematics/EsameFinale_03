@@ -1,4 +1,10 @@
 <?php
+
+session_start(); // Inizializzazione della Sessione
+
+// Importazione Sicurezza della Sessione
+require_once("inclusioni/session_security.php");
+
 // Importo strumenti e Dati dal JSON
 require_once("inclusioni/strumenti.php");
 use assets\strumenti;
@@ -17,7 +23,18 @@ if (!empty($_POST)) {
         $result = strumenti::check_credentials($connection, $username, $password);
         if ($result) {
             // Account Found
-            $flag = 201;
+            $flag = 201; // Flag di Successo
+
+            /* Rigenerazione di Sicurezza dell'ID della Sessione */
+            session_regenerate_id(true); // Cancellazione della Sessione Precedente
+
+            /* Variabili di Sessione */
+            $_SESSION['username'] = $username;
+            $_SESSION['is_auth'] = true;
+            
+            /* Ridirezionamento nella pagina di Backend */
+            header("Location: backend.php");
+            exit(); // Termine anticipato dello sviluppo di codice
         } else {
             // Account Not Found
             $flag = 400;
@@ -42,17 +59,7 @@ if (!empty($_POST)) {
             <!-- Contenitore Form -->
             <div id="contactsWrapper">
                 <div id="contactsBg">
-                    <?php if ($flag === 201) { ?>
-                        <!-- Success Message -->
-                        <h1 id="formSentLogin" class="success"><?php echo $data['login_success'] ?></h1>
-                        <h3 id="formRedirectMessage">Ridericting...</h3>
-                        <!-- Timeout Before Redirection -->
-                        <script>
-                            setTimeout(() => {
-                                window.location.replace("backend.php");
-                            }, 5000);
-                        </script>
-                    <?php } elseif ($flag === 400) { ?>
+                    <?php if ($flag === 400) { ?>
                         <h1 id="formSentLogin" class="error"><?php echo $data['login_error_client'] ?></h1>
                     <?php } elseif ($flag === 500) { ?>
                         <h1 id="formSentLogin" class="error"><?php echo $data['login_error_server'] ?></h1>
