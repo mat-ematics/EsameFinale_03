@@ -1,0 +1,29 @@
+@use 'variables' as var;
+
+h1#pageTitle {
+    font-size: 90px;
+    color: var.$colorTertiary
+}
+
+menu.area-list {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    padding: 0 20%;
+    width: 100%;
+    list-style: none;
+
+    li.area {
+        color: var.$colorTertiary;
+        font-size: 30px;
+        cursor: pointer;
+
+        &:hover {
+            text-decoration: underline;
+        }
+        &.current {
+            font-weight: bold;
+            text-decoration: underline;
+        }
+    }
+}

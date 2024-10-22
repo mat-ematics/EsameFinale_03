@@ -336,5 +336,10 @@
         "login_success": "Logged In Succesfully",
         "login_error_client": "ERROR: Invalid Credentials",
         "login_error_server": "ERROR: Failure of Server Processing"
+    },
+
+    "backend": {
+        "page_title": "Backend",
+        "style_sheet": "backend.min.css"
     }
 }
