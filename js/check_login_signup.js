@@ -1,13 +1,15 @@
 /* Input di Credenziali */
-const credentials = document.querySelectorAll(".login-credential");
+const credentials = document.querySelectorAll(".input-credential");
 /* Bottone di Invio */
-const buttonLogIn = document.getElementById("buttonLogIn");
+const buttonSubmitCredentials = document.querySelectorAll(".button-submit-credentials");
 /* Password e Pulsante "Mostra Password" */
-const password = document.getElementById("password");
-const passwordToggle = document.getElementById("passwordToggle");
+const password = document.querySelectorAll(".input-password");
+const passwordToggle = document.querySelectorAll(".password-toggle");
 
 /* Disabilitazione iniziale del Pulsante di Invio */
-buttonLogIn.setAttribute('disabled', 'disabled');
+buttonSubmitCredentials.forEach(button => {
+    button.setAttribute('disabled', 'disabled');
+})
 
 /* Regex di Validazione */
 const regexUsername = /^[a-zA-Z_]{6,32}$/; // Username
@@ -60,10 +62,10 @@ function updateSubmitButton() {
     /* Controllo Validità */
     if (errorPresent) {
         /* Disabilitazione del Pulsante in Presenza di Errori */
-        buttonLogIn.setAttribute('disabled', 'disabled');
+        buttonSubmitCredentials.setAttribute('disabled', 'disabled');
     } else {
         /* Abilitazione del Pulsante in Assenza di Errori */
-        buttonLogIn.removeAttribute('disabled');
+        buttonSubmitCredentials.removeAttribute('disabled');
     }
 }
 

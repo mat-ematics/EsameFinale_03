@@ -73,22 +73,22 @@ if (!empty($_POST)) {
                             <h2 id="title">Log In</h2>
                             <!-- Username Input -->
                             <label for="username">Username:</label>
-                            <input type="text" class="login-credential" name="username" id="username" placeholder="Username">
+                            <input type="text" class="input-credential" name="username" id="username" placeholder="Username">
                             <!-- Username Error Message -->
                             <ul class="errors-container" id="usernameErrors" role="alert"><li></li></ul>
 
                             <!-- Password Input -->
                             <label for="password">Password:</label>
                             <div class="password-container">
-                                <input type="password" class="login-credential" name="password" id="password" placeholder="Password">
-                                <span class="iconShowPassword"><i id="passwordToggle" class="fa-solid fa-eye show"></i></span>
+                                <input type="password" class="input-credential input-password" name="password" id="password" placeholder="Password">
+                                <span class="iconShowPassword"><i class="password-toggle" class="fa-solid fa-eye show"></i></span>
                             </div>
                             
                             <!-- Password Error Message -->
                             <ul class="errors-container" id="passwordErrors" role="alert"><li></li></ul>
 
                             <!-- Submit Button -->
-                            <button type="submit" name="button_login" value="login" id="buttonLogIn">
+                            <button type="submit" name="button_login" value="login" class="button-submit-credentials">
                                 <span id="buttonText">Log In</span>
                             </button>
                         </form>
@@ -96,6 +96,6 @@ if (!empty($_POST)) {
                 </div>
             </div>
         </main>
-        <script src="js/log_in.js"></script>
+        <script src="js/check_login_signup.js"></script>
     </body>
 </html>
