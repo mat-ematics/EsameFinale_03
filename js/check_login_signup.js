@@ -3,8 +3,10 @@ const credentials = document.querySelectorAll(".input-credential");
 /* Bottone di Invio */
 const buttonSubmitCredentials = document.querySelectorAll(".button-submit-credentials");
 /* Password e Pulsante "Mostra Password" */
-const passwordList = document.querySelectorAll(".input-password");
+const passwordList = document.querySelectorAll("input[type=password]");
 const passwordToggle = document.querySelectorAll(".password-toggle");
+/* Ripeti Password */
+const repeatPasswordList = document.querySelectorAll("repeat-password");
 /* Container degli Errori */
 const errorContainers = document.querySelectorAll(".errors-container");
 
@@ -38,12 +40,12 @@ credentials.forEach(input => {
     input.addEventListener("input", function (e) {
          /* Variabili delle Credenziali */
         const currentValue = e.target.value; // Testo scritto in tempo reale
+        console.log(currentValue)
         let regex = regexList[this.id] ; // Controllo degli Errori
         // Container of the Error Message
         let errContainer = Array.from(errorContainers).find(container => container.id == this.id + "Errors");
 
-        /* Controllo di Validità dell'Input */
-         if (!regex.test(currentValue)) {
+        if (this.id != 'repeatPassword' && !regex.test(currentValue)) {  /* Controllo di Validità dell'Input */
             /* Caso di Invalidità  */
             this.classList.add('invalid'); // Aggiunta Stile di Errore
             this.classList.remove('valid'); // Rimozione Stile di Validità
@@ -62,6 +64,43 @@ credentials.forEach(input => {
     })
 });
 
+repeatPasswordList.forEach(input => {
+    input.addEventListener('input', checkPasswordMatch);
+})
+passwordList.forEach(input => {
+    input.addEventListener('input', checkPasswordMatch);
+})
+
+function checkPasswordMatch () {
+    const parentForm = this.parentElement.parentElement;
+    // console.log(parentForm);
+
+    const inputPassword = parentForm.querySelector("input#password");
+    console.log(inputPassword.value);
+
+    const inputRepeatPassword = parentForm.querySelector("input#repeatPassword");
+    console.log(inputRepeatPassword.value);
+
+    const errorRepeatPassword = parentForm.querySelector('#repeatPasswordErrors');
+
+    /* Controllo Validità Ripeti Password */
+    if (inputPassword.value !== inputRepeatPassword.value) {
+        /* Caso di Invalidità  */
+        inputRepeatPassword.classList.add('invalid'); // Aggiunta Stile di Errore
+        inputRepeatPassword.classList.remove('valid'); // Rimozione Stile di Validità
+        // Messaggio di Errore Visibile
+        errorRepeatPassword.style.visibility = 'visible';
+    } else {
+        /* Caso di Validità */
+        inputRepeatPassword.classList.remove('invalid'); // Rimozione Stile di Errore
+        inputRepeatPassword.classList.add('valid'); // Aggiunta Stile di Validità
+        // Messaggio di Errore Nascosto
+        errorRepeatPassword.style.visibility = 'hidden';
+    }
+
+    updateSubmitButton();
+}
+
 /* Funzione di Aggiornamento del Pulsante di Invio */
 function updateSubmitButton() {
     /* Ricerca di Invalidità di un Input */
@@ -78,7 +117,7 @@ function updateSubmitButton() {
 
 /* Pulsante "Mostra Password" */
 passwordToggle.forEach(toggle => {
-    const password = toggle.parentElement.parentElement.querySelector(".input-password");
+    const password = toggle.parentElement.parentElement.querySelector("input[type=password]");
     toggle.addEventListener("click", function () {
         if (this.classList.contains("show")) {
             password.type = "text";
