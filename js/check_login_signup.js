@@ -3,25 +3,32 @@ const credentials = document.querySelectorAll(".input-credential");
 /* Bottone di Invio */
 const buttonSubmitCredentials = document.querySelectorAll(".button-submit-credentials");
 /* Password e Pulsante "Mostra Password" */
-const password = document.querySelectorAll(".input-password");
+const passwordList = document.querySelectorAll(".input-password");
 const passwordToggle = document.querySelectorAll(".password-toggle");
+/* Container degli Errori */
+const errorContainers = document.querySelectorAll(".errors-container");
+
+/* Regex di Validazione */
+const regexList = {
+    username: /^[a-zA-Z_]{6,32}$/, // Username
+    password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, // Password
+}
+
+/* Message Errors */
+const errorMessages = {
+    usernameErrors: 'Username must contain only letters or underscore ("_") and be between 6 and 32 characters',
+    passwordErrors: 'Password must contain at least 1 Lowercase and 1 Uppercase Letter, 1 Digit and 1 Special Character (@$!%*?&) and be between 8 and 32 characters',
+    repeatPasswordErrors: "Password isn't the Same",
+}
 
 /* Disabilitazione iniziale del Pulsante di Invio */
 buttonSubmitCredentials.forEach(button => {
     button.setAttribute('disabled', 'disabled');
 })
 
-/* Regex di Validazione */
-const regexUsername = /^[a-zA-Z_]{6,32}$/; // Username
-const regexPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/; // Password
-
-/* Container degli Errori */
-const errorContainers = document.querySelectorAll(".errors-container");
+/* Error Messages to Container Association */
 errorContainers.forEach(container => {
-    container.firstElementChild.textContent = container.id == 'usernameErrors' ? 
-                            'Username must contain only letters or underscore ("_") and be between 6 and 32 characters' :
-                            'Password must contain at least 1 Lowercase and 1 Uppercase Letter, 1 Digit and 1 Special Character (@$!%*?&) and be between 8 and 32 characters'
-                            ;
+    container.firstElementChild.textContent = errorMessages[container.id];
     container.style.visibility = 'hidden';
 });
 
@@ -31,9 +38,9 @@ credentials.forEach(input => {
     input.addEventListener("input", function (e) {
          /* Variabili delle Credenziali */
         const currentValue = e.target.value; // Testo scritto in tempo reale
-        let regex = this.id == 'username' ? regexUsername : regexPassword; // Controllo degli Errori
+        let regex = regexList[this.id] ; // Controllo degli Errori
         // Container of the Error Message
-        const errContainer = this.id == 'username' ? document.getElementById('usernameErrors') : document.getElementById('passwordErrors');
+        let errContainer = Array.from(errorContainers).find(container => container.id == this.id + "Errors");
 
         /* Controllo di Validità dell'Input */
          if (!regex.test(currentValue)) {
@@ -62,22 +69,25 @@ function updateSubmitButton() {
     /* Controllo Validità */
     if (errorPresent) {
         /* Disabilitazione del Pulsante in Presenza di Errori */
-        buttonSubmitCredentials.setAttribute('disabled', 'disabled');
+        buttonSubmitCredentials.forEach(button => button.setAttribute('disabled', 'disabled'));
     } else {
         /* Abilitazione del Pulsante in Assenza di Errori */
-        buttonSubmitCredentials.removeAttribute('disabled');
+        buttonSubmitCredentials.forEach(button => button.removeAttribute('disabled'));
     }
 }
 
 /* Pulsante "Mostra Password" */
-passwordToggle.addEventListener("click", function () {
-    if (this.classList.contains("show")) {
-        password.type = "text";
-        this.classList.remove("show");
-        this.classList.add("hide");
-    } else {
-        password.type = "password";
-        this.classList.remove("hide");
-        this.classList.add("show");
-    }
+passwordToggle.forEach(toggle => {
+    const password = toggle.parentElement.parentElement.querySelector(".input-password");
+    toggle.addEventListener("click", function () {
+        if (this.classList.contains("show")) {
+            password.type = "text";
+            this.classList.remove("show");
+            this.classList.add("hide");
+        } else {
+            password.type = "password";
+            this.classList.remove("hide");
+            this.classList.add("show");
+        }
+    });
 });

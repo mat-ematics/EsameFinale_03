@@ -81,7 +81,7 @@ if (!empty($_POST)) {
                             <label for="password">Password:</label>
                             <div class="password-container">
                                 <input type="password" class="input-credential input-password" name="password" id="password" placeholder="Password">
-                                <span class="iconShowPassword"><i class="password-toggle" class="fa-solid fa-eye show"></i></span>
+                                <span class="iconShowPassword"><i class="password-toggle show fa-solid fa-eye"></i></span>
                             </div>
                             
                             <!-- Password Error Message -->
