@@ -290,9 +290,16 @@ class strumenti {
 
             // Check if it is empty
             if ($query_check_login->num_rows() > 0) {
-                // Binding of the Result
-                $query_check_login->bind_result($hash_password);
-                $query_check_login->fetch();
+                // Determine Credentials Check Type
+                if ($type === CHECK_REGISTER) {
+                    /* Register Case */
+                    return true;
+                } else {
+                    /* Login Case */
+                    // Binding of the Result
+                    $query_check_login->bind_result($hash_password);
+                    $query_check_login->fetch();
+                }
             } else {
                 return false;
             }
@@ -306,7 +313,15 @@ class strumenti {
             $query_check_login->execute();
             // Binding of the Result
             if ($query_check_login->rowCount() > 0) {
-                $hash_password = $query_check_login->fetch();
+                // Determine Credentials Check Type
+                if ($type === CHECK_REGISTER) {
+                    /* Register Case */
+                    return true;
+                } else {
+                    /* Login Case */
+                    // Binding of the Result
+                    $hash_password = $query_check_login->fetch();
+                }
             } else {
                 return false;
             }
