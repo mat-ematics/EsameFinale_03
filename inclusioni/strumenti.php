@@ -329,7 +329,7 @@ class strumenti {
             throw new InvalidArgumentException("ERROR: Invalid Connection Type");
         }
         // Boolean Return for Login Verification
-        if ($type == CHECK_LOGIN) {
+        if ($type === CHECK_LOGIN) {
             if (password_verify($password, $hash_password)) {
                 return true;
             } else {
