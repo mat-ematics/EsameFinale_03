@@ -304,7 +304,7 @@ class strumenti {
             $query_check_login->execute();
             // Binding of the Result
             if ($query_check_login->rowCount() > 0) {
-                $is_present = $query_check_login->fetch();
+                $hash_password = $query_check_login->fetch();
             } else {
                 return false;
             }
