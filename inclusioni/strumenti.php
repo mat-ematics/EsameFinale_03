@@ -8,6 +8,8 @@ use PDO;
 
 define('EXTENSION_MYSQLI', 'MYSQLI');
 define('EXTENSION_PDO', 'PDO');
+define('CHECK_LOGIN', 0);
+define('CHECK_REGISTER', 1);
 
 /**
  * Classe contente strumenti utili
@@ -271,7 +273,7 @@ class strumenti {
      * @return bool True if a match is found, false otherwise
      */
 
-    static public function check_credentials(object $connection, string $username, string $password) {
+    static public function check_credentials(object $connection, string $username, string $password, int $type = CHECK_LOGIN) {
         $is_present = 0; // Flag of the Account presence
 
         // Try with MySQLi
@@ -311,11 +313,13 @@ class strumenti {
         } else {
             throw new InvalidArgumentException("ERROR: Invalid Connection Type");
         }
-        // Boolean Return
-        if (password_verify($password, $hash_password)) {
-            return true;
-        } else {
-            return false;
+        // Boolean Return for Login Verification
+        if ($type == CHECK_LOGIN) {
+            if (password_verify($password, $hash_password)) {
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 }
