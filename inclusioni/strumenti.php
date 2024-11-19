@@ -2,9 +2,11 @@
 
 namespace assets;
 
+use Exception;
 use InvalidArgumentException;
 use mysqli;
 use PDO;
+use PDOException;
 
 define('EXTENSION_MYSQLI', 'MYSQLI');
 define('EXTENSION_PDO', 'PDO');
@@ -334,6 +336,63 @@ class strumenti {
                 return true;
             } else {
                 return false;
+            }
+        }
+    }
+
+    /**
+     * Creates a New Account in the provided Database
+     * 
+     * @param object $connection The Connection Object with the Database
+     * @param string $username The Username of the new account
+     * @param string $password The Password of the new account
+     * 
+     * @return true|string True if successful, otherwise the failure message is returned
+     */
+    static public function create_account(object $connection, string $username, string $password) {
+        /* Password Hashing */
+        $password_hash = password_hash($password, PASSWORD_DEFAULT);
+        
+        // Try with MySQLi
+        if ($connection instanceof mysqli) {
+            // SQL Statement with MySQLi parameters that creates the Account
+            $sql_create_account = "INSERT INTO admins (username, `password`) VALUES (?, ?)";
+            
+
+            $connection->begin_transaction(); // Transaction For Security
+            /* Creation of Account */
+            try {
+                // Preparation of the statement
+                $query_create_account = $connection->prepare($sql_create_account);
+                // Parameter Binding and Query Execution
+                $query_create_account->bind_param("ss", $username, $password_hash);
+                $query_create_account->execute();
+
+                /* Commit Changes and Return True on Success */
+                $connection->commit();
+                return true;               
+            } catch (Exception $e) {
+                /* Failure Handling */
+                $connection->rollback(); // Rollback of changes
+                return $e->getMessage();; 
+            }
+        } elseif ($connection instanceof PDO) {
+            $sql_create_account = "INSERT INTO admins (username, `password`) VALUES (:usr, :psw)";
+            try {
+                // Preparation of the statement
+                $query_create_account = $connection->prepare($sql_create_account);
+                // Parameter Binding and Query Execution
+                $query_create_account->bindParam(":usr", $username);
+                $query_create_account->bindParam(":psw", $hash_password);
+                $query_create_account->execute();
+
+                /* Commit Changes and Return True on Success */
+                $connection->commit();
+                return true;               
+            } catch (PDOException $e) {
+                /* Failure Handling */
+                $connection->rollback(); // Rollback of changes
+                return $e->getMessage(); 
             }
         }
     }

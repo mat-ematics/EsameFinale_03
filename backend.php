@@ -21,9 +21,12 @@ if (!isset($_SESSION) || !isset($_SESSION['is_auth']) || $_SESSION['is_auth'] !=
 }
 
 /* Creazione della Connessione con Database */
-strumenti::create_connection(EXTENSION_MYSQLI, 'localhost', 'portfolio', 'root');
+$connection = strumenti::create_connection(EXTENSION_MYSQLI, 'localhost', 'portfolio', 'root');
 
 $data = strumenti::leggiJSON("json/data.json", true)["backend"];
+
+//Importazione Validazione Server del Backend
+require_once('inclusioni/backend_validation.php');
 
 ?>
 
@@ -52,24 +55,30 @@ $data = strumenti::leggiJSON("json/data.json", true)["backend"];
 
         <!-- Input Password -->
         <label for="password">Password:</label>
+        <!-- Password Container -->
         <div class="password-container">
+            <!-- Password Input -->
             <input type="password" class="input-credential" name="password" id="password" placeholder="Password">
+            <!-- "Show Password" Icon -->
             <span class="iconShowPassword"><i class="password-toggle fa-solid fa-eye show"></i></span>
         </div>
          <!-- Password Error Message -->
          <ul class="errors-container" id="passwordErrors" role="alert"><li></li></ul>
 
         <!-- Input Repeat Password -->
-        <label for="repeatPassword">Repeat Password:</label>
+        <label for="repeatPassword">Repeat Password:</label> 
+        <!-- Repeat Password Container -->
         <div class="password-container">
+            <!-- Password Input -->
             <input type="password"  class="input-credential" name="repeat_password" id="repeatPassword" placeholder="Password">
+            <!-- "Show Password" Icon -->
             <span class="iconShowPassword"><i class="repeat-password password-toggle fa-solid fa-eye show"></i></span>
         </div>
          <!-- Repeat Password Error Message -->
          <ul class="errors-container" id="repeatPasswordErrors" role="alert"><li></li></ul>
 
          <!-- Submit Button -->
-         <button type="submit" name="button_login" value="login" class="button-submit-credentials">
+         <button type="submit" name="button_submit" value="create_user" class="button-submit-credentials">
             <span id="buttonText">Create User</span>
         </button>
     </form>
