@@ -81,6 +81,7 @@ if (!empty($_POST)) {
                             <input type="text" 
                                 class="input-credential" 
                                 name="username" 
+                                id="username"
                                 data-type="username" 
                                 placeholder="Username">
                             <!-- Username Error Message -->
@@ -92,6 +93,7 @@ if (!empty($_POST)) {
                                 <input type="password" 
                                     class="input-credential input-password" 
                                     name="password" 
+                                    id="password"
                                     data-type="password" 
                                     placeholder="Password">
                                 <span class="iconShowPassword">
