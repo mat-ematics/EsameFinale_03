@@ -43,45 +43,86 @@ require_once('inclusioni/backend_validation.php');
             <li id="works" class="area">Works</li>
         </menu>
     </main>
-    <form action="backend.php" method="post" class="users">
-        <!-- Area Title -->
-        <h2 class="area-title">Users</h2>
+    <!-- Form Response -->
+    <?php if($flagUsers != 200) { ?>
+        <div class="response"></div>
+    <?php } ?>
 
-        <!-- Input Username -->
-        <label for="username">Insert Username:</label>
-        <input type="text" class="input-credential" name="username" id="username" placeholder="Username">
-        <!-- Username Error Message -->
-        <ul class="errors-container" id="usernameErrors" role="alert"><li></li></ul>
+    <!-- Users -->
+    <div id="areaUsers">
+        <!-- Create Account Form -->
+        <form action="backend.php" method="post" class="users-form">
+            <!-- Form Title -->
+            <h3 class="form-title">Create Account</h3>
 
-        <!-- Input Password -->
-        <label for="password">Password:</label>
-        <!-- Password Container -->
-        <div class="password-container">
-            <!-- Password Input -->
-            <input type="password" class="input-credential" name="password" id="password" placeholder="Password">
-            <!-- "Show Password" Icon -->
-            <span class="iconShowPassword"><i class="password-toggle fa-solid fa-eye show"></i></span>
-        </div>
-         <!-- Password Error Message -->
-         <ul class="errors-container" id="passwordErrors" role="alert"><li></li></ul>
+            <!-- Input Username -->
+            <label for="username">Insert Username:</label>
+            <input type="text" 
+                class="input-credential" 
+                name="username" 
+                id="username" 
+                data-type="username" 
+                placeholder="Username">
+            <!-- Username Error Message -->
+            <ul class="errors-container username-errors" data-type="username" role="alert"><li></li></ul>
 
-        <!-- Input Repeat Password -->
-        <label for="repeatPassword">Repeat Password:</label> 
-        <!-- Repeat Password Container -->
-        <div class="password-container">
-            <!-- Password Input -->
-            <input type="password"  class="input-credential" name="repeat_password" id="repeatPassword" placeholder="Password">
-            <!-- "Show Password" Icon -->
-            <span class="iconShowPassword"><i class="repeat-password password-toggle fa-solid fa-eye show"></i></span>
-        </div>
-         <!-- Repeat Password Error Message -->
-         <ul class="errors-container" id="repeatPasswordErrors" role="alert"><li></li></ul>
+            <!-- Input Password -->
+            <label for="password">Password:</label>
+            <!-- Password Container -->
+            <div class="password-container">
+                <!-- Password Input -->
+                <input type="password" 
+                    class="input-credential" 
+                    name="password" 
+                    id="password" 
+                    data-type="password" 
+                    placeholder="Password">
+                <!-- "Show Password" Icon -->
+                <span class="iconShowPassword">
+                    <i class="password-toggle fa-solid fa-eye show"></i>
+                </span>
+            </div>
+            <!-- Password Error Message -->
+            <ul class="errors-container password-errors" data-type="password" role="alert"><li></li></ul>
 
-         <!-- Submit Button -->
-         <button type="submit" name="button_submit" value="create_user" class="button-submit-credentials">
-            <span id="buttonText">Create User</span>
-        </button>
-    </form>
+            <!-- Input Repeat Password -->
+            <label for="repeatPassword">Repeat Password:</label> 
+            <!-- Repeat Password Container -->
+            <div class="password-container">
+                <!-- Repeat Password Input -->
+                <input type="password" 
+                    class="input-credential" 
+                    name="repeat_password" 
+                    class="input-repeat-password" 
+                    data-type="repeat-password" 
+                    placeholder="Repeat Password">
+                <!-- "Show Password" Icon -->
+                <span class="iconShowPassword">
+                    <i class="repeat-password password-toggle fa-solid fa-eye show"></i>
+                </span>
+            </div>
+            <!-- Repeat Password Error Message -->
+            <ul class="errors-container repeat-password-errors" data-type="repeat-password" role="alert"><li></li></ul>
+
+            <!-- Submit Button -->
+            <button type="submit" 
+                    name="button_create_account" 
+                    value="create_user" 
+                    class="button-submit">
+                <span id="buttonText">Create User</span>
+            </button>
+        </form>
+
+        <!-- Edit Account form -->
+        <form action="backend.php" method="post" class="users-form">
+            
+        </form>
+
+        <!-- Delete Account form -->
+        <form action="backend.php" method="post" class="users-form">
+            
+        </form>
+    </div>
     <script src="js/backend.js"></script>
     <script src="js/check_login_signup.js"></script>
 </body>

@@ -7,6 +7,8 @@ use assets\strumenti;
 $regex_username = "/^[a-zA-Z_]{6,32}$/";
 $regex_password = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@$!%*?&])[A-Za-z0-9@$!%*?&]{8,}$/";
 
+$flagUsers = 200;
+
 /* Check if a Form was Submitted */
 if (isset($_POST) && !empty($_POST)) {
     /* Create User Validation */
@@ -31,6 +33,7 @@ if (isset($_POST) && !empty($_POST)) {
                 $create_result = strumenti::create_account($connection, $username, $password); 
                 if ($create_result === true) {
                     /* Account Successfully Created */
+                    $flag = 201;
                 } else {
                     /* Failed to Create Account */
                     $flag = 500;

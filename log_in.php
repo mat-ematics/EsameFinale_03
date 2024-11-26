@@ -68,27 +68,42 @@ if (!empty($_POST)) {
                         <h1 id="formSentLogin" class="error"><?php echo $data['login_error_server'] ?></h1>
                     <?php } else { ?>
                         <!-- Form vero e proprio -->
-                        <form action="log_in.php" method="post" id="contactForm" novalidate>
+                        <form action="log_in.php" method="post" novalidate>
                             <!-- Titolo Form -->
                             <h2 id="title">Log In</h2>
+
                             <!-- Username Input -->
                             <label for="username">Username:</label>
-                            <input type="text" class="input-credential" name="username" id="username" placeholder="Username">
+                            <input type="text" 
+                                class="input-credential" 
+                                name="username" 
+                                id="username" 
+                                data-type="username" 
+                                placeholder="Username">
                             <!-- Username Error Message -->
-                            <ul class="errors-container" id="usernameErrors" role="alert"><li></li></ul>
+                            <ul class="errors-container username-errors" data-type="username" role="alert"><li></li></ul>
 
                             <!-- Password Input -->
                             <label for="password">Password:</label>
                             <div class="password-container">
-                                <input type="password" class="input-credential input-password" name="password" id="password" placeholder="Password">
-                                <span class="iconShowPassword"><i class="password-toggle show fa-solid fa-eye"></i></span>
+                                <input type="password" 
+                                    class="input-credential input-password" 
+                                    name="password" 
+                                    id="password" 
+                                    data-type="password" 
+                                    placeholder="Password">
+                                <span class="iconShowPassword">
+                                    <i class="password-toggle show fa-solid fa-eye"></i>
+                                </span>
                             </div>
-                            
                             <!-- Password Error Message -->
-                            <ul class="errors-container" id="passwordErrors" role="alert"><li></li></ul>
+                            <ul class="errors-container password-errors" data-type="password" role="alert"><li></li></ul>
 
                             <!-- Submit Button -->
-                            <button type="submit" name="button_login" value="login" class="button-submit-credentials">
+                            <button type="submit" 
+                                    name="button_login" 
+                                    value="login" 
+                                    class="button-submit">
                                 <span id="buttonText">Log In</span>
                             </button>
                         </form>
