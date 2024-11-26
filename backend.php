@@ -65,7 +65,6 @@ require_once('inclusioni/backend_validation.php');
             <input type="text" 
                 class="input-credential" 
                 name="username" 
-                id="username" 
                 data-type="username" 
                 placeholder="Username">
             <!-- Username Error Message -->
@@ -79,7 +78,6 @@ require_once('inclusioni/backend_validation.php');
                 <input type="password" 
                     class="input-credential" 
                     name="password" 
-                    id="password" 
                     data-type="password" 
                     placeholder="Password">
                 <!-- "Show Password" Icon -->
