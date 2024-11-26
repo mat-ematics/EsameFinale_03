@@ -10,6 +10,19 @@ $submitBorder: rgba(224, 224, 224, 1);
 $submitBgColor: rgb(59, 45, 45);
 $submitHoverColor: linear-gradient(52deg, rgba(69,98,162,1) 0%, rgba(58,86,186,1) 33%, rgba(17,172,221,1) 100%);
 
+/* Stile Select */
+select {
+    padding: 10px;
+    font-size: 18px;
+    border: $inputBorder;
+    outline: none;
+    width: 50%;
+    transition: border 0.2s;
+
+    color: var.$colorSecondary;
+    background-color: #f8f7f7;
+}
+
 /* Stile input di testo e label */
 input {
     padding: 10px;

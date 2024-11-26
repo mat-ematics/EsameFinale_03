@@ -28,6 +28,8 @@ $data = strumenti::leggiJSON("json/data.json", true)["backend"];
 //Importazione Validazione Server del Backend
 require_once('inclusioni/backend_validation.php');
 
+$users = strumenti::get_admins($connection);
+
 ?>
 
 <!DOCTYPE html>
@@ -56,7 +58,7 @@ require_once('inclusioni/backend_validation.php');
     <!-- Users -->
     <div id="areaUsers">
         <!-- Create Account Form -->
-        <form action="backend.php" method="post" class="users-form">
+        <form action="backend.php" method="post" class="form-users">
             <!-- Form Title -->
             <h3 class="form-title">Create Account</h3>
 
@@ -120,56 +122,65 @@ require_once('inclusioni/backend_validation.php');
         </form>
 
         <!-- Edit Account form -->
-        <form action="backend.php" method="post" class="users-form">
+        <form action="backend.php" method="post" class="form-users">
             <!-- Form Title -->
             <h3 class="form-title">Edit Account</h3>
 
-            <label for="user"></label>
+            <label class="label-select-user">User:
+                <select name="selected_user" class="select-user">
+                    <?php foreach ($users as $user) { ?>
+                        <option value="<?php echo $user['idAdmin'] ?>"><?php echo $user['username'] ?></option>
+                    <?php } ?>
+                </select>
+            </label>
 
             <!-- Input Username -->
-            <label for="username">Insert Username:</label>
-            <input type="text" 
-                class="input-credential" 
-                name="username" 
-                data-type="username" 
-                placeholder="Username">
+            <label>Insert Username:
+                <input type="text" 
+                    class="input-credential" 
+                    name="username" 
+                    data-type="username" 
+                    placeholder="Username">
+            </label>
             <!-- Username Error Message -->
             <ul class="errors-container username-errors" data-type="username" role="alert"><li></li></ul>
 
             <!-- Input Password -->
-            <label for="password">Password:</label>
+            <label>Password:
             <!-- Password Container -->
-            <div class="password-container">
-                <!-- Password Input -->
-                <input type="password" 
-                    class="input-credential" 
-                    name="password" 
-                    data-type="password" 
-                    placeholder="Password">
-                <!-- "Show Password" Icon -->
-                <span class="iconShowPassword">
-                    <i class="password-toggle fa-solid fa-eye show"></i>
-                </span>
-            </div>
+                <div class="password-container">
+                    <!-- Password Input -->
+                    <input type="password" 
+                        class="input-credential" 
+                        name="password" 
+                        data-type="password" 
+                        placeholder="Password">
+                    <!-- "Show Password" Icon -->
+                    <span class="iconShowPassword">
+                        <i class="password-toggle fa-solid fa-eye show"></i>
+                    </span>
+                </div>
+            </label>
             <!-- Password Error Message -->
             <ul class="errors-container password-errors" data-type="password" role="alert"><li></li></ul>
 
             <!-- Input Repeat Password -->
-            <label for="repeatPassword">Repeat Password:</label> 
-            <!-- Repeat Password Container -->
-            <div class="password-container">
-                <!-- Repeat Password Input -->
-                <input type="password" 
-                    class="input-credential" 
-                    name="repeat_password" 
-                    class="input-repeat-password" 
-                    data-type="repeat-password" 
-                    placeholder="Repeat Password">
-                <!-- "Show Password" Icon -->
-                <span class="iconShowPassword">
-                    <i class="repeat-password password-toggle fa-solid fa-eye show"></i>
-                </span>
-            </div>
+            <label>Repeat Password:
+                <!-- Repeat Password Container -->
+                <div class="password-container">
+                    <!-- Repeat Password Input -->
+                    <input type="password" 
+                        class="input-credential" 
+                        name="repeat_password" 
+                        class="input-repeat-password" 
+                        data-type="repeat-password" 
+                        placeholder="Repeat Password">
+                    <!-- "Show Password" Icon -->
+                    <span class="iconShowPassword">
+                        <i class="repeat-password password-toggle fa-solid fa-eye show"></i>
+                    </span>
+                </div>
+            </label>
             <!-- Repeat Password Error Message -->
             <ul class="errors-container repeat-password-errors" data-type="repeat-password" role="alert"><li></li></ul>
 

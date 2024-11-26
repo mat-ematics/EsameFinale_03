@@ -46,10 +46,22 @@ menu.area-list {
     display: flex;
     flex-direction: row;
 
-    form.users-form {
+    label.label-select-user {
+        text-align: center;
+        font-weight: bold;
+    }
+
+    select.select-user {
+        display: block;
+        margin: 0 auto;
+        border: 2px solid;
+    }
+
+    form.form-users {
         display: flex;
         flex-direction: column;
         align-items: center;
         padding: 0 5%;
+
     }
 }
