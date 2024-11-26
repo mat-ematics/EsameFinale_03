@@ -103,7 +103,7 @@ button.button-submit {
     }
     &:hover:not(:disabled) { 
         > {
-            span#buttonText {
+            span.buttonText {
                 z-index: 2;
                 position: relative;
                 color: var.$colorTertiary; 

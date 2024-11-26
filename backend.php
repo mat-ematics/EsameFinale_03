@@ -114,7 +114,7 @@ require_once('inclusioni/backend_validation.php');
                     name="button_create_account" 
                     value="create_user" 
                     class="button-submit">
-                <span id="buttonText">Create User</span>
+                <span class="buttonText">Create User</span>
             </button>
         </form>
 

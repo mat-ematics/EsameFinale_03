@@ -108,7 +108,7 @@ if (!empty($_POST)) {
                                     name="button_login" 
                                     value="login" 
                                     class="button-submit">
-                                <span id="buttonText">Log In</span>
+                                <span class="buttonText">Log In</span>
                             </button>
                         </form>
                     <?php } ?>
