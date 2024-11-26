@@ -72,7 +72,7 @@ if (!empty($_POST)) {
                         <h1 id="formSentLogin" class="error"><?php echo $data['login_error_server'] ?></h1>
                     <?php } else { ?>
                         <!-- Form vero e proprio -->
-                        <form action="log_in.php" method="post" novalidate>
+                        <form action="log_in.php" method="post" id="loginForm" novalidate>
                             <!-- Titolo Form -->
                             <h2 id="title">Log In</h2>
 
