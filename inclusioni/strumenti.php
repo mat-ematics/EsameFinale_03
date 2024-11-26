@@ -396,4 +396,43 @@ class strumenti {
             }
         }
     }
+
+    /**
+     * Retrieves Admins from given database in the provided Database
+     * 
+     * @param object $connection The Connection Object with the Database
+     * 
+     * @return array|string Users if successful, otherwise the failure message is returned
+     */
+    static public function get_admins(object $connection) {
+        //Query
+        $sql_get_users = "SELECT idAdmin, username, `password` FROM admins";
+
+        // Try with MySQLi
+        if ($connection instanceof mysqli) {
+            /* Creation of Account */
+            try {
+                // Query of the statement
+                $query_get_users = $connection->query($sql_get_users);
+                
+                $result = $query_get_users->fetch_all(MYSQLI_ASSOC);
+
+                return $result;               
+            } catch (Exception $e) {
+                return $e->getMessage();; 
+            }
+        } elseif ($connection instanceof PDO) {
+            try {
+                // Query of the statement
+                $query_get_users = $connection->query($sql_get_users);
+
+                $result = $query_get_users->fetchAll(PDO::FETCH_ASSOC);
+
+                return $result;               
+            } catch (PDOException $e) {
+                /* Failure Handling */
+                return $e->getMessage(); 
+            }
+        }
+    }
 }
