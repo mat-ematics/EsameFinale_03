@@ -33,7 +33,10 @@ require_once('inclusioni/backend_validation.php');
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Head Import -->
     <?php require_once("inclusioni/head.php") ?>
+    <!-- Form Content Style -->
+    <link rel="stylesheet" href="css/account_form.min.css">
 </head>
 <body>
     <?php require_once('inclusioni/navbar.php') ?>

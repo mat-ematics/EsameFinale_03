@@ -59,6 +59,8 @@ if (!empty($_POST)) {
         <head>
             <!-- Barra di navigazione inclusa da navbar.php -->
             <?php require_once('inclusioni/navbar.php') ?>
+            <!-- Form Content Style -->
+            <link rel="stylesheet" href="css/account_form.min.css">
         </head>
         <main>
             <!-- Contenitore Form -->

@@ -12,14 +12,21 @@ $gradientBgColor: linear-gradient(-45deg, rgb(57, 141, 190), #3683db, #2b95bb, #
 
 $mainBoxShadow: 0px 2px 6px 4px rgb(219, 219, 219);
 
+/* Errors */
+
 /* Testi */
 $colorPrimary: #1c7bd3;
 $colorSecondary: black;
 $colorTertiary: #F2F3F4;
 $colorDisabled: #898787;
+//Errori
+$errorColor: rgb(201, 30, 30);
 
 $fontPrimary: 'Poppins';
 $fontSecondary: Helvetica, sans-serif, Arial;
+
+/* Bordi */
+$errorBorder: 1px solid rgb(221, 17, 17);
 
 /* Header/Navbar */
 
