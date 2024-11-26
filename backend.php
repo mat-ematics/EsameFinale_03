@@ -32,7 +32,9 @@ require_once('inclusioni/backend_validation.php');
 
 <!DOCTYPE html>
 <html lang="en">
-<?php require_once("inclusioni/head.php") ?>
+<head>
+    <?php require_once("inclusioni/head.php") ?>
+</head>
 <body>
     <?php require_once('inclusioni/navbar.php') ?>
     <main>

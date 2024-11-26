@@ -1,4 +1,4 @@
-@use 'variables' as var;
+@use '../variables' as var;
 
 $inputBorder: 1px solid lightgray;
 $inputValidBorder: 1px solid var.$primaryBgColor;

@@ -10,8 +10,10 @@ exit; */
 
 <!DOCTYPE html>
 <html lang="en">
-    <!-- Head incluso da inclusioni/head.php -->
-    <?php require_once("inclusioni/head.php") ?> 
+    <head>
+        <!-- Head incluso da inclusioni/head.php -->
+        <?php require_once("inclusioni/head.php") ?> 
+    </head>
     <body>
         <!-- Barra di navigazione inclusa da navbar.php -->
         <?php require_once('inclusioni/navbar.php') ?>
