@@ -45,6 +45,7 @@ menu.area-list {
 #areaUsers {
     display: flex;
     flex-direction: row;
+    padding-bottom: 30px;
 
     label.label-select-user {
         text-align: center;
@@ -54,6 +55,7 @@ menu.area-list {
     select.select-user {
         display: block;
         margin: 0 auto;
+        margin-bottom: 10px;
         border: 2px solid;
     }
 
@@ -61,7 +63,8 @@ menu.area-list {
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: space-between;
         padding: 0 5%;
-
+        width: 100%;
     }
 }

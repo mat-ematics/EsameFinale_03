@@ -114,8 +114,8 @@ $users = strumenti::get_admins($connection);
 
             <!-- Submit Button -->
             <button type="submit" 
-                    name="button_create_account" 
-                    value="create_user" 
+                    name="button_submit" 
+                    value="user_create" 
                     class="button-submit">
                 <span class="buttonText">Create User</span>
             </button>
@@ -186,16 +186,33 @@ $users = strumenti::get_admins($connection);
 
             <!-- Submit Button -->
             <button type="submit" 
-                    name="button_create_account" 
-                    value="create_user" 
+                    name="button_submit" 
+                    value="user_edit" 
                     class="button-submit">
-                <span class="buttonText">Create User</span>
+                <span class="buttonText">Edit User</span>
             </button>
         </form>
 
-        <!-- Delete Account form -->
-        <form action="backend.php" method="post" class="users-form">
-            
+        <!-- Delete (Admin) User form -->
+        <form action="backend.php" method="post" class="form-users">
+            <!-- Form Title -->
+            <h3 class="form-title">Delete User</h3>
+
+            <label class="label-select-user">User:
+                <select name="selected_user" class="select-user">
+                    <?php foreach ($users as $user) { ?>
+                        <option value="<?php echo $user['idAdmin'] ?>"><?php echo $user['username'] ?></option>
+                    <?php } ?>
+                </select>
+            </label>
+
+            <!-- Submit Button -->
+            <button type="submit" 
+                    name="button_submit" 
+                    value="user_delete" 
+                    class="button-submit">
+                <span class="buttonText">Delete User</span>
+            </button>
         </form>
     </div>
     <script src="js/backend.js"></script>

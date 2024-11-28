@@ -4,6 +4,8 @@ $inputBorder: 1px solid lightgray;
 $inputValidBorder: 1px solid var.$primaryBgColor;
 $inputInvalidBorder: var.$errorBorder;
 
+$selectColor: #f8f7f7;
+
 $errorMessageColor: var.$errorColor;
 
 $submitBorder: rgba(224, 224, 224, 1);
@@ -20,7 +22,7 @@ select {
     transition: border 0.2s;
 
     color: var.$colorSecondary;
-    background-color: #f8f7f7;
+    background-color: $selectColor;
 }
 
 /* Stile input di testo e label */
