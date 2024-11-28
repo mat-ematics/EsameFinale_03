@@ -58,7 +58,7 @@ $users = strumenti::get_admins($connection);
     <!-- Users -->
     <div id="areaUsers">
         <!-- Create Account Form -->
-        <form action="backend.php" method="post" class="form-users">
+        <form action="backend.php" method="post" class="form-users" id="formCreateUser">
             <!-- Form Title -->
             <h3 class="form-title">Create Account</h3>
 
@@ -98,9 +98,8 @@ $users = strumenti::get_admins($connection);
                 <div class="password-container">
                     <!-- Repeat Password Input -->
                     <input type="password" 
-                        class="input-credential" 
                         name="repeat_password" 
-                        class="input-repeat-password" 
+                        class="input-credential input-repeat-password" 
                         data-type="repeat-password" 
                         placeholder="Repeat Password">
                     <!-- "Show Password" Icon -->
