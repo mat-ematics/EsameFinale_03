@@ -340,6 +340,12 @@
 
     "backend": {
         "page_title": "Backend",
-        "style_sheet": "backend.min.css"
+        "style_sheet": "backend.min.css",
+        "response_messages": {
+            "201": "User Succesfully Created",
+            "400": "Incorrect Form of Username or Password",
+            "406": "User Already Exists",
+            "500": "Failed to Create Account"
+        }
     }
 }

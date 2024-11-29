@@ -141,3 +141,23 @@ button.button-submit {
         transition: background 0.5s;
     }        
 }
+
+.response {
+    border: 2px solid;
+    width: 25%;
+    margin: 20px auto;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    font-size: 18px;
+    
+    &.success {
+        border-color: var.$successBorderColor;
+        background-color: var.$successBgColor;
+    }
+    
+    &.failure {
+        border-color: var.$errorBorderColor;
+        background-color: var.$errorBgColor;
+    }
+}

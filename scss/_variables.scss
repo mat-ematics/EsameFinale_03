@@ -10,9 +10,10 @@ $primaryBgColor: #3683db;
 $secondaryBgColor: #F2F3F4;
 $gradientBgColor: linear-gradient(-45deg, rgb(57, 141, 190), #3683db, #2b95bb, #28a7ac);
 
-$mainBoxShadow: 0px 2px 6px 4px rgb(219, 219, 219);
+$errorBgColor: rgb(248, 202, 202);
+$successBgColor: rgb(208, 248, 202);
 
-/* Errors */
+$mainBoxShadow: 0px 2px 6px 4px rgb(219, 219, 219);
 
 /* Testi */
 $colorPrimary: #1c7bd3;
@@ -26,7 +27,9 @@ $fontPrimary: 'Poppins';
 $fontSecondary: Helvetica, sans-serif, Arial;
 
 /* Bordi */
-$errorBorder: 1px solid rgb(221, 17, 17);
+$errorBorderColor: rgb(221, 17, 17);
+$successBorderColor: green;
+$errorBorder: 1px solid $errorBorderColor;
 
 /* Header/Navbar */
 

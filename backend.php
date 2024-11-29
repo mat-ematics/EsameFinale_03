@@ -52,7 +52,16 @@ $users = strumenti::get_admins($connection);
     </main>
     <!-- Form Response -->
     <?php if($flagUsers != 200) { ?>
-        <div class="response"></div>
+        <div 
+            class="response
+            <?php if (str_starts_with($flagUsers, 2)) {
+                echo 'success';
+            } else {
+                echo 'failure';
+            } ?>"
+            >
+            <?php echo $data['response_messages'][$flagUsers] ?>
+        </div>
     <?php } ?>
 
     <!-- Users -->
