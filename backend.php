@@ -16,7 +16,7 @@ use assets\strumenti;
 if (!isset($_SESSION) || !isset($_SESSION['is_auth']) || $_SESSION['is_auth'] != true) {
     session_unset(); // Dissociazione Dati della Sessione Corrente
     session_destroy(); // Eliminazione della Sessione Corrente
-    header("Location: log_in.php"); // Reindirizzamento alla pagina di Login
+    header("Location: login.php"); // Reindirizzamento alla pagina di Login
     exit; // Chiusura Caricamento pagina corrente
 }
 
@@ -67,7 +67,7 @@ $users = strumenti::get_admins($connection);
     <!-- Users -->
     <div id="areaUsers">
         <!-- Create Account Form -->
-        <form action="backend.php" method="post" class="form-users" id="formCreateUser">
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-users" id="formCreateUser">
             <!-- Form Title -->
             <h3 class="form-title">Create Account</h3>
 
@@ -130,7 +130,7 @@ $users = strumenti::get_admins($connection);
         </form>
 
         <!-- Edit Account form -->
-        <form action="backend.php" method="post" class="form-users">
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-users">
             <!-- Form Title -->
             <h3 class="form-title">Edit Account</h3>
 
@@ -202,7 +202,7 @@ $users = strumenti::get_admins($connection);
         </form>
 
         <!-- Delete (Admin) User form -->
-        <form action="backend.php" method="post" class="form-users">
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-users">
             <!-- Form Title -->
             <h3 class="form-title">Delete User</h3>
 
