@@ -1,7 +1,7 @@
 <?php 
-
 /* Rigenerazione Periodica del Session ID */
 $regeneration_interval = 300; // Intervallo di Rigenerazione
+$dest_file = 'login.php';
 
 /* Controllo Rigenerazione */
 if (!isset($_SESSION['CREATED'])) {
@@ -20,6 +20,6 @@ if (!isset($_SESSION['LAST_ACTIVITY'])) {
 } elseif (time() - $_SESSION['LAST_ACTIVITY'] > $timeout_interval) {
     session_unset(); // Dissociazione di tutti i dati di sessione
     session_destroy(); // Eliminazione della Sessione
-    header("Location: log_in.php"); // Reindirizzamento alla pagina di Login
+    header("Location: {$dest_file}"); // Reindirizzamento alla pagina di Login
     exit(); // Chiusura caricamento pagina corrente
 }

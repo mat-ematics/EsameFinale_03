@@ -1,5 +1,5 @@
 /* Imports */
-import { initializeCheckLoginSignup } from "./modules/check_login_signup.js";
+import { initializeCheckLoginSignup as initUserCreate } from "./modules/check_login_signup.js";
 
 /* Menu delle Visualizzazioni */
 const areaList = document.querySelectorAll(".area");
@@ -8,6 +8,7 @@ let currentViewItem = document.getElementById('users');
 /* Select the Current View in Menu */
 currentViewItem.classList.add('current');
 
+/* Area Selection Behaviour */
 areaList.forEach(item => {
     item.addEventListener('click', function() {
         currentViewItem.classList.remove("current");
@@ -16,4 +17,5 @@ areaList.forEach(item => {
     });
 });
 
-initializeCheckLoginSignup(document.getElementById('formCreateUser'));
+/* Create User Validation */
+initUserCreate(document.getElementById('formCreateUser'));
