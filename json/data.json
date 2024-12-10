@@ -326,9 +326,9 @@
         }
     },
 
-    "log_in": {
+    "login": {
         "page_title": "Log In",
-        "style_sheet": "log_in.min.css",
+        "style_sheet": "login.min.css",
         "action": "contacts.php",
         "title": "Contacts",
         "regex_username": "/^[a-zA-Z_]{6,32}$/",

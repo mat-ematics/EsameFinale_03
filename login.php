@@ -11,7 +11,7 @@ require_once("inclusioni/session_security.php");
 // Importo strumenti e Dati dal JSON
 require_once("inclusioni/strumenti.php");
 use assets\strumenti;
-$data = strumenti::leggiJSON("json/data.json", true)["log_in"];
+$data = strumenti::leggiJSON("json/data.json", true)["login"];
 $flag = 0;
 
 /* Validazione Lato Server */
@@ -72,7 +72,7 @@ if (!empty($_POST)) {
                         <h1 id="formSentLogin" class="error"><?php echo $data['login_error_server'] ?></h1>
                     <?php } else { ?>
                         <!-- Form vero e proprio -->
-                        <form action="log_in.php" method="post" id="formLogin" novalidate>
+                        <form action="login.php" method="post" id="formLogin" novalidate>
                             <!-- Titolo Form -->
                             <h2 id="title">Log In</h2>
 
@@ -115,6 +115,6 @@ if (!empty($_POST)) {
                 </div>
             </div>
         </main>
-        <script src="js/check_login_signup.js"></script>
+        <script type="module" src="js/login.js"></script>
     </body>
 </html>

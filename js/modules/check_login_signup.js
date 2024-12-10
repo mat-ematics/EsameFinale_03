@@ -1,16 +1,4 @@
-const formsId = [
-    'formLogin',
-    'formCreateUser',
-]
-
-formsId.forEach(id => {
-    let form = document.getElementById(id);
-    if (form != null) {
-        initializeCheckLoginSignup(form);
-    }
-});
-
-function initializeCheckLoginSignup(form) {
+export function initializeCheckLoginSignup(form) {
     /* Input di Credenziali */
     const credentials = form.querySelectorAll(".input-credential");
     /* Bottone di Invio */
@@ -81,7 +69,7 @@ function initializeCheckLoginSignup(form) {
         const inputRepeatPassword = form.querySelector("input[data-type='repeat-password']");
         const errorRepeatPassword = form.querySelector(".errors-container.repeat-password-errors");
     
-        if (inputPassword.value !== inputRepeatPassword.value) {
+        if (inputPassword.value !== inputRepeatPassword.value || inputRepeatPassword.value == '') {
             inputRepeatPassword.classList.add("invalid");
             inputRepeatPassword.classList.remove("valid");
             errorRepeatPassword.style.visibility = "visible";

@@ -1,3 +1,6 @@
+/* Imports */
+import { initializeCheckLoginSignup } from "./modules/check_login_signup.js";
+
 /* Menu delle Visualizzazioni */
 const areaList = document.querySelectorAll(".area");
 let currentViewItem = document.getElementById('users');
@@ -12,3 +15,5 @@ areaList.forEach(item => {
         currentViewItem = this;
     });
 });
+
+initializeCheckLoginSignup(document.getElementById('formCreateUser'));

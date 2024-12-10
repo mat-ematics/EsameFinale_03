@@ -223,7 +223,6 @@ $users = strumenti::get_admins($connection);
             </button>
         </form>
     </div>
-    <script src="js/backend.js"></script>
-    <script src="js/check_login_signup.js"></script>
+    <script type="module" src="js/backend.js"></script>
 </body>
 </html>
