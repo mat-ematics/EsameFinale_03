@@ -1,5 +1,6 @@
-import { initializeCheckLoginSignup } from "./modules/check_login_signup";
+/* Imports */
+import initializeForm from "./modules/form_handlers/form_toggle";
 
 // Add validation to Login
 const form = document.getElementById('formLogin');
-initializeCheckLoginSignup(form);
+initializeForm("login", form);

@@ -1,5 +1,5 @@
 /* Imports */
-import { initializeCheckLoginSignup as initUserCreate } from "./modules/check_login_signup.js";
+import initializeForm from "./modules/form_handlers/form_toggle";
 
 /* Menu delle Visualizzazioni */
 const areaList = document.querySelectorAll(".area");
@@ -17,5 +17,5 @@ areaList.forEach(item => {
     });
 });
 
-/* Create User Validation */
-initUserCreate(document.getElementById('formCreateUser'));
+/* Create User Form Validation Initialization */
+initializeForm("signup", document.getElementById("formCreateUser"));
