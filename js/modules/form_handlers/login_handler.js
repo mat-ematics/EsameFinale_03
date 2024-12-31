@@ -13,8 +13,8 @@ export const regexList = {
  * List of Error Messages for Login.
  */
 export const errorMessages = {
-    username: 'Invalid username.',
-    password: 'Password must be at least 8 characters long.',
+    username: 'Username must be 3-20 characters long and can only contain letters and underscores.',
+    password: 'Password must be at least 8 characters long, and include an uppercase letter, a lowercase letter, a number, and a special character ($!%*?&).',
 };
 
 /**
