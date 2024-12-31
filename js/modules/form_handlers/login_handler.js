@@ -13,7 +13,7 @@ export const regexList = {
  * List of Error Messages for Login.
  */
 export const errorMessages = {
-    username: 'Username must be 3-20 characters long and can only contain letters and underscores.',
+    username: 'Username must be 6-32 characters long and can only contain letters and underscores.',
     password: 'Password must be at least 8 characters long, and include an uppercase letter, a lowercase letter, a number, and a special character ($!%*?&).',
 };
 
