@@ -1,5 +1,5 @@
 /* Imports */
-import initializeForm from "./modules/form_handlers/form_toggle";
+import initializeForm from "./modules/form_handlers/_form_toggle";
 
 /* Menu delle Visualizzazioni */
 const areaList = document.querySelectorAll(".area");
@@ -19,3 +19,4 @@ areaList.forEach(item => {
 
 /* Create User Form Validation Initialization */
 initializeForm("signup", document.getElementById("formCreateUser"));
+initializeForm('editUser', document.getElementById("formEditUser"));

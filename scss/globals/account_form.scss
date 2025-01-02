@@ -40,7 +40,7 @@ input {
     &:focus {
         border: $inputValidBorder;
     }
-    &.valid {
+    &:not(:placeholder-shown):not(.invalid) {
         border: $inputValidBorder;
     }
     &.invalid {

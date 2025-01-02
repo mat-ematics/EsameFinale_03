@@ -2,15 +2,15 @@
 import DOMUtils from "../_shared/_dom_utils"; 
 
 /** 
- * List of Regexes for User/Admin Creation.
+ * List of Regexes for User/Admin Editing
  */
 const regexList = {
-    username: /^[a-zA-Z_]{6,32}$/, // Uppercase and Lowercase letters, underscores, between 6 and 32 characters
+    username: /^$|^[a-zA-Z_]{6,32}$/, // Uppercase and Lowercase letters, underscores, between 6 and 32 characters
     // Default Password Validation, at least 8 characters. Used indirectly for Repeat Password as well
-    password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, 
+    password: /^$|^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, 
 };
 /**
- * List of Error Messages for User/Admin Creation
+ * List of Error Messages for User/Admin Editing
  */
 const errorMessages = {
     username: 'Username must be alphanumeric or underscore and 6-32 characters long.',
@@ -19,11 +19,11 @@ const errorMessages = {
 };
 
 /**
- * Intializes Signup-like Validation on a given Form
+ * Intializes User Editing Validation on a given Form
  * 
  * @param {HTMLFormElement} form The Form to initialize validation
  */
-export default function initializeValidationSignup(form) {
+export default function initializeValidationUserEdit(form) {
     const inputs = form.querySelectorAll(".input-credential");
     const submitButton = form.querySelector(".button-submit");
 
@@ -34,7 +34,7 @@ export default function initializeValidationSignup(form) {
         input.addEventListener("input", () => {
             DOMUtils.validateInput(form, input, regexList);
             DOMUtils.repeatPasswordCheck(form);
-            DOMUtils.updateButtonState(inputs, submitButton);
+            DOMUtils.updateButtonState(inputs, submitButton, false);
         });
     });
 

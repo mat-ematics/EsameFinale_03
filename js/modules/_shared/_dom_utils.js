@@ -69,12 +69,23 @@ export default class DOMUtils {
      * 
      * @param {NodeList} inputs List of Inputs to Verifiy
      * @param {HTMLButtonElement} button The Button element to update
-     * @param {boolean} [checkEmpty] If true (default), checks if the input is empty
+     * @param {boolean} [checkSomeEmpty] If true (default), checks if ANY ONE INPUT IS EMPTY, otherwise CHECKS IF ALL INPUTS ARE EMPTY
      */
-    static updateButtonState(inputs, button, checkEmpty = true) {
+    static updateButtonState(inputs, button, checkSomeEmpty = true) {
         let hasErrors = false; // Variable that checks whether there are errors or not
-        if (checkEmpty) hasErrors = Array.from(inputs).some(input => input.classList.contains("invalid") || !input.value);
-        else hasErrors = Array.from(inputs).some(input => input.classList.contains("invalid"));
+
+        /* Check for some empty */
+        if (checkSomeEmpty) {
+            /* hasErrors is true when at least one input is invalid or empty */
+            hasErrors = Array.from(inputs).some(input => input.classList.contains("invalid") || !input.value);
+        } 
+        else {
+            /* hasErrors is true when at least one input is invalid or all inputs are empty */
+            const hasInvalidInputs = Array.from(inputs).some(input => input.classList.contains("invalid"));
+            const allInputsEmpty = Array.from(inputs).every(input => !input.value);
+            hasErrors = hasInvalidInputs || allInputsEmpty;
+        } 
+
         DOMUtils.disableButton(button, hasErrors);
     }
 

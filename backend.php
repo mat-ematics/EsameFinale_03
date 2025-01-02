@@ -149,7 +149,7 @@ $users = strumenti::get_admins($connection);
         </form>
 
         <!-- Edit Account form -->
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-users">
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-users" id="formEditUser">
             <!-- Form Title -->
             <h3 class="form-title">Edit Account</h3>
 
@@ -243,6 +243,6 @@ $users = strumenti::get_admins($connection);
         </form>
     </div>
     <script type="module" src="js/backend.js"></script>
-    <script src="js/modules/_shared/prevent_resubmission.js"></script>
+    <script src="js/global/prevent_resubmission.js"></script>
 </body>
 </html>
