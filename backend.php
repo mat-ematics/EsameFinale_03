@@ -223,7 +223,7 @@ exit; */
         </form>
 
         <!-- Delete (Admin) User form -->
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-users">
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-users" id="formDeleteUser">
             <!-- Form Title -->
             <h3 class="form-title">Delete User</h3>
 

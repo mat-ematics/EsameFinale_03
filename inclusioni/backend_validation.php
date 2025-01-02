@@ -90,5 +90,17 @@ if (isset($_POST) && !empty($_POST)) {
             //Invalid Inputs
             $flag_response = 400;
         }
+    } elseif ($_POST['button_submit'] == "user_delete") {
+        /* Form Submission to Respond */
+        $form_response = 'user_deletion';
+        /* ID of the User to delete */
+        $idUser = $_POST['selected_user'];
+        /* User Deletion */
+        $isDeleted = strumenti::delete_user($connection, $idUser);
+        if ($isDeleted === true) {
+            $flag_response = 201;
+        } else {
+            $flag_response = 500;
+        }
     }
 }

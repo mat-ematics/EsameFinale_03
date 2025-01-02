@@ -530,4 +530,58 @@ class strumenti {
             }
         }
     }
+
+    /**
+     * Deletes an existing account
+     * 
+     * @param object $connection The Connection Object with the Database
+     * @param int $idAdmin The ID number of the account
+     * 
+     * @return bool|string Either True if successful, the failure message, or a non-exception-caught failure is returned
+     */
+    static public function delete_user(object $connection, int $idAdmin) {
+        
+        // Try with MySQLi
+        if ($connection instanceof mysqli) {
+            //SQL statement
+            $sql_delete_user = "DELETE FROM admins WHERE idAdmin = ?";
+            
+            /* Deletion */
+            $connection->begin_transaction(); //Start of Transaction
+            try {
+                // Query of the statement
+                $query_delete_user = $connection->prepare($sql_delete_user); //Prepare the statement
+                $query_delete_user->bind_param('i', $idAdmin);
+                $result = $query_delete_user->execute(); //Statement Execution
+
+                /* Return of the Result and Commit Changes */
+                $connection->commit();
+                return $result;
+            } catch (Exception $e) {
+                /* Return Error Message and Rollback changes */
+                $connection->rollback();
+                return $e->getMessage();
+            }
+        } elseif ($connection instanceof PDO) {
+            //SQL statement
+            $sql_delete_user = "DELETE FROM admins WHERE idAdmin = :id";
+
+            /* Deletion */
+            $connection->beginTransaction();
+            try {
+                // Query of the statement
+                $query_delete_user = $connection->prepare($sql_delete_user); //Prepare the statement
+                $query_delete_user->bindParam(':id', $idAdmin, PDO::PARAM_INT); // Parameter Binding
+                $result = $query_delete_user->execute(); //Statement Execution
+
+                /* Return of the Result and Commit Changes */
+                $connection->commit();
+                return $result;
+            } catch (PDOException $e) {
+                /* Failure Handling and Rollback */
+                $connection->rollBack();
+                return $e->getMessage(); 
+            }
+        }
+    }
 }
