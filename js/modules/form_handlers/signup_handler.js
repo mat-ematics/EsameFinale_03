@@ -1,5 +1,5 @@
 //Imports
-import DOMUtils from "../_shared/dom_utils"; 
+import DOMUtils from "../_shared/_dom_utils"; 
 
 /** 
  * List of Regexes for User/Admin Creation.

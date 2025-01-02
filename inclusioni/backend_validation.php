@@ -44,7 +44,7 @@ if (isset($_POST) && !empty($_POST)) {
             $flagUsers = 400;
         } else {
             /* Server Error */
-            $flagUsers = 500;
+            $flagUsers = 500.1;
         }
     }
 }

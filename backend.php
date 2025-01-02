@@ -54,13 +54,32 @@ $users = strumenti::get_admins($connection);
     <?php if($flagUsers != 200) { ?>
         <div 
             class="response
-            <?php if (str_starts_with($flagUsers, 2)) {
-                echo 'success';
-            } else {
-                echo 'failure';
-            } ?>"
+            <?php
+                /* Dynamic Validation Style */
+                if (str_starts_with($flagUsers, 2)) {
+                    echo 'success';
+                } else {
+                    echo 'failure';
+                } 
+            ?>"
             >
-            <?php echo $data['response_messages'][$flagUsers] ?>
+            <!-- Response Printing -->
+            <p>
+                <!-- Response Status Code -->
+                <?php
+                    /* Dynamic Validation Style */
+                    if (str_starts_with($flagUsers, 2)) {
+                        echo 'Success';
+                    } else {
+                        echo 'Error';
+                    } 
+                    echo " " . $flagUsers . ": ";
+                ?>
+            </p>
+            <p>
+                <!-- Response Message -->
+                <?php echo $data['response_messages'][$flagUsers] ?>
+            </p>
         </div>
     <?php } ?>
 
@@ -224,5 +243,6 @@ $users = strumenti::get_admins($connection);
         </form>
     </div>
     <script type="module" src="js/backend.js"></script>
+    <script src="js/modules/_shared/prevent_resubmission.js"></script>
 </body>
 </html>

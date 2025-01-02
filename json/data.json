@@ -345,7 +345,8 @@
             "201": "User Succesfully Created",
             "400": "Incorrect Form of Username or Password",
             "406": "User Already Exists",
-            "500": "Failed to Create Account"
+            "500": "Failed to Create Account",
+            "500.1": "Failed to Check Credentials"
         }
     }
 }

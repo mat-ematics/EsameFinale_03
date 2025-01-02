@@ -160,4 +160,9 @@ button.button-submit {
         border-color: var.$errorBorderColor;
         background-color: var.$errorBgColor;
     }
+
+    /* Response Message Containers */
+    p {
+        margin: 0 ;
+    }
 }

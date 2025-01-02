@@ -1,7 +1,6 @@
 /* Imports */
 import initializeValidationLogin from "./login_handler.js";
 import initializeValidationSignup from "./signup_handler.js";
-import DOMUtils from "../_shared/dom_utils.js";
 
 /**
  * Initialize the Validation of a Form based on its type

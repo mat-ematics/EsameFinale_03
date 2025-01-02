@@ -374,7 +374,7 @@ class strumenti {
             } catch (Exception $e) {
                 /* Failure Handling */
                 $connection->rollback(); // Rollback of changes
-                return $e->getMessage();; 
+                return $e->getMessage(); 
             }
         } elseif ($connection instanceof PDO) {
             $sql_create_account = "INSERT INTO admins (username, `password`) VALUES (:usr, :psw)";
@@ -419,7 +419,7 @@ class strumenti {
 
                 return $result;               
             } catch (Exception $e) {
-                return $e->getMessage();; 
+                return $e->getMessage();
             }
         } elseif ($connection instanceof PDO) {
             try {
