@@ -30,6 +30,8 @@ require_once('inclusioni/backend_validation.php');
 
 $users = strumenti::get_admins($connection);
 
+/* strumenti::stampaArray($_POST);
+exit; */
 ?>
 
 <!DOCTYPE html>
@@ -51,12 +53,12 @@ $users = strumenti::get_admins($connection);
         </menu>
     </main>
     <!-- Form Response -->
-    <?php if($flagUsers != 200) { ?>
+    <?php if($flag_response != 200 && $form_response != '') { ?>
         <div 
             class="response
             <?php
                 /* Dynamic Validation Style */
-                if (str_starts_with($flagUsers, 2)) {
+                if (str_starts_with($flag_response, 2)) {
                     echo 'success';
                 } else {
                     echo 'failure';
@@ -68,17 +70,17 @@ $users = strumenti::get_admins($connection);
                 <!-- Response Status Code -->
                 <?php
                     /* Dynamic Validation Style */
-                    if (str_starts_with($flagUsers, 2)) {
+                    if (str_starts_with($flag_response, 2)) {
                         echo 'Success';
                     } else {
                         echo 'Error';
                     } 
-                    echo " " . $flagUsers . ": ";
+                    echo " " . $flag_response . ": ";
                 ?>
             </p>
             <p>
                 <!-- Response Message -->
-                <?php echo $data['response_messages'][$flagUsers] ?>
+                <?php echo $data['responses'][$form_response][$flag_response] ?>
             </p>
         </div>
     <?php } ?>

@@ -272,35 +272,34 @@ class strumenti {
      * @param string $username The Username to check
      * @param string $database The Password to check
      * 
-     * @return bool True if a match is found, false otherwise
+     * @return int|bool On success, the ID of the Account matched if found (CHECK_REGISTER) or true (CHECK_LOGIN), false otherwise
      */
 
     static public function check_credentials(object $connection, string $username, string $password, int $type = CHECK_LOGIN) {
-        $is_present = 0; // Flag of the Account presence
 
         // Try with MySQLi
         if ($connection instanceof mysqli) {
             // SQL Statement with MySQLi parameters that performs the match
-            $sql_check_login = "SELECT `password` FROM admins WHERE username = ?";
+            $sql_check_login = "SELECT `password`, idAdmin FROM admins WHERE username = ?";
             // Execution of the statement
             $query_check_login = $connection->prepare($sql_check_login);
             $query_check_login->bind_param("s", $username);
             $query_check_login->execute();
 
+           
             // Store the Login Result
             $query_check_login->store_result();
+
+            /* Result Binding */
+            $query_check_login->bind_result($hash_password, $idUser);
+            $query_check_login->fetch();
 
             // Check if it is empty
             if ($query_check_login->num_rows() > 0) {
                 // Determine Credentials Check Type
                 if ($type === CHECK_REGISTER) {
                     /* Register Case */
-                    return true;
-                } else {
-                    /* Login Case */
-                    // Binding of the Result
-                    $query_check_login->bind_result($hash_password);
-                    $query_check_login->fetch();
+                    return $idUser; //Return the ID of the user
                 }
             } else {
                 return false;
@@ -318,11 +317,12 @@ class strumenti {
                 // Determine Credentials Check Type
                 if ($type === CHECK_REGISTER) {
                     /* Register Case */
-                    return true;
+                    $existing_account = $query_check_login->fetch(PDO::FETCH_NUM);
+                    return $existing_account;
                 } else {
                     /* Login Case */
                     // Binding of the Result
-                    $hash_password = $query_check_login->fetch();
+                    $hash_password = $query_check_login->fetch()[0];
                 }
             } else {
                 return false;
@@ -336,63 +336,6 @@ class strumenti {
                 return true;
             } else {
                 return false;
-            }
-        }
-    }
-
-    /**
-     * Creates a New Account in the provided Database
-     * 
-     * @param object $connection The Connection Object with the Database
-     * @param string $username The Username of the new account
-     * @param string $password The Password of the new account
-     * 
-     * @return true|string True if successful, otherwise the failure message is returned
-     */
-    static public function create_account(object $connection, string $username, string $password) {
-        /* Password Hashing */
-        $password_hash = password_hash($password, PASSWORD_DEFAULT);
-        
-        // Try with MySQLi
-        if ($connection instanceof mysqli) {
-            // SQL Statement with MySQLi parameters that creates the Account
-            $sql_create_account = "INSERT INTO admins (username, `password`) VALUES (?, ?)";
-            
-
-            $connection->begin_transaction(); // Transaction For Security
-            /* Creation of Account */
-            try {
-                // Preparation of the statement
-                $query_create_account = $connection->prepare($sql_create_account);
-                // Parameter Binding and Query Execution
-                $query_create_account->bind_param("ss", $username, $password_hash);
-                $query_create_account->execute();
-
-                /* Commit Changes and Return True on Success */
-                $connection->commit();
-                return true;               
-            } catch (Exception $e) {
-                /* Failure Handling */
-                $connection->rollback(); // Rollback of changes
-                return $e->getMessage(); 
-            }
-        } elseif ($connection instanceof PDO) {
-            $sql_create_account = "INSERT INTO admins (username, `password`) VALUES (:usr, :psw)";
-            try {
-                // Preparation of the statement
-                $query_create_account = $connection->prepare($sql_create_account);
-                // Parameter Binding and Query Execution
-                $query_create_account->bindParam(":usr", $username);
-                $query_create_account->bindParam(":psw", $hash_password);
-                $query_create_account->execute();
-
-                /* Commit Changes and Return True on Success */
-                $connection->commit();
-                return true;               
-            } catch (PDOException $e) {
-                /* Failure Handling */
-                $connection->rollback(); // Rollback of changes
-                return $e->getMessage(); 
             }
         }
     }
@@ -416,8 +359,8 @@ class strumenti {
                 $query_get_users = $connection->query($sql_get_users);
                 
                 $result = $query_get_users->fetch_all(MYSQLI_ASSOC);
-
-                return $result;               
+                
+                return $result;
             } catch (Exception $e) {
                 return $e->getMessage();
             }
@@ -425,12 +368,164 @@ class strumenti {
             try {
                 // Query of the statement
                 $query_get_users = $connection->query($sql_get_users);
-
+                
                 $result = $query_get_users->fetchAll(PDO::FETCH_ASSOC);
-
-                return $result;               
+                
+                return $result;
             } catch (PDOException $e) {
                 /* Failure Handling */
+                return $e->getMessage(); 
+            }
+        }
+    }
+
+    /**
+     * Creates a New Account in the provided Database
+     * 
+     * @param object $connection The Connection Object with the Database
+     * @param string $username The Username of the new account
+     * @param string $password The Password of the new account
+     * 
+     * @return true|string True if successful, otherwise the failure message is returned
+     */
+    static public function create_account(object $connection, string $username, string $password) {
+        /* Password Hashing */
+        $password_hash = password_hash($password, PASSWORD_DEFAULT);
+        
+        // Try with MySQLi
+        if ($connection instanceof mysqli) {
+            // SQL Statement with MySQLi parameters that creates the Account
+            $sql_create_account = "INSERT INTO admins (username, `password`) VALUES (?, ?)";
+            
+            $connection->begin_transaction(); // Transaction For Security
+            /* Creation of Account */
+            try {
+                // Preparation of the statement
+                $query_create_account = $connection->prepare($sql_create_account);
+                // Parameter Binding and Query Execution
+                $query_create_account->bind_param("ss", $username, $password_hash);
+                $query_create_account->execute();
+
+                /* Commit Changes and Return True on Success */
+                $connection->commit();
+                return true;               
+            } catch (Exception $e) {
+                /* Failure Handling */
+                $connection->rollback(); // Rollback of changes
+                return $e->getMessage(); 
+            }
+        } elseif ($connection instanceof PDO) {
+            $sql_create_account = "INSERT INTO admins (username, `password`) VALUES (:usr, :psw)";
+            $connection->beginTransaction();
+            try {
+                // Preparation of the statement
+                $query_create_account = $connection->prepare($sql_create_account);
+                // Parameter Binding and Query Execution
+                $query_create_account->bindParam(":usr", $username);
+                $query_create_account->bindParam(":psw", $hash_password);
+                $query_create_account->execute();
+
+                /* Commit Changes and Return True on Success */
+                $connection->commit();
+                return true;               
+            } catch (PDOException $e) {
+                /* Failure Handling */
+                $connection->rollback(); // Rollback of changes
+                return $e->getMessage(); 
+            }
+        }
+    }
+
+    /**
+     * Modifies the username and/or password of an existing account
+     * 
+     * @param object $connection The Connection Object with the Database
+     * @param int $idAdmin The ID number of the account
+     * @param string $username (optional) The new Username 
+     * @param string $password (optional) The new Password 
+     * 
+     * @return true|string True if successful, otherwise the failure message is returned
+     */
+    static public function edit_user(object $connection, int $idAdmin, string $username = '', string $password = '') {
+        /* Arrays for Database Update */
+        $updates = [];
+        $params = [];
+        $types = "";
+        
+        /* Query Creation */
+        $sql_update_users = "UPDATE admins SET "; //Query start
+        //Joining of Username (if present)
+        if ($username != '') {
+            $updates[] = "username = ?"; //Username field SQL update
+            $params[] = $username; //Add username to parameters array
+            $types .= 's';
+        }
+        //Joining of Password (if present)
+        if ($password != '') {
+            $updates[] = "password = ?"; //Password field SQL update
+            $params[] = password_hash($password, PASSWORD_DEFAULT); //Add password to parameters array
+            $types .= 's';
+        }
+        //Adjoining of SQL togheter
+        $sql_update_users .= implode(', ', $updates); //Joins the parameter array togheter
+        $sql_update_users .= " WHERE idAdmin = ?"; //Username field SQL search
+        $params[] = $idAdmin;
+        $types .= 'i';
+
+        // Try with MySQLi
+        if ($connection instanceof mysqli) {
+            /* Modification Start */
+            /* Modification of Account */
+            $connection->begin_transaction(); //Start of Transaction
+            try {
+                // Query of the statement
+                $query_update_users = $connection->prepare($sql_update_users); //Prepare the statement
+
+                /* The following steps allows to pass the array into the query's method (otherwise impossible, it requires individual variables) */
+                // Combine types and parameters into a single array with references
+                $bind_names = [$types];
+                foreach ($params as $key => $value) {
+                    $bind_names[] = &$params[$key]; // & -> Pass by reference
+                }
+                call_user_func_array([$query_update_users, "bind_param"], $bind_names); //Use this function to bypass array parameter limitation
+
+                $result = $query_update_users->execute(); //Statement Execution
+
+                /* Return of the Result and Commit Changes */
+                $connection->commit();
+                return $result;
+            } catch (Exception $e) {
+                /* Return Error Message and Rollback changes */
+                $connection->rollback();
+                return $e->getMessage();
+            }
+        } elseif ($connection instanceof PDO) {
+            /* Modification Start */
+            //Transaction Start
+            $connection->beginTransaction();
+            try {
+                // Query of the statement
+                $query_update_users = $connection->prepare($sql_update_users); //Prepare the statement
+
+                /* Parameter Binding */
+                $i = 1; //Iterator (for ? placeholders)
+                foreach ($params as $value) {
+                    //Type Indentification
+                    $type = PDO::PARAM_STR; 
+                    if (gettype($value) == 'integer') {
+                        $type = PDO::PARAM_INT;
+                    }
+                    $query_update_users->bindParam($i, $value, $type); //Binding
+                    $i++; //Iterator Progression
+                }
+                $result = $query_update_users->execute(); //Statement Execution
+
+                /* Return of the Result and Commit Changes */
+                $connection->commit();
+                return $result;
+            } catch (PDOException $e) {
+                /* Failure Handling and Rollback */
+                $connection->rollBack();
                 return $e->getMessage(); 
             }
         }
