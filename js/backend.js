@@ -1,19 +1,20 @@
 /* Imports */
 import initializeForm from "./modules/form_handlers/_form_toggle";
+import DOMUtils from "./modules/_shared/_dom_utils";
 
 /* Menu delle Visualizzazioni */
-const areaList = document.querySelectorAll(".area");
-let currentViewItem = document.getElementById('users');
+const areaNavItems = document.querySelectorAll(".area");
+const areaList = document.querySelectorAll(".area-div");
+let currentViewItem;
 
 /* Select the Current View in Menu */
-currentViewItem.classList.add('current');
+
 
 /* Area Selection Behaviour */
-areaList.forEach(item => {
+areaNavItems.forEach(item => {
     item.addEventListener('click', function() {
-        currentViewItem.classList.remove("current");
-        this.classList.add("current");
-        currentViewItem = this;
+        const newViewItem = this;
+        currentViewItem = DOMUtils.changeArea(areaList, areaNavItems, newViewItem, currentViewItem);
     });
 });
 

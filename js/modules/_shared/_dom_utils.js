@@ -136,5 +136,33 @@ export default class DOMUtils {
             errorContainer.style.visibility = 'visible';
         }
     }
+
+    /**
+        * Switches the Area/Slide/View shown based on a Item List/NavBar of the same length and in the same order
+        * 
+        * @param {NodeListOf<Element>} slides The Node List of the possible Views/Slides to change to current
+        * @param {NodeListOf<Element>} itemList The Node List of the Items inside the NavBar of the slides
+        * @param {Element} newItem The new Element to Show
+        * @param {Element=} currentItem The currently Shown Element
+        * 
+        * @returns {Element} The New Current Element (New Item)
+        */
+    static changeArea(slides, itemList, newItem, currentItem) {
+        
+        const zipped = Array.from(itemList).map((item, area) => [item.id, slides[area]]);
+        const areaMap = Object.fromEntries(zipped);
+        
+        if (!currentItem) {
+            currentItem = itemList[0];
+        }
+
+        currentItem.classList.remove("current");
+        areaMap[currentItem.id].classList.remove("current");
+
+        newItem.classList.add("current");
+        areaMap[newItem.id].classList.add("current");
+
+        return newItem;
+    }
 }
 

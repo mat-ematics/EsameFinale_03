@@ -85,8 +85,9 @@ exit; */
         </div>
     <?php } ?>
 
-    <!-- Users -->
-    <div id="areaUsers">
+
+    <!-- Users Management Area -->
+    <div id="areaUsers" class="area-div">
         <!-- Create Account Form -->
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-users" id="formCreateUser">
             <!-- Form Title -->
@@ -94,6 +95,327 @@ exit; */
 
             <!-- Input Username -->
             <label>Insert Username:
+                <input type="text" 
+                    class="input-credential" 
+                    name="username" 
+                    data-type="username" 
+                    placeholder="Username">
+            </label>
+            <!-- Username Error Message -->
+            <ul class="errors-container username-errors" data-type="username" role="alert"><li></li></ul>
+
+            <!-- Input Password -->
+            <label>Password:
+            <!-- Password Container -->
+                <div class="password-container">
+                    <!-- Password Input -->
+                    <input type="password" 
+                        class="input-credential" 
+                        name="password" 
+                        data-type="password" 
+                        placeholder="Password">
+                    <!-- "Show Password" Icon -->
+                    <span class="iconShowPassword">
+                        <i class="password-toggle fa-solid fa-eye show"></i>
+                    </span>
+                </div>
+            </label>
+            <!-- Password Error Message -->
+            <ul class="errors-container password-errors" data-type="password" role="alert"><li></li></ul>
+
+            <!-- Input Repeat Password -->
+            <label>Repeat Password:
+                <!-- Repeat Password Container -->
+                <div class="password-container">
+                    <!-- Repeat Password Input -->
+                    <input type="password" 
+                        name="repeat_password" 
+                        class="input-credential input-repeat-password" 
+                        data-type="repeat-password" 
+                        placeholder="Repeat Password">
+                    <!-- "Show Password" Icon -->
+                    <span class="iconShowPassword">
+                        <i class="repeat-password password-toggle fa-solid fa-eye show"></i>
+                    </span>
+                </div>
+            </label>
+            <!-- Repeat Password Error Message -->
+            <ul class="errors-container repeat-password-errors" data-type="repeat-password" role="alert"><li></li></ul>
+
+            <!-- Submit Button -->
+            <button type="submit" 
+                    name="button_submit" 
+                    value="user_create" 
+                    class="button-submit">
+                <span class="buttonText">Create User</span>
+            </button>
+        </form>
+
+        <!-- Edit Account form -->
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-users" id="formEditUser">
+            <!-- Form Title -->
+            <h3 class="form-title">Edit Account</h3>
+
+            <label class="label-select-user">User:
+                <select name="selected_user" class="select-user">
+                    <?php foreach ($users as $user) { ?>
+                        <option value="<?php echo $user['idAdmin'] ?>"><?php echo $user['username'] ?></option>
+                    <?php } ?>
+                </select>
+            </label>
+
+            <!-- Input Username -->
+            <label>Insert Username:
+                <input type="text" 
+                    class="input-credential" 
+                    name="username" 
+                    data-type="username" 
+                    placeholder="Username">
+            </label>
+            <!-- Username Error Message -->
+            <ul class="errors-container username-errors" data-type="username" role="alert"><li></li></ul>
+
+            <!-- Input Password -->
+            <label>Password:
+            <!-- Password Container -->
+                <div class="password-container">
+                    <!-- Password Input -->
+                    <input type="password" 
+                        class="input-credential" 
+                        name="password" 
+                        data-type="password" 
+                        placeholder="Password">
+                    <!-- "Show Password" Icon -->
+                    <span class="iconShowPassword">
+                        <i class="password-toggle fa-solid fa-eye show"></i>
+                    </span>
+                </div>
+            </label>
+            <!-- Password Error Message -->
+            <ul class="errors-container password-errors" data-type="password" role="alert"><li></li></ul>
+
+            <!-- Input Repeat Password -->
+            <label>Repeat Password:
+                <!-- Repeat Password Container -->
+                <div class="password-container">
+                    <!-- Repeat Password Input -->
+                    <input type="password" 
+                        class="input-credential" 
+                        name="repeat_password" 
+                        class="input-repeat-password" 
+                        data-type="repeat-password" 
+                        placeholder="Repeat Password">
+                    <!-- "Show Password" Icon -->
+                    <span class="iconShowPassword">
+                        <i class="repeat-password password-toggle fa-solid fa-eye show"></i>
+                    </span>
+                </div>
+            </label>
+            <!-- Repeat Password Error Message -->
+            <ul class="errors-container repeat-password-errors" data-type="repeat-password" role="alert"><li></li></ul>
+
+            <!-- Submit Button -->
+            <button type="submit" 
+                    name="button_submit" 
+                    value="user_edit" 
+                    class="button-submit">
+                <span class="buttonText">Edit User</span>
+            </button>
+        </form>
+
+        <!-- Delete (Admin) User form -->
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-users" id="formDeleteUser">
+            <!-- Form Title -->
+            <h3 class="form-title">Delete User</h3>
+
+            <label class="label-select-user">User:
+                <select name="selected_user" class="select-user">
+                    <?php foreach ($users as $user) { ?>
+                        <option value="<?php echo $user['idAdmin'] ?>"><?php echo $user['username'] ?></option>
+                    <?php } ?>
+                </select>
+            </label>
+
+            <!-- Submit Button -->
+            <button type="submit" 
+                    name="button_submit" 
+                    value="user_delete" 
+                    class="button-submit">
+                <span class="buttonText">Delete User</span>
+            </button>
+        </form>
+    </div>
+
+
+    <!-- Category Management Area -->
+    <div id="areaCategories" class="area-div">
+
+    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-users" id="formCreateUser">
+            <!-- Form Title -->
+            <h3 class="form-title">Create Category</h3>
+
+            <!-- Input Username -->
+            <label>Insert Username:
+                <input type="text" 
+                    class="input-credential" 
+                    name="username" 
+                    data-type="username" 
+                    placeholder="Username">
+            </label>
+            <!-- Username Error Message -->
+            <ul class="errors-container username-errors" data-type="username" role="alert"><li></li></ul>
+
+            <!-- Input Password -->
+            <label>Password:
+            <!-- Password Container -->
+                <div class="password-container">
+                    <!-- Password Input -->
+                    <input type="password" 
+                        class="input-credential" 
+                        name="password" 
+                        data-type="password" 
+                        placeholder="Password">
+                    <!-- "Show Password" Icon -->
+                    <span class="iconShowPassword">
+                        <i class="password-toggle fa-solid fa-eye show"></i>
+                    </span>
+                </div>
+            </label>
+            <!-- Password Error Message -->
+            <ul class="errors-container password-errors" data-type="password" role="alert"><li></li></ul>
+
+            <!-- Input Repeat Password -->
+            <label>Repeat Password:
+                <!-- Repeat Password Container -->
+                <div class="password-container">
+                    <!-- Repeat Password Input -->
+                    <input type="password" 
+                        name="repeat_password" 
+                        class="input-credential input-repeat-password" 
+                        data-type="repeat-password" 
+                        placeholder="Repeat Password">
+                    <!-- "Show Password" Icon -->
+                    <span class="iconShowPassword">
+                        <i class="repeat-password password-toggle fa-solid fa-eye show"></i>
+                    </span>
+                </div>
+            </label>
+            <!-- Repeat Password Error Message -->
+            <ul class="errors-container repeat-password-errors" data-type="repeat-password" role="alert"><li></li></ul>
+
+            <!-- Submit Button -->
+            <button type="submit" 
+                    name="button_submit" 
+                    value="user_create" 
+                    class="button-submit">
+                <span class="buttonText">Create User</span>
+            </button>
+        </form>
+
+        <!-- Edit Account form -->
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-users" id="formEditUser">
+            <!-- Form Title -->
+            <h3 class="form-title">Edit Account</h3>
+
+            <label class="label-select-user">User:
+                <select name="selected_user" class="select-user">
+                    <?php foreach ($users as $user) { ?>
+                        <option value="<?php echo $user['idAdmin'] ?>"><?php echo $user['username'] ?></option>
+                    <?php } ?>
+                </select>
+            </label>
+
+            <!-- Input Username -->
+            <label>Insert Username:
+                <input type="text" 
+                    class="input-credential" 
+                    name="username" 
+                    data-type="username" 
+                    placeholder="Username">
+            </label>
+            <!-- Username Error Message -->
+            <ul class="errors-container username-errors" data-type="username" role="alert"><li></li></ul>
+
+            <!-- Input Password -->
+            <label>Password:
+            <!-- Password Container -->
+                <div class="password-container">
+                    <!-- Password Input -->
+                    <input type="password" 
+                        class="input-credential" 
+                        name="password" 
+                        data-type="password" 
+                        placeholder="Password">
+                    <!-- "Show Password" Icon -->
+                    <span class="iconShowPassword">
+                        <i class="password-toggle fa-solid fa-eye show"></i>
+                    </span>
+                </div>
+            </label>
+            <!-- Password Error Message -->
+            <ul class="errors-container password-errors" data-type="password" role="alert"><li></li></ul>
+
+            <!-- Input Repeat Password -->
+            <label>Repeat Password:
+                <!-- Repeat Password Container -->
+                <div class="password-container">
+                    <!-- Repeat Password Input -->
+                    <input type="password" 
+                        class="input-credential" 
+                        name="repeat_password" 
+                        class="input-repeat-password" 
+                        data-type="repeat-password" 
+                        placeholder="Repeat Password">
+                    <!-- "Show Password" Icon -->
+                    <span class="iconShowPassword">
+                        <i class="repeat-password password-toggle fa-solid fa-eye show"></i>
+                    </span>
+                </div>
+            </label>
+            <!-- Repeat Password Error Message -->
+            <ul class="errors-container repeat-password-errors" data-type="repeat-password" role="alert"><li></li></ul>
+
+            <!-- Submit Button -->
+            <button type="submit" 
+                    name="button_submit" 
+                    value="user_edit" 
+                    class="button-submit">
+                <span class="buttonText">Edit User</span>
+            </button>
+        </form>
+
+        <!-- Delete (Admin) User form -->
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-users" id="formDeleteUser">
+            <!-- Form Title -->
+            <h3 class="form-title">Delete User</h3>
+
+            <label class="label-select-user">User:
+                <select name="selected_user" class="select-user">
+                    <?php foreach ($users as $user) { ?>
+                        <option value="<?php echo $user['idAdmin'] ?>"><?php echo $user['username'] ?></option>
+                    <?php } ?>
+                </select>
+            </label>
+
+            <!-- Submit Button -->
+            <button type="submit" 
+                    name="button_submit" 
+                    value="user_delete" 
+                    class="button-submit">
+                <span class="buttonText">Delete User</span>
+            </button>
+        </form>
+    </div>
+
+
+    <!-- Works Management Area -->
+    <div id="areaWorks" class="area-div">
+    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-users" id="formCreateUser">
+            <!-- Form Title -->
+            <h3 class="form-title">Create Account</h3>
+
+            <!-- Input Username -->
+            <label>Insert Work:
                 <input type="text" 
                     class="input-credential" 
                     name="username" 

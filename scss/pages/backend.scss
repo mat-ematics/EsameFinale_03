@@ -42,10 +42,17 @@ menu.area-list {
     }
 }
 
-#areaUsers {
-    display: flex;
-    flex-direction: row;
+.area-div {
+    display: none;
     padding-bottom: 30px;
+
+    &.current {
+        display: flex;
+        flex-direction: row;
+    }
+}
+
+#areaUsers {
 
     label.label-select-user {
         text-align: center;
