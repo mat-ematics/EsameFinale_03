@@ -18,6 +18,9 @@ areaNavItems.forEach(item => {
     });
 });
 
-/* Create User Form Validation Initialization */
+/* User Forms Validation Initialization */
 initializeForm("signup", document.getElementById("formCreateUser"));
-initializeForm('editUser', document.getElementById("formEditUser"));
+initializeForm('userEdit', document.getElementById("formEditUser"));
+
+/* Category Forms Validation Initialization */
+initializeForm('categoryCreate', document.getElementById("formCreateCategory"));

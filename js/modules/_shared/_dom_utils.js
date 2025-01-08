@@ -93,11 +93,11 @@ export default class DOMUtils {
      * Initializes all Error Messages, assigning the texts to the correct containers
      * 
      * @param {HTMLFormElement} form The Form containing the Inputs
+     * @param {NodeListOf<Element>} inputs The Inputs to match
      * @param {Object} [errorMessages] The Error Messages List (input type - error pairs) of the Inputs
      */
-    static initializeErrorMessages(form, errorMessages) {
-        const inputs = form.querySelectorAll(".input-credential");
-        inputs.forEach(input => {
+    static initializeErrorMessages(form, inputs, errorMessages) {
+        Array.from(inputs).forEach(input => {
             /* Error Message Assigning */
             const errorContainer = form.querySelector(`.errors-container.${input.dataset.type}-errors`); //Nearest Error Container 
             const errorMessage = errorMessages[input.dataset.type] || "Invalid input."; //Generic error Message (if not present)

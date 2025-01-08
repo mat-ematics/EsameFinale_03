@@ -1,7 +1,8 @@
 /* Imports */
 import initializeValidationLogin from "./login_handler.js";
-import initializeValidationSignup from "./signup_handler.js";
-import initializeValidationUserEdit from "./edit_user_handler.js";
+import initializeValidationSignup from "./users/signup_handler.js";
+import initializeValidationUserEdit from "./users/edit_user_handler.js";
+import initializeValidationCategoryCreate from "./categories/create_category_handler.js";
 
 /**
  * Initialize the Validation of a Form based on its type
@@ -17,8 +18,11 @@ export default function initializeForm(type, formElement) {
         case "signup":
             initializeValidationSignup(formElement);
             break;
-        case "editUser": 
+        case "userEdit": 
             initializeValidationUserEdit(formElement);
+            break;
+        case "categoryCreate":
+            initializeValidationCategoryCreate(formElement);
             break;
         default:
             throw new Error(`Unknown form type: ${type}`);

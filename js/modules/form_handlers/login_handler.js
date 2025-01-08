@@ -26,7 +26,7 @@ export default function initializeValidationLogin(form) {
     const inputs = form.querySelectorAll(".input-credential");
     const submitButton = form.querySelector(".button-submit");
 
-    DOMUtils.initializeErrorMessages(form, errorMessages); //Assign all error messages 
+    DOMUtils.initializeErrorMessages(form, inputs, errorMessages); //Assign all error messages 
     DOMUtils.disableButton(submitButton, true); //Disable initially the submit button
 
     inputs.forEach(input => {
