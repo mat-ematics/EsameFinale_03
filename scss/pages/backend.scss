@@ -50,28 +50,25 @@ menu.area-list {
         display: flex;
         flex-direction: row;
     }
-}
-
-#areaUsers {
-
-    label.label-select-user {
-        text-align: center;
-        font-weight: bold;
-    }
-
-    select.select-user {
-        display: block;
-        margin: 0 auto;
-        margin-bottom: 10px;
-        border: 2px solid;
-    }
-
-    form.form-users {
+    
+    form {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: space-between;
         padding: 0 5%;
         width: 100%;
+
+        label.label-select {
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        select.select-user, select.select-category, select.select-work {
+            display: block;
+            margin: 0 auto;
+            margin-bottom: 10px;
+            border: 2px solid;
+        }
     }
 }
