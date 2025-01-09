@@ -1,7 +1,7 @@
 /* Imports */
 import initializeValidationLogin from "./login_handler.js";
-import initializeValidationSignup from "./users/signup_handler.js";
-import initializeValidationUserEdit from "./users/edit_user_handler.js";
+import initializeValidationUserCreate from "./users/user_create_handler.js";
+import initializeValidationUserEdit from "./users/user_edit_handler.js";
 import initializeValidationCategoryCreate from "./categories/create_category_handler.js";
 
 /**
@@ -15,8 +15,8 @@ export default function initializeForm(type, formElement) {
         case "login":
             initializeValidationLogin(formElement);
             break;
-        case "signup":
-            initializeValidationSignup(formElement);
+        case "userCreate":
+            initializeValidationUserCreate(formElement);
             break;
         case "userEdit": 
             initializeValidationUserEdit(formElement);

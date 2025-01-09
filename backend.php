@@ -89,7 +89,7 @@ exit; */
     <!-- Users Management Area -->
     <div id="areaUsers" class="area-div">
         <!-- Create Account Form -->
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-users" id="formCreateUser">
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-users" id="formUserCreate">
             <!-- Form Title -->
             <h3 class="form-title">Create Account</h3>
 
@@ -152,7 +152,7 @@ exit; */
         </form>
 
         <!-- Edit Account form -->
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-users" id="formEditUser">
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-users" id="formUserEdit">
             <!-- Form Title -->
             <h3 class="form-title">Edit Account</h3>
 
@@ -223,7 +223,7 @@ exit; */
         </form>
 
         <!-- Delete (Admin) User form -->
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-users" id="formDeleteUser">
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-users" id="formUserDelete">
             <!-- Form Title -->
             <h3 class="form-title">Delete User</h3>
 
@@ -252,7 +252,7 @@ exit; */
     <!-- Category Management Area -->
     <div id="areaCategories" class="area-div">
 
-    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-categories" id="formCreateCategory">
+    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-categories" id="formCategoryCreate">
             <!-- Form Title -->
             <h3 class="form-title">Create Category</h3>
 
@@ -277,7 +277,7 @@ exit; */
         </form>
 
         <!-- Edit Account form -->
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-cateogories" id="formEditCategory">
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-cateogories" id="formCategoryEdit">
             <!-- Form Title -->
             <h3 class="form-title">Edit Category</h3>
 
@@ -311,7 +311,7 @@ exit; */
         </form>
 
         <!-- Delete (Admin) User form -->
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-users" id="formDeleteUser">
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-users" id="formCategoryDelete">
             <!-- Form Title -->
             <h3 class="form-title">Delete Category</h3>
 

@@ -23,7 +23,7 @@ const errorMessages = {
  * 
  * @param {HTMLFormElement} form The Form to initialize validation
  */
-export default function initializeValidationSignup(form) {
+export default function initializeValidationUserCreate(form) {
     const inputs = form.querySelectorAll(".input-credential");
     const submitButton = form.querySelector(".button-submit");
 
