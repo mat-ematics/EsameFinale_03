@@ -75,10 +75,11 @@ if (isset($_POST) && !empty($_POST)) {
             /* Tests of Credentials */
             $test_username = preg_match($regex_create_username, $username) || $username == '';
             $test_password = preg_match($regex_create_password, $password) || $password == '';
+            $both_empty = $username == '' && $password == '';
             $test_repeat_password = $password == $repeat_password;
 
             /* Check Validity of Inputs */
-            if ($test_username == true && $test_password == true && $test_repeat_password == true) {
+            if ($test_username == true && $test_password == true && $both_empty == false && $test_repeat_password == true) {
                 //Valid Inputs
                 $account_exists = strumenti::check_credentials($connection, $username, $password, CHECK_REGISTER);
                 
@@ -158,6 +159,48 @@ if (isset($_POST) && !empty($_POST)) {
             } else {
                 /* Server Error */
                 $flag_response = 500.1;
+            }
+
+            /* Breaking of the Case */
+            break;
+
+        /* User Editing Server Validation */
+        case 'category_edit':
+            /* Form Submission to Respond */
+            $form_response = 'category_edit'; 
+
+            /* Get Category Name and ID */
+            $category_name = trim($_POST['category_name']);
+            $idCategory = $_POST['selected_category'];
+
+            /* Tests of Credentials */
+            $test_category_name = preg_match($regex_category_name, $category_name);
+
+            /* Check Validity of Inputs */
+            if ($test_category_name == true) {
+                //Valid Inputs
+                $account_exists = strumenti::check_category($connection, $category_name, true);
+                
+                /* Check if username already exists */
+                if ($account_exists != false && $account_exists != $idCategory) {
+                    //User already Exists
+                    $flag_response = 406;
+                } else {
+                    /* User Modification */
+                    $edit_result = strumenti::edit_category($connection, $idCategory, $category_name); 
+                    
+                    /* Check if operation was successful */
+                    if ($edit_result === true) {
+                        //Account Successfully Modified
+                        $flag_response = 201;
+                    } else {
+                        //Account Modification Failure
+                        $flag_response = 500;
+                    }
+                }
+            } else {
+                //Invalid Inputs
+                $flag_response = 400;
             }
 
             /* Breaking of the Case */

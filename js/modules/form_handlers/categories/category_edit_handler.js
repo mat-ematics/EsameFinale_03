@@ -5,7 +5,7 @@ import DOMUtils from "../../_shared/_dom_utils";
  * List of Regexes for User/Admin Creation.
  */
 const regexList = {
-    'category-name': /^$|^[a-zA-Z]{3,32}$/, // Uppercase and Lowercase letters, underscores, between 6 and 32 characters
+    'category-name': /^[a-zA-Z]{3,32}$/, // Uppercase and Lowercase letters, underscores, between 6 and 32 characters
 };
 /**
  * List of Error Messages for User/Admin Creation

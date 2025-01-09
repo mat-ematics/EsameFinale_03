@@ -743,4 +743,62 @@ class strumenti {
             }
         }
     }
+
+    /**
+     * Modifies an existing Category
+     * 
+     * @param object $connection The Connection Object with the Database
+     * @param int $idCategory The ID number of the Category to Modify
+     * @param string $category The New name of the Category
+     * 
+     * @return true|string True if successful, otherwise the failure message is returned
+     */
+    static public function edit_category(object $connection, int $idCategory, string $category) {
+                
+        // Try with MySQLi
+        if ($connection instanceof mysqli) {
+            /* Query Creation */
+            $sql_update_category = "UPDATE categories SET `name` = ? WHERE idCategory = ?"; //Query start
+
+            $connection->begin_transaction(); //Start of Transaction
+            try {
+                // Query of the statement
+                $query_update_category = $connection->prepare($sql_update_category); //Prepare the statement
+                $query_update_category->bind_param("si", $category, $idCategory); //Bind the Parameter
+                $result = $query_update_category->execute(); //Statement Execution
+
+                /* Return of the Result and Commit Changes */
+                $connection->commit();
+                return $result;
+            } catch (Exception $e) {
+                /* Return Error Message and Rollback changes */
+                $connection->rollback();
+                return $e->getMessage();
+            }
+        } elseif ($connection instanceof PDO) {
+
+            $sql_update_category = "UPDATE categories SET `name` = :newCatName WHERE idCategory = :idCat"; //Query start
+
+            //Transaction Start
+            $connection->beginTransaction();
+            try {
+                // Query of the statement
+                $query_update_category = $connection->prepare($sql_update_category); //Prepare the statement
+
+                /* Parameter Binding */
+                $query_update_category->bindParam(":newCatName", $category);
+                $query_update_category->bindParam(":idCat", $idCategory, PDO::PARAM_INT);
+
+                $result = $query_update_category->execute(); //Statement Execution
+
+                /* Return of the Result and Commit Changes */
+                $connection->commit();
+                return $result;
+            } catch (PDOException $e) {
+                /* Failure Handling and Rollback */
+                $connection->rollBack();
+                return $e->getMessage(); 
+            }
+        }
+    }
 }

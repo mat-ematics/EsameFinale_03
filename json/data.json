@@ -365,6 +365,12 @@
                 "406": "Category Already Exists",
                 "500": "Failed to Create Category",
                 "500.1": "Failed to Check Categories"
+            },
+            "category_edit": {
+                "201": "Category Successfully Modified",
+                "400": "Invalid Category Name (Category not Modified)",
+                "406": "Category Already Exists, changes reverted",
+                "500": "Failed to Modify Category"
             }
         }
     }
