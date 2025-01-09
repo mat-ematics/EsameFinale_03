@@ -206,6 +206,24 @@ if (isset($_POST) && !empty($_POST)) {
             /* Breaking of the Case */
             break;
 
+        /* Category Deletion Server Validation */
+        case 'category_delete': 
+            /* Form Submission to Respond */
+            $form_response = 'category_deletion';
+            /* ID of the Category to delete */
+            $idCategory = $_POST['selected_category'];
+            /* User Deletion */
+            $isDeleted = strumenti::delete_category($connection, $idCategory);
+
+            if ($isDeleted === true) {
+                $flag_response = 201;
+            } else {
+                $flag_response = 500;
+            }
+
+            /* Breaking of the Case */
+            break;
+
         default:
             throw new Exception("Error!", 1);
             

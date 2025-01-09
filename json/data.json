@@ -371,6 +371,10 @@
                 "400": "Invalid Category Name (Category not Modified)",
                 "406": "Category Already Exists, changes reverted",
                 "500": "Failed to Modify Category"
+            },
+            "category_deletion": {
+                "201": "Category Succesfully Deleted",
+                "500": "Failed to Delete Category"
             }
         }
     }

@@ -307,7 +307,7 @@ exit; */
                     name="button_submit" 
                     value="category_edit" 
                     class="button-submit">
-                <span class="buttonText">Modify Category</span>
+                <span class="buttonText">Edit Category</span>
             </button>
         </form>
 
@@ -330,7 +330,7 @@ exit; */
                     name="button_submit" 
                     value="category_delete" 
                     class="button-submit">
-                <span class="buttonText">Modify Category</span>
+                <span class="buttonText">Delete Category</span>
             </button>
         </form>
     </div>

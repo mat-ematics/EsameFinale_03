@@ -801,4 +801,58 @@ class strumenti {
             }
         }
     }
+
+    /**
+     * Deletes an existing Category
+     * 
+     * @param object $connection The Connection Object with the Database
+     * @param int $idCategory The ID number of the Category to delete
+     * 
+     * @return bool|string Either True if successful, the failure message, or a non-exception-caught failure is returned
+     */
+    static public function delete_category(object $connection, int $idCategory) {
+        
+        // Try with MySQLi
+        if ($connection instanceof mysqli) {
+            //SQL statement
+            $sql_delete_category = "DELETE FROM categories WHERE idCategory = ?";
+            
+            /* Deletion */
+            $connection->begin_transaction(); //Start of Transaction
+            try {
+                // Query of the statement
+                $query_delete_category = $connection->prepare($sql_delete_category); //Prepare the statement
+                $query_delete_category->bind_param('i', $idCategory);
+                $result = $query_delete_category->execute(); //Statement Execution
+
+                /* Return of the Result and Commit Changes */
+                $connection->commit();
+                return $result;
+            } catch (Exception $e) {
+                /* Return Error Message and Rollback changes */
+                $connection->rollback();
+                return $e->getMessage();
+            }
+        } elseif ($connection instanceof PDO) {
+            //SQL statement
+            $sql_delete_category = "DELETE FROM categories WHERE idCategory = :id";
+
+            /* Deletion */
+            $connection->beginTransaction();
+            try {
+                // Query of the statement
+                $query_delete_category = $connection->prepare($sql_delete_category); //Prepare the statement
+                $query_delete_category->bindParam(':id', $idCategory, PDO::PARAM_INT); // Parameter Binding
+                $result = $query_delete_category->execute(); //Statement Execution
+
+                /* Return of the Result and Commit Changes */
+                $connection->commit();
+                return $result;
+            } catch (PDOException $e) {
+                /* Failure Handling and Rollback */
+                $connection->rollBack();
+                return $e->getMessage(); 
+            }
+        }
+    }
 }
