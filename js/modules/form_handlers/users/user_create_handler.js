@@ -13,7 +13,7 @@ const regexList = {
  * List of Error Messages for User/Admin Creation
  */
 const errorMessages = {
-    username: 'Username must be alphabetic or underscore and 6-32 characters long.',
+    username: 'Username must be alphabetic with eventual underscores and 6-32 characters long.',
     password: 'Password must contain at least 1 lowercase, 1 uppercase, 1 digit, and 1 special character (@$!%*?&), and be 8-32 chars long.',
     "repeat-password": "Passwords do not match.",
 };
