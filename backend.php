@@ -284,8 +284,8 @@ exit; */
             <!-- Category Selection -->
             <label class="label-select">Select Category:
                 <select name="selected_category" class="select-category">
-                    <?php foreach ($users as $user) { ?>
-                        <option value="<?php echo $user['idAdmin'] ?>"><?php echo $user['username'] ?></option>
+                    <?php foreach ($categories as $cat) { ?>
+                        <option value="<?php echo $cat['idAdmin'] ?>"><?php echo $cat['username'] ?></option>
                     <?php } ?>
                 </select>
             </label>

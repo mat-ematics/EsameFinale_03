@@ -584,4 +584,124 @@ class strumenti {
             }
         }
     }
+
+    /**
+     * Checks if given category name is present on a given Database
+     * 
+     * @param object $connection The Connection Object with the Database
+     * @param string $category The Name of the Category to check
+     * @param bool $return_id If true, returns the ID matched on success, otherwise it returns true
+     * 
+     * @return int|bool On success, the ID of the Account matched if found or true , false otherwise
+     */
+     static public function check_category(object $connection, string $category, bool $return_id = false) {
+
+        // Try with MySQLi
+        if ($connection instanceof mysqli) {
+            // SQL Statement with MySQLi parameters that performs the match
+            $sql_check_login = "SELECT idCategory FROM categories WHERE `name` = ?";
+            // Execution of the statement
+            $query_check_login = $connection->prepare($sql_check_login);
+            $query_check_login->bind_param("s", $category);
+            $query_check_login->execute();
+
+           
+            // Store the Login Result
+            $query_check_login->store_result();
+
+            /* Result Binding */
+            $query_check_login->bind_result($idCategory);
+            $query_check_login->fetch();
+
+            // Check if it is empty
+            if ($query_check_login->num_rows() > 0) {
+                // Determine Credentials Check Type
+                if ($return_id) {
+                    /* Register Case */
+                    return $idCategory; //Return the ID of the user
+                } else {
+                    return true; //Return true
+                }
+            } else {
+                return false;
+            }
+
+        } elseif ($connection instanceof PDO) {
+            // SQL Statement with PDO parameters
+            $sql_check_login = "SELECT idCategory FROM categories WHERE `name` = :inputName";
+            // Execution of the statement
+            $query_check_login = $connection->prepare($sql_check_login);
+            $query_check_login->bindParam(":inputName", $category, PDO::PARAM_STR); // Name Binding
+            $query_check_login->execute();
+            // Binding of the Result
+            if ($query_check_login->rowCount() > 0) {
+                // Determine Credentials Check Type
+                if ($return_id) {
+                    /* ID case */
+                    $idCategory = $query_check_login->fetch(PDO::FETCH_NUM);
+                    return $idCategory; //Returns the ID
+                } else {
+                    /* Boolean Case */
+                    return true; // Return true
+                }
+            } else {
+                return false;
+            }
+        } else {
+            throw new InvalidArgumentException("ERROR: Invalid Connection Type");
+        }
+    }
+
+    /**
+     * Creates a New Category in the provided Database
+     * 
+     * @param object $connection The Connection Object with the Database
+     * @param string $category The Name of the new category
+     * 
+     * @return true|string True if successful, otherwise the failure message is returned
+     */
+    static public function create_category(object $connection, string $category) {
+        
+        // Try with MySQLi
+        if ($connection instanceof mysqli) {
+            // SQL Statement with MySQLi parameters that creates the Account
+            $sql_create_category = "INSERT INTO categories (`name`) VALUES (?)";
+            
+            $connection->begin_transaction(); // Transaction For Security
+            /* Creation of Account */
+            try {
+                // Preparation of the statement
+                $query_create_category = $connection->prepare($sql_create_category);
+                // Parameter Binding and Query Execution
+                $query_create_category->bind_param("s", $category);
+                $query_create_category->execute();
+
+                /* Commit Changes and Return True on Success */
+                $connection->commit();
+                return true;               
+            } catch (Exception $e) {
+                /* Failure Handling */
+                $connection->rollback(); // Rollback of changes
+                return $e->getMessage(); 
+            }
+        } elseif ($connection instanceof PDO) {
+            $sql_create_category = "INSERT INTO categories (`name`) VALUES (:catname)";
+            $connection->beginTransaction();
+            try {
+                // Preparation of the statement
+                $query_create_category = $connection->prepare($sql_create_category);
+                // Parameter Binding and Query Execution
+                $query_create_category->bindParam(":catname", $category);
+                $query_create_category->execute();
+
+                /* Commit Changes and Return True on Success */
+                $connection->commit();
+                return true;               
+            } catch (PDOException $e) {
+                /* Failure Handling */
+                $connection->rollback(); // Rollback of changes
+                return $e->getMessage(); 
+            }
+        }
+    }
 }

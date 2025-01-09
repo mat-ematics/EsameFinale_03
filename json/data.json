@@ -358,6 +358,13 @@
             "user_deletion": {
                 "201": "User Succesfully Deleted",
                 "500": "Failed to Delete User"
+            },
+            "category_creation": {
+                "201": "Category Succesfully Created",
+                "400": "Invalid Category Name (Category not Created)",
+                "406": "Category Already Exists",
+                "500": "Failed to Create Category",
+                "500.1": "Failed to Check Categories"
             }
         }
     }
