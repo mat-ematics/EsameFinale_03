@@ -341,7 +341,7 @@ class strumenti {
     }
 
     /**
-     * Retrieves Admins from given database in the provided Database
+     * Retrieves Admins from the provided Database
      * 
      * @param object $connection The Connection Object with the Database
      * 
@@ -700,6 +700,45 @@ class strumenti {
             } catch (PDOException $e) {
                 /* Failure Handling */
                 $connection->rollback(); // Rollback of changes
+                return $e->getMessage(); 
+            }
+        }
+    }
+
+    /**
+     * Retrieves Categories from the provided Database
+     * 
+     * @param object $connection The Connection Object with the Database
+     * 
+     * @return array|string Categories if successful, otherwise the failure message is returned
+     */
+    static public function get_categories(object $connection) {
+        //Query
+        $sql_get_cat = "SELECT idCategory, `name` FROM categories";
+
+        // Try with MySQLi
+        if ($connection instanceof mysqli) {
+            /* Creation of Account */
+            try {
+                // Query of the statement
+                $query_get_cat = $connection->query($sql_get_cat);
+                
+                $result = $query_get_cat->fetch_all(MYSQLI_ASSOC);
+                
+                return $result;
+            } catch (Exception $e) {
+                return $e->getMessage();
+            }
+        } elseif ($connection instanceof PDO) {
+            try {
+                // Query of the statement
+                $query_get_cat = $connection->query($sql_get_cat);
+                
+                $result = $query_get_cat->fetchAll(PDO::FETCH_ASSOC);
+                
+                return $result;
+            } catch (PDOException $e) {
+                /* Failure Handling */
                 return $e->getMessage(); 
             }
         }

@@ -29,6 +29,7 @@ $data = strumenti::leggiJSON("json/data.json", true)["backend"];
 require_once('inclusioni/backend_validation.php');
 
 $users = strumenti::get_admins($connection);
+$categories = strumenti::get_categories($connection);
 
 /* strumenti::stampaArray($_POST);
 exit; */
@@ -285,7 +286,7 @@ exit; */
             <label class="label-select">Select Category:
                 <select name="selected_category" class="select-category">
                     <?php foreach ($categories as $cat) { ?>
-                        <option value="<?php echo $cat['idAdmin'] ?>"><?php echo $cat['username'] ?></option>
+                        <option value="<?php echo $cat['idCategory'] ?>"><?php echo $cat['name'] ?></option>
                     <?php } ?>
                 </select>
             </label>
@@ -318,8 +319,8 @@ exit; */
             <!-- Category Selection -->
             <label class="label-select">Select Category:
                 <select name="selected_category" class="select-category">
-                    <?php foreach ($users as $user) { ?>
-                        <option value="<?php echo $user['idAdmin'] ?>"><?php echo $user['username'] ?></option>
+                    <?php foreach ($categories as $cat) { ?>
+                        <option value="<?php echo $cat['idCategory'] ?>"><?php echo $cat['name'] ?></option>
                     <?php } ?>
                 </select>
             </label>
