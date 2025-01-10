@@ -39,8 +39,10 @@ export default class DOMUtils {
      * Works if regexList and errorContainer both exist.
      * 
      * @param {HTMLFormElement} form The Form containing the Input
-     * @param {HTMLInputElement} input The Input element to validate
+     * @param {HTMLInputElement|HTMLSelectElement} input The Input (or Select) element to validate
      * @param {Object} [regexList] The Regular Expression List (input type - regex pairs) of the Inputs
+     * 
+     * @return {Boolean} True if the input is valid, false otherwise
      */
     static validateInput (form, input, regexList) {
         /* Error Container and Regex Null Checking */
@@ -48,20 +50,30 @@ export default class DOMUtils {
         const regex = regexList[input.dataset.type] || /.*/; //Regex, any input if not present
         const value = input.value; // The value of the Input
     
-        /* Input Validity Check */
+        /* Select Input */
+        if (input.tagName === "SELECT" && input.options.length == 0) {
+            /* Invalid Inpput */
+            input.classList.add("invalid");
+            errorContainer.style.visibility = 'visible';
+            return false;
+        }
+
+        /* Normal Input Element*/
         if (!regex.test(value)) {
             /* Invalid Input */
             input.classList.add("invalid");
 
             /* Update Error Message Container Visibility */
             errorContainer.style.visibility = "visible";
-        } else {
-            /* Valid Input */
-            input.classList.remove("invalid");
-
-            /* Remove Error Message Container Visibility */
-            errorContainer.style.visibility = "hidden";
+            return false;
         }
+
+        /* Valid Input */
+        input.classList.remove("invalid");
+
+        /* Remove Error Message Container Visibility */
+        errorContainer.style.visibility = "hidden";
+        return true; //Input is valid
     }
 
     /**
@@ -107,6 +119,37 @@ export default class DOMUtils {
             errorContainer.style.visibility = 'hidden';
         });
     }
+
+    /**
+     * Initializes the Error Message of a given Element in a given Form
+     * 
+     * @param {HTMLFormElement} form The Form containing the Input
+     * @param {Element} input The Input to initialize
+     * @param {Object} [errorMessages] The Error Messages List (input type - error pairs) of the Inputs
+     */
+    static initializeError(form, input, errorMessages) {
+        /* Error Message Assigning */
+        const errorContainer = form.querySelector(`.errors-container.${input.dataset.type}-errors`); //Nearest Error Container 
+        const errorMessage = errorMessages[input.dataset.type] || "Invalid input."; //Generic error Message (if not present)
+        errorContainer.textContent = errorMessage; //Assign the error message to the container
+
+        /* Hide the Error Message */
+        errorContainer.style.visibility = 'hidden';
+    }
+
+    /**
+     * Displays the Error Message of a given Input in a given form
+     * 
+     * @param {HTMLFormElement} form The Form containing the Input
+     * @param {Element} input The Input of which the error is displayed
+     */
+    static displayError(form, input) {
+        /* Error Message Assigning */
+        const errorContainer = form.querySelector(`.errors-container.${input.dataset.type}-errors`); //Nearest Error Container
+        /* Hide the Error Message */
+        errorContainer.style.visibility = 'visible';
+    }
+
 
     /**
      * Checks for a match between the Password Input and its corresponding Repeat Password

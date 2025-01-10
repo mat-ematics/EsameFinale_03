@@ -21,7 +21,9 @@ areaNavItems.forEach(item => {
 /* User Forms Validation Initialization */
 initializeForm("userCreate", document.getElementById("formUserCreate"));
 initializeForm('userEdit', document.getElementById("formUserEdit"));
+initializeForm('userDelete', document.getElementById('formUserDelete'));
 
 /* Category Forms Validation Initialization */
 initializeForm('categoryCreate', document.getElementById("formCategoryCreate"));
 initializeForm('categoryEdit', document.getElementById("formCategoryEdit"));
+initializeForm('categoryDelete', document.getElementById('formCategoryDelete'));

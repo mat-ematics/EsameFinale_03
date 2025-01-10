@@ -158,12 +158,13 @@ exit; */
             <h3 class="form-title">Edit Account</h3>
 
             <label class="label-select">Select User:
-                <select name="selected_user" class="select-user">
+                <select name="selected_user" class="select-user" data-type="user-select">
                     <?php foreach ($users as $user) { ?>
                         <option value="<?php echo $user['idAdmin'] ?>"><?php echo $user['username'] ?></option>
                     <?php } ?>
                 </select>
             </label>
+            <ul class="errors-container user-select-errors" data-type="select-user" role="alert"><li></li></ul>
 
             <!-- Input Username -->
             <label>Insert New Username:
@@ -229,12 +230,13 @@ exit; */
             <h3 class="form-title">Delete User</h3>
 
             <label class="label-select">Select User:
-                <select name="selected_user" class="select-user">
+                <select name="selected_user" class="select-user" data-type="user-select">
                     <?php foreach ($users as $user) { ?>
                         <option value="<?php echo $user['idAdmin'] ?>"><?php echo $user['username'] ?></option>
                     <?php } ?>
                 </select>
             </label>
+            <ul class="errors-container user-select-errors" data-type="select-user" role="alert"><li></li></ul>
 
             <!-- Submit Button -->
             <button type="submit" 
@@ -284,12 +286,13 @@ exit; */
 
             <!-- Category Selection -->
             <label class="label-select">Select Category:
-                <select name="selected_category" class="select-category">
+                <select name="selected_category" class="select-category" data-type="category-select">
                     <?php foreach ($categories as $cat) { ?>
                         <option value="<?php echo $cat['idCategory'] ?>"><?php echo $cat['name'] ?></option>
                     <?php } ?>
                 </select>
             </label>
+            <ul class="errors-container category-select-errors" data-type="select-category" role="alert"><li></li></ul>
 
            <!-- Input Category Name -->
            <label>Insert New Category Name:
@@ -318,12 +321,13 @@ exit; */
 
             <!-- Category Selection -->
             <label class="label-select">Select Category:
-                <select name="selected_category" class="select-category">
+                <select name="selected_category" class="select-category" data-type="category-select">
                     <?php foreach ($categories as $cat) { ?>
                         <option value="<?php echo $cat['idCategory'] ?>"><?php echo $cat['name'] ?></option>
                     <?php } ?>
                 </select>
             </label>
+            <ul class="errors-container category-select-errors" data-type="select-category" role="alert"><li></li></ul>
 
             <!-- Submit Button -->
             <button type="submit" 

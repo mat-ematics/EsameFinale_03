@@ -13,6 +13,7 @@ const regexList = {
  * List of Error Messages for User/Admin Editing
  */
 const errorMessages = {
+    "user-select": "No User Selected or Present",
     username: 'Username must be alphabetic with eventual underscores and 6-32 characters long.',
     password: 'Password must contain at least 1 lowercase, 1 uppercase, 1 digit, and 1 special character (@$!%*?&), and be 8-32 chars long.',
     "repeat-password": "Passwords do not match.",
@@ -25,16 +26,31 @@ const errorMessages = {
  */
 export default function initializeValidationUserEdit(form) {
     const inputs = form.querySelectorAll(".input-credential");
+    const select = form.querySelector(".select-user");
     const submitButton = form.querySelector(".button-submit");
+    let allowEnable = true;
 
-    DOMUtils.initializeErrorMessages(form, inputs, errorMessages); //Assign all error messages 
-    DOMUtils.disableButton(submitButton, true); //Disable initially the submit button
+    //Assign all error messages 
+    DOMUtils.initializeErrorMessages(form, inputs, errorMessages);
+    DOMUtils.initializeError(form, select, errorMessages);
+
+    /* Check if there is at least one option */
+    if (select.options.length == 0) {
+        /* No options found, button disabled */
+        DOMUtils.displayError(form, select);
+        allowEnable = false;
+    }
+    
+    //Disable initially the submit button
+    DOMUtils.disableButton(submitButton, true); 
 
     inputs.forEach(input => {
         input.addEventListener("input", () => {
             DOMUtils.validateInput(form, input, regexList);
             DOMUtils.repeatPasswordCheck(form);
-            DOMUtils.updateButtonState(inputs, submitButton, false);
+            if (allowEnable) {
+                DOMUtils.updateButtonState(inputs, submitButton, false);
+            }
         });
     });
 
