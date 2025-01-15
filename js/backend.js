@@ -1,6 +1,8 @@
 /* Imports */
 import initializeForm from "./modules/form_handlers/_form_toggle";
+// Shared Imports
 import DOMUtils from "./modules/_shared/_dom_utils";
+import manageMultitagDropdown from "./modules/_shared/multitag_dropdown";
 
 /* Menu delle Visualizzazioni */
 const areaNavItems = document.querySelectorAll(".area");
@@ -27,3 +29,9 @@ initializeForm('userDelete', document.getElementById('formUserDelete'));
 initializeForm('categoryCreate', document.getElementById("formCategoryCreate"));
 initializeForm('categoryEdit', document.getElementById("formCategoryEdit"));
 initializeForm('categoryDelete', document.getElementById('formCategoryDelete'));
+
+/* Work Forms Validation Initialization */
+initializeForm('workCreate', document.getElementById("formWorkCreate"));
+
+/* Multilanguage Dropdown Behaviour */
+manageMultitagDropdown(document.getElementById('formCreateWork'));

@@ -25,6 +25,29 @@ select {
     background-color: $selectColor;
 }
 
+textarea {
+    padding: 10px;
+    font-size: 18px;
+    border: $inputBorder;
+    outline: none;
+    width: 100%;
+    transition: border 0.2s;
+    resize: none;
+
+    color: var.$colorSecondary;
+    background-color: var.$secondaryBgColor;
+
+    &:focus {
+        border: $inputValidBorder;
+    }
+    &:not(:placeholder-shown):not(.invalid) {
+        border: $inputValidBorder;
+    }
+    &.invalid {
+        border: $inputInvalidBorder !important;
+    }
+}
+
 /* Stile input di testo e label */
 input {
     padding: 10px;

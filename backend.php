@@ -24,6 +24,7 @@ if (!isset($_SESSION) || !isset($_SESSION['is_auth']) || $_SESSION['is_auth'] !=
 $connection = strumenti::create_connection(EXTENSION_MYSQLI, 'localhost', 'portfolio', 'root');
 
 $data = strumenti::leggiJSON("json/data.json", true)["backend"];
+$works = strumenti::leggiJSON("json/data.json", true)['projects'];
 
 //Importazione Validazione Server del Backend
 require_once('inclusioni/backend_validation.php');
@@ -42,6 +43,7 @@ exit; */
     <?php require_once("inclusioni/head.php") ?>
     <!-- Form Content Style -->
     <link rel="stylesheet" href="css/account_form.min.css">
+    <link rel="stylesheet" href="css/multitag_dropdown.min.css">
 </head>
 <body>
     <?php require_once('inclusioni/navbar.php') ?>
@@ -255,7 +257,7 @@ exit; */
     <!-- Category Management Area -->
     <div id="areaCategories" class="area-div">
 
-    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-categories" id="formCategoryCreate">
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-categories" id="formCategoryCreate">
             <!-- Form Title -->
             <h3 class="form-title">Create Category</h3>
 
@@ -314,8 +316,8 @@ exit; */
             </button>
         </form>
 
-        <!-- Delete (Admin) User form -->
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-users" id="formCategoryDelete">
+        <!-- Delete Category form -->
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-category" id="formCategoryDelete">
             <!-- Form Title -->
             <h3 class="form-title">Delete Category</h3>
 
@@ -342,70 +344,83 @@ exit; */
 
 
 
-
-
-
     <!-- Works Management Area -->
     <div id="areaWorks" class="area-div">
-    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-users" id="formCreateUser">
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-work" id="formWorkCreate">
             <!-- Form Title -->
-            <h3 class="form-title">Create Account</h3>
+            <h3 class="form-title">Create Work</h3>
 
-            <!-- Input Username -->
-            <label>Insert Work:
+            <!-- Input Work Name -->
+            <label>Insert Work Name:
                 <input type="text" 
-                    class="input-credential" 
-                    name="username" 
-                    data-type="username" 
-                    placeholder="Username">
+                    class="input-work" 
+                    name="work_name" 
+                    data-type="work-name" 
+                    placeholder="Work Name">
             </label>
             <!-- Username Error Message -->
-            <ul class="errors-container username-errors" data-type="username" role="alert"><li></li></ul>
+            <ul class="errors-container work_name-errors" role="alert"><li></li></ul>
 
-            <!-- Input Password -->
-            <label>Password:
-            <!-- Password Container -->
-                <div class="password-container">
-                    <!-- Password Input -->
-                    <input type="password" 
-                        class="input-credential" 
-                        name="password" 
-                        data-type="password" 
-                        placeholder="Password">
-                    <!-- "Show Password" Icon -->
-                    <span class="iconShowPassword">
-                        <i class="password-toggle fa-solid fa-eye show"></i>
-                    </span>
-                </div>
+            <!-- Input Work Date -->
+            <label>Insert Work Date:
+            <input type="date" 
+                class="input-work" 
+                name="work_date" 
+                data-type="work-date" >
             </label>
-            <!-- Password Error Message -->
-            <ul class="errors-container password-errors" data-type="password" role="alert"><li></li></ul>
+            <!-- Username Error Message -->
+            <ul class="errors-container work-date-errors" role="alert"><li></li></ul>
 
-            <!-- Input Repeat Password -->
-            <label>Repeat Password:
-                <!-- Repeat Password Container -->
-                <div class="password-container">
-                    <!-- Repeat Password Input -->
-                    <input type="password" 
-                        name="repeat_password" 
-                        class="input-credential" 
-                        data-type="repeat-password" 
-                        placeholder="Repeat Password">
-                    <!-- "Show Password" Icon -->
-                    <span class="iconShowPassword">
-                        <i class="repeat-password password-toggle fa-solid fa-eye show"></i>
-                    </span>
-                </div>
+            <!-- Input Work Image -->
+            <label>Insert Image of the Work:
+                <input type="file" 
+                    class="input-work" 
+                    name="work_image" 
+                    data-type="work-image"
+                    accept="image/*">
             </label>
-            <!-- Repeat Password Error Message -->
-            <ul class="errors-container repeat-password-errors" data-type="repeat-password" role="alert"><li></li></ul>
+            <!-- Username Error Message -->
+            <ul class="errors-container work-image-errors" role="alert"><li></li></ul>
+
+            <!-- Input Work Languages -->
+            
+            <div class="global-multitag-dropdown-container">
+                <div class="tags-container"></div>
+                <input 
+                    type="text" 
+                    class="input-work tags-input"
+                    data-type="work-languages"
+                    placeholder="Type or select a language" 
+                    autocomplete="off">
+                <!-- Dropdown Menu -->
+                <ul class="dropdown-menu">
+                    <li data-value="Python">Python</li>
+                    <li data-value="JavaScript">JavaScript</li>
+                    <li data-value="Java">Java</li>
+                    <li data-value="C++">C++</li>
+                    <li data-value="Ruby">Ruby</li>
+                    <li data-value="Go">Go</li>
+                    <li data-value="PHP">PHP</li>
+                    <li data-value="Swift">Swift</li>
+                </ul>
+            </div>
+            <!-- Languages Error Message -->
+            <ul class="errors-container work-languages-errors" role="alert"><li></li></ul>
+
+            <textarea 
+                name="work_description" 
+                class="input-work"
+                data-type="work-description"
+                placeholder="This is Work number 1..."></textarea>
+            <!-- Description Error Message -->
+            <ul class="errors-container work-description-errors" role="alert"><li></li></ul>
 
             <!-- Submit Button -->
             <button type="submit" 
                     name="button_submit" 
-                    value="user_create" 
+                    value="work_create" 
                     class="button-submit">
-                <span class="buttonText">Create User</span>
+                <span class="buttonText">Create Work</span>
             </button>
         </form>
 
