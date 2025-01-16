@@ -35,45 +35,188 @@ export default class DOMUtils {
     };
 
     /**
-     * Validates a given Input element with a Regular Expression.
+     * Toggles the visibility of the given Error Message(s) container
+     * @param {Element} errorContainer - The container of the errors
+     * @param {Boolean} [showError] - Optional flag to explicitly show or hide the error
+     * @returns {String|false} The new State of the Error, false if failed to toggle
+     */
+    static toggleErrorMessage(errorContainer, showError = null) {
+        if (!errorContainer) {
+            console.error("Error container not provided");
+            return false;
+        }
+
+        // Explicit control if `showError` is passed
+        if (showError !== null) {
+            errorContainer.style.visibility = showError ? 'visible' : 'hidden';
+        } 
+        // Automatic toggle if no `showError` value provided
+        else if (errorContainer.style.visibility === 'visible') {
+            errorContainer.style.visibility = 'hidden';
+        } else {
+            errorContainer.style.visibility = 'visible';
+        }
+
+        // Return the new State of the Error Container
+        return errorContainer.style.visibility;
+    }
+
+    /**
+     * Validates a text input using a given regex.
+     * @param {string} text - The text to validate.
+     * @param {RegExp} regex - The regular expression to validate against.
+     * @param {boolean} [allowEmpty=false] [optional] Whether empty values are allowed.
+     * @returns {boolean} `true` if the text passes validation or is allowed to be empty, otherwise `false`.
+     */
+    static validateText(text, regex, allowEmpty = false) {
+        if (!text.trim()) return allowEmpty; // If empty, follow allowEmpty
+        return regex.test(text);
+    }
+
+    /**
+     * Validates a date input against optional max and min dates.
+     * @param {string} date - The date to validate in ISO format (YYYY-MM-DD).
+     * @param {Date|null} [maxDate=null] - The maximum allowed date.
+     * @param {Date|null} [minDate=null] - The minimum allowed date.
+     * @param {boolean} [allowEmpty=false] [optional] Whether empty values are allowed.
+     * @returns {boolean} `true` if the date is valid or is allowed to be empty, otherwise `false`.
+     */
+    static validateDate(date, maxDate = null, minDate = null, allowEmpty = false) {
+        if (!date.trim()) return allowEmpty; // If empty, follow allowEmpty
+
+        const parsedDate = new Date(date);
+        if (isNaN(parsedDate.getTime())) return false;
+
+        if (maxDate && parsedDate > maxDate) return false;
+        if (minDate && parsedDate < minDate) return false;
+
+        return true;
+    }
+
+    /**
+     * Validates a select input to ensure it is not empty.
+     * @param {string|Array} value - The value of the select input (string for single select, array for multi-select).
+     * @returns {boolean} `true` if the select input is not empty, otherwise `false`.
+     */
+    static validateSelect(value) {
+        if (Array.isArray(value)) {
+            return value.length > 0;
+        }
+        return !!value; // Non-empty string
+    }
+
+    /**
+     * Validates an image input by checking the file extension.
+     * @param {string} imagePath - The path or filename of the image to validate.
+     * @param {boolean} [allowEmpty=false] [optional] Whether empty values are allowed.
+     * @returns {boolean} `true` if the file is valid or is allowed to be empty, otherwise `false`.
+     */
+    static validateImage(imagePath, allowEmpty = false) {
+        if (!imagePath.trim()) return allowEmpty; // If empty, follow allowEmpty
+        return /\.(jpg|jpeg|png|gif)$/i.test(imagePath);
+    }
+
+    /**
+     * Validates the multi-tag dropdown to ensure at least one tag is selected.
+     * @param {Element} container - The container of the multi-tag dropdown.
+     * @param {boolean} [allowEmpty=false] [optional] - Whether empty selections are allowed.
+     * @returns {boolean} `true` if the validation passes, otherwise `false`.
+     */
+    static validateMultitagSelect(container, allowEmpty = false) {
+        const tagsContainer = container.querySelector('.tags-container');
+        if (!tagsContainer) {
+            console.error("Tags container not found in the specified container.");
+            return false;
+        }
+
+        // Check for tags
+        const hasTags = tagsContainer.children.length > 0;
+
+        // Return validation result based on allowEmpty
+        return allowEmpty || hasTags;
+    }
+
+    /**
+     * Validates a given Input element.
      * Works if regexList and errorContainer both exist.
      * 
      * @param {HTMLFormElement} form The Form containing the Input
      * @param {HTMLInputElement|HTMLSelectElement} input The Input (or Select) element to validate
-     * @param {Object} [regexList] The Regular Expression List (input type - regex pairs) of the Inputs
-     * 
-     * @return {Boolean} True if the input is valid, false otherwise
+     * @param {RegExp} [options.regex=/./] - Default regex for validation.
+     * @param {Object} [options.regexList={}] - A map of regex patterns for different input types.
+     * @param {Date|null} [options.maxDate=null] - The maximum allowed date (null if no limit).
+     * @param {Date|null} [options.minDate=null] - The minimum allowed date (null if no limit).
+     * @param {boolean} [options.allowEmpty=false] - Whether empty inputs are considered valid.
+     * @returns {boolean} - Returns `true` if the input passes validation, otherwise `false`.
      */
-    static validateInput (form, input, regexList) {
-        /* Error Container and Regex Null Checking */
-        const errorContainer = form.querySelector(`.errors-container.${input.dataset.type}-errors`); //Error Container 
-        const regex = regexList[input.dataset.type] || /.*/; //Regex, any input if not present
+    static validateInput(
+        form, 
+        input, 
+        options = { 
+            regex: /./, 
+            regexList: {}, 
+            maxDate: null, 
+            minDate: null, 
+            allowEmpty: false 
+        }
+    ) {
+        /* Flags */
+        let flagValid = true; //Validity flag
+
+        /* Input related variables */
+        const type = input.dataset.type || 'input-type'; //Data-type of the input
+        const inputType = input.dataset.inputType || 'text'; //Input type (text/select/multitag-select/date/image)
+
+        
         const value = input.value; // The value of the Input
+        
+        const parent = input.parentElement;
+        const errorContainer = form.querySelector(`.errors-container.${type}-errors`); //Error Container 
+        const regex = options.regexList[type] || options.regex; //Regex, any input if not present
+        
+        /* Control for multitag-select (already checked in its script) */
+        if (inputType == 'multitag-select') {
+            const container = input.closest(".global-multitag-dropdown-container");
+            flagValid = this.validateMultitagSelect(container, options.allowEmpty);
+        
+            return flagValid;
+        }
     
-        /* Select Input */
-        if (input.tagName === "SELECT" && input.options.length == 0) {
-            /* Invalid Inpput */
-            input.classList.add("invalid");
-            errorContainer.style.visibility = 'visible';
-            return false;
+        /* Check the Correct type */
+        switch (inputType) {
+            case "text":
+                flagValid = this.validateText(value, regex, options.allowEmpty); 
+                break;
+            case "date":
+                flagValid = this.validateDate(value, options.maxDate, options.minDate, options.allowEmpty); // Date validation
+                break;
+            case "image":
+                flagValid = this.validateImage(value, options.allowEmpty); // Image validation
+                break;
+            case "select":
+                flagValid = this.validateSelect(value, options.allowEmpty); // Min length
+                break;
+            //Already integrated inside default integration
+            case "multitag-select":
+                // flagValid = this.validateMultitagSelect(container, options.allowEmpty); // Must select at least one tag
+                break;
+            default:
+                break;
         }
 
-        /* Normal Input Element*/
-        if (!regex.test(value)) {
-            /* Invalid Input */
+        /* Update Validty Input */
+        if (flagValid) {
+            input.classList.remove("invalid");
+            input.classList.add("valid");
+        } else {
             input.classList.add("invalid");
-
-            /* Update Error Message Container Visibility */
-            errorContainer.style.visibility = "visible";
-            return false;
+            input.classList.remove("valid");
         }
-
-        /* Valid Input */
-        input.classList.remove("invalid");
 
         /* Remove Error Message Container Visibility */
-        errorContainer.style.visibility = "hidden";
-        return true; //Input is valid
+        flagValid ? this.toggleErrorMessage(errorContainer, false) : this.toggleErrorMessage(errorContainer, true);
+
+        return flagValid; //Return Value
     }
 
     /**
@@ -89,7 +232,13 @@ export default class DOMUtils {
         /* Check for some empty */
         if (checkSomeEmpty) {
             /* hasErrors is true when at least one input is invalid or empty */
-            hasErrors = Array.from(inputs).some(input => input.classList.contains("invalid") || !input.value);
+            hasErrors = Array.from(inputs).some(input => {
+                if (input.dataset.inputType === 'multitag-select') {
+                    return input.parentElement.classList.contains("invalid") && !input.parentElement.classList.contains("valid");
+                } else {
+                    return input.classList.contains("invalid") || !input.value;
+                }
+            });
         } 
         else {
             /* hasErrors is true when at least one input is invalid or all inputs are empty */
@@ -98,6 +247,7 @@ export default class DOMUtils {
             hasErrors = hasInvalidInputs || allInputsEmpty;
         } 
 
+        console.log(hasErrors);
         DOMUtils.disableButton(button, hasErrors);
     }
 
@@ -111,12 +261,13 @@ export default class DOMUtils {
     static initializeErrorMessages(form, inputs, errorMessages) {
         Array.from(inputs).forEach(input => {
             /* Error Message Assigning */
-            const errorContainer = form.querySelector(`.errors-container.${input.dataset.type}-errors`); //Nearest Error Container 
-            const errorMessage = errorMessages[input.dataset.type] || "Invalid input."; //Generic error Message (if not present)
+            const type = input.dataset.type || 'input';
+            const errorContainer = form.querySelector(`.errors-container.${type}-errors`); //Nearest Error Container 
+            const errorMessage = errorMessages[type] || "Invalid input."; //Generic error Message (if not present)
             errorContainer.textContent = errorMessage; //Assign the error message to the container
 
             /* Hide the Error Message */
-            errorContainer.style.visibility = 'hidden';
+            this.toggleErrorMessage(errorContainer, false);
         });
     }
 

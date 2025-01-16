@@ -46,7 +46,7 @@ export default function initializeValidationUserEdit(form) {
 
     inputs.forEach(input => {
         input.addEventListener("input", () => {
-            DOMUtils.validateInput(form, input, regexList);
+            DOMUtils.validateInput(form, input, {regexList: regexList, allowEmpty: true});
             DOMUtils.repeatPasswordCheck(form);
             if (allowEnable) {
                 DOMUtils.updateButtonState(inputs, submitButton, false);

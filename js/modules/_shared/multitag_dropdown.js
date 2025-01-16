@@ -1,3 +1,6 @@
+/* Imports */
+import DOMUtils from "./_dom_utils";
+
 /**
  * Function that intializes and manages a MultiTag Dropdown Behaviour
  * 
@@ -13,6 +16,7 @@ export default function manageMultitagDropdown(container, options = {createHidde
     const dropdownMenu = container.querySelector('.dropdown-menu');
     const tagsContainer = container.querySelector('.tags-container');
     const form = container.closest('form'); //If the container is the form, container will be equal to form
+    const errorContainer = form.querySelector(`.errors-container.${input.dataset.type}-errors`) || null;
 
     if (!tagsContainer || !input || !dropdownMenu) return false; // Ensure all required elements are present
 
@@ -22,10 +26,21 @@ export default function manageMultitagDropdown(container, options = {createHidde
     // Function to check tags presence and adds validity
     function checkTags() {
     	const tagsPresent = tagsContainer.children.length != 0;
+
         if (tagsPresent) {
             dropdownContainer.classList.add('valid');
+            dropdownContainer.classList.remove("invalid");
+            
+            if (errorContainer) {
+                DOMUtils.toggleErrorMessage(errorContainer, false);
+            }
         } else {
             dropdownContainer.classList.remove('valid');
+            dropdownContainer.classList.add("invalid");
+
+            if (errorContainer) {
+                DOMUtils.toggleErrorMessage(errorContainer, true);
+            }
         }
     }
 
@@ -97,10 +112,10 @@ export default function manageMultitagDropdown(container, options = {createHidde
                 if (hiddenInput) {
                     form.removeChild(hiddenInput);
                 }
+                //Check tags
+                checkTags();
             }
             
-            //Check tags
-            checkTags();
         });
 
         //Appends the Tag to the container
@@ -115,9 +130,9 @@ export default function manageMultitagDropdown(container, options = {createHidde
             hiddenInput.name = 'languages[]'; // Name for form submission as an array
             hiddenInput.value = value;
             form.appendChild(hiddenInput);
+            checkTags();
         }
 
-        checkTags();
     }
     
     /* Event Listeners */

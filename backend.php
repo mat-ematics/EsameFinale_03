@@ -101,7 +101,8 @@ exit; */
                 <input type="text" 
                     class="input-credential" 
                     name="username" 
-                    data-type="username" 
+                    data-type="username"
+                    data-input-type="text"
                     placeholder="Username">
             </label>
             <!-- Username Error Message -->
@@ -115,7 +116,8 @@ exit; */
                     <input type="password" 
                         class="input-credential" 
                         name="password" 
-                        data-type="password" 
+                        data-type="password"
+                        data-input-type="text"
                         placeholder="Password">
                     <!-- "Show Password" Icon -->
                     <span class="iconShowPassword">
@@ -134,7 +136,8 @@ exit; */
                     <input type="password" 
                         name="repeat_password" 
                         class="input-credential" 
-                        data-type="repeat-password" 
+                        data-type="repeat-password"
+                        data-input-type="text"
                         placeholder="Repeat Password">
                     <!-- "Show Password" Icon -->
                     <span class="iconShowPassword">
@@ -160,7 +163,11 @@ exit; */
             <h3 class="form-title">Edit Account</h3>
 
             <label class="label-select">Select User:
-                <select name="selected_user" class="select-user" data-type="user-select">
+                <select 
+                    name="selected_user" 
+                    class="select-user" 
+                    data-type="user-select"
+                    data-input-type="select">
                     <?php foreach ($users as $user) { ?>
                         <option value="<?php echo $user['idAdmin'] ?>"><?php echo $user['username'] ?></option>
                     <?php } ?>
@@ -173,7 +180,8 @@ exit; */
                 <input type="text" 
                     class="input-credential" 
                     name="username" 
-                    data-type="username" 
+                    data-type="username"
+                    data-input-type="text"
                     placeholder="Username">
             </label>
             <!-- Username Error Message -->
@@ -187,7 +195,8 @@ exit; */
                     <input type="password" 
                         class="input-credential" 
                         name="password" 
-                        data-type="password" 
+                        data-type="password"
+                        data-input-type="text"
                         placeholder="Password">
                     <!-- "Show Password" Icon -->
                     <span class="iconShowPassword">
@@ -206,7 +215,8 @@ exit; */
                     <input type="password" 
                         class="input-credential" 
                         name="repeat_password" 
-                        data-type="repeat-password" 
+                        data-type="repeat-password"
+                        data-input-type="text"
                         placeholder="Repeat Password">
                     <!-- "Show Password" Icon -->
                     <span class="iconShowPassword">
@@ -232,7 +242,11 @@ exit; */
             <h3 class="form-title">Delete User</h3>
 
             <label class="label-select">Select User:
-                <select name="selected_user" class="select-user" data-type="user-select">
+                <select 
+                    name="selected_user" 
+                    class="select-user" 
+                    data-type="user-select"
+                    data-input-type="select">
                     <?php foreach ($users as $user) { ?>
                         <option value="<?php echo $user['idAdmin'] ?>"><?php echo $user['username'] ?></option>
                     <?php } ?>
@@ -266,7 +280,8 @@ exit; */
                 <input type="text" 
                     class="input-category" 
                     name="category_name" 
-                    data-type="category-name" 
+                    data-type="category-name"
+                    data-input-type="text"
                     placeholder="Category">
             </label>
             <!-- Category Name Error Message -->
@@ -288,7 +303,11 @@ exit; */
 
             <!-- Category Selection -->
             <label class="label-select">Select Category:
-                <select name="selected_category" class="select-category" data-type="category-select">
+                <select 
+                    name="selected_category" 
+                    class="select-category" 
+                    data-type="category-select"
+                    data-input-type="select">
                     <?php foreach ($categories as $cat) { ?>
                         <option value="<?php echo $cat['idCategory'] ?>"><?php echo $cat['name'] ?></option>
                     <?php } ?>
@@ -301,7 +320,8 @@ exit; */
                 <input type="text" 
                     class="input-category" 
                     name="category_name" 
-                    data-type="category-name" 
+                    data-type="category-name"
+                    data-input-type="text" 
                     placeholder="Category">
             </label>
             <!-- Category Name Error Message -->
@@ -323,7 +343,11 @@ exit; */
 
             <!-- Category Selection -->
             <label class="label-select">Select Category:
-                <select name="selected_category" class="select-category" data-type="category-select">
+                <select 
+                    name="selected_category" 
+                    class="select-category" 
+                    data-type="category-select"
+                    data-input-type="select">
                     <?php foreach ($categories as $cat) { ?>
                         <option value="<?php echo $cat['idCategory'] ?>"><?php echo $cat['name'] ?></option>
                     <?php } ?>
@@ -355,18 +379,20 @@ exit; */
                 <input type="text" 
                     class="input-work" 
                     name="work_name" 
-                    data-type="work-name" 
+                    data-type="work-name"
+                    data-input-type="text"
                     placeholder="Work Name">
             </label>
             <!-- Username Error Message -->
-            <ul class="errors-container work_name-errors" role="alert"><li></li></ul>
+            <ul class="errors-container work-name-errors" role="alert"><li></li></ul>
 
             <!-- Input Work Date -->
             <label>Insert Work Date:
             <input type="date" 
                 class="input-work" 
                 name="work_date" 
-                data-type="work-date" >
+                data-type="work-date"
+                data-input-type="date">
             </label>
             <!-- Username Error Message -->
             <ul class="errors-container work-date-errors" role="alert"><li></li></ul>
@@ -377,6 +403,7 @@ exit; */
                     class="input-work" 
                     name="work_image" 
                     data-type="work-image"
+                    data-input-type="image"
                     accept="image/*">
             </label>
             <!-- Username Error Message -->
@@ -390,6 +417,7 @@ exit; */
                     type="text" 
                     class="input-work tags-input"
                     data-type="work-languages"
+                    data-input-type="multitag-select"
                     placeholder="Type or select a language" 
                     autocomplete="off">
                 <!-- Dropdown Menu -->
@@ -411,6 +439,7 @@ exit; */
                 name="work_description" 
                 class="input-work"
                 data-type="work-description"
+                data-input-type="text"
                 placeholder="This is Work number 1..."></textarea>
             <!-- Description Error Message -->
             <ul class="errors-container work-description-errors" role="alert"><li></li></ul>

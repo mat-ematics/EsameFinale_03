@@ -31,7 +31,7 @@ export default function initializeValidationLogin(form) {
 
     inputs.forEach(input => {
         input.addEventListener("input", () => {
-            DOMUtils.validateInput(form, input, regexList);
+            DOMUtils.validateInput(form, input, {'regexList': regexList});
             DOMUtils.updateButtonState(inputs, submitButton);
         });
     });

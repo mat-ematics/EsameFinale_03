@@ -63,7 +63,7 @@ input {
     &:focus {
         border: $inputValidBorder;
     }
-    &:not(:placeholder-shown):not(.invalid) {
+    &.valid {
         border: $inputValidBorder;
     }
     &.invalid {

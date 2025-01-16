@@ -34,4 +34,4 @@ initializeForm('categoryDelete', document.getElementById('formCategoryDelete'));
 initializeForm('workCreate', document.getElementById("formWorkCreate"));
 
 /* Multilanguage Dropdown Behaviour */
-manageMultitagDropdown(document.getElementById('formCreateWork'));
+manageMultitagDropdown(document.getElementById('formWorkCreate'));

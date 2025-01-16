@@ -32,7 +32,7 @@ export default function initializeValidationUserCreate(form) {
 
     inputs.forEach(input => {
         input.addEventListener("input", () => {
-            DOMUtils.validateInput(form, input, regexList);
+            DOMUtils.validateInput(form, input, { 'regexList': regexList });
             DOMUtils.repeatPasswordCheck(form);
             DOMUtils.updateButtonState(inputs, submitButton);
         });

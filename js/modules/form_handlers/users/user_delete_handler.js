@@ -29,7 +29,7 @@ export default function initializeValidationUserDelete(form) {
     }
 
     select.addEventListener("click", () => {
-        DOMUtils.validateInput(form, select, regexList);
+        DOMUtils.validateInput(form, select);
         if (allowEnable) {
             DOMUtils.updateButtonState(selectElements, submitButton, false);
         }

@@ -80,6 +80,7 @@
         "page_title": "Projects",
         "style_sheet": "projects.min.css",
         "bubbles": 20,
+        "project_description_length": 100,
         "project_list": {
             "project_1": {
                 "project_id": "work_1",
