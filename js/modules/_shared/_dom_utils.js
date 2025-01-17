@@ -69,8 +69,9 @@ export default class DOMUtils {
      * @returns {boolean} `true` if the text passes validation or is allowed to be empty, otherwise `false`.
      */
     static validateText(text, regex, allowEmpty = false) {
-        if (!text.trim()) return allowEmpty; // If empty, follow allowEmpty
-        return regex.test(text);
+        const value = text.trim();
+        if (!value) return allowEmpty; // If empty, follow allowEmpty
+        return regex.test(value);
     }
 
     /**
@@ -160,6 +161,19 @@ export default class DOMUtils {
             allowEmpty: false 
         }
     ) {
+        /* Options Merging */
+        const passedOptions = {
+            ...{ 
+                regex: /./, 
+                regexList: {}, 
+                maxDate: null, 
+                minDate: null, 
+                allowEmpty: false 
+            },
+
+            ...options
+        }
+
         /* Flags */
         let flagValid = true; //Validity flag
 
@@ -172,12 +186,18 @@ export default class DOMUtils {
         
         const parent = input.parentElement;
         const errorContainer = form.querySelector(`.errors-container.${type}-errors`); //Error Container 
-        const regex = options.regexList[type] || options.regex; //Regex, any input if not present
+        let regex = passedOptions.regexList[type] || passedOptions.regex; //Regex, any input if not present
+        if (typeof passedOptions.regexList[type] == 'undefined') {
+            regex = passedOptions.regex;
+            console.log(passedOptions);
+        }
+
+        console.log(regex);
         
         /* Control for multitag-select (already checked in its script) */
         if (inputType == 'multitag-select') {
             const container = input.closest(".global-multitag-dropdown-container");
-            flagValid = this.validateMultitagSelect(container, options.allowEmpty);
+            flagValid = this.validateMultitagSelect(container, passedOptions.allowEmpty);
         
             return flagValid;
         }
@@ -185,20 +205,20 @@ export default class DOMUtils {
         /* Check the Correct type */
         switch (inputType) {
             case "text":
-                flagValid = this.validateText(value, regex, options.allowEmpty); 
+                flagValid = this.validateText(value, regex, passedOptions.allowEmpty); 
                 break;
             case "date":
-                flagValid = this.validateDate(value, options.maxDate, options.minDate, options.allowEmpty); // Date validation
+                flagValid = this.validateDate(value, passedOptions.maxDate, passedOptions.minDate, passedOptions.allowEmpty); // Date validation
                 break;
             case "image":
-                flagValid = this.validateImage(value, options.allowEmpty); // Image validation
+                flagValid = this.validateImage(value, passedOptions.allowEmpty); // Image validation
                 break;
             case "select":
-                flagValid = this.validateSelect(value, options.allowEmpty); // Min length
+                flagValid = this.validateSelect(value, passedOptions.allowEmpty); // Min length
                 break;
             //Already integrated inside default integration
             case "multitag-select":
-                // flagValid = this.validateMultitagSelect(container, options.allowEmpty); // Must select at least one tag
+                // flagValid = this.validateMultitagSelect(container, passedOptions.allowEmpty); // Must select at least one tag
                 break;
             default:
                 break;
@@ -247,7 +267,7 @@ export default class DOMUtils {
             hasErrors = hasInvalidInputs || allInputsEmpty;
         } 
 
-        console.log(hasErrors);
+        // console.log(hasErrors);
         DOMUtils.disableButton(button, hasErrors);
     }
 
@@ -329,6 +349,8 @@ export default class DOMUtils {
             /* Show the Error Message */
             errorContainer.style.visibility = 'visible';
         }
+
+        console.log('im beign activated', password.value === repeatPassword.value);
     }
 
     /**
