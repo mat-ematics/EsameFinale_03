@@ -6,10 +6,11 @@ import DOMUtils from "./_dom_utils";
  * 
  * @param {Element} container The Element containing the dropdown
  * @param {Object} options An object containing the options for the dropdown
- * @param {boolean} options.createHiddenInput If true (default), creates
+ * @param {boolean} options.createHiddenInput If true (default), creates hidden inputs for each tag
+ * @param {string} options.hiddenInputName The Name of the Hidden Inputs (collected as array). Works only if createHiddenInput is true
  * @returns {boolean} True on initialization success, otherwise false (necessary elements not found)
  */
-export default function manageMultitagDropdown(container, options = {createHiddenInput: true}) {
+export default function manageMultitagDropdown(container, options = {createHiddenInput: true, hiddenInputName: 'tag'}) {
     /* Define all Inputs */
     const dropdownContainer = container.querySelector('.global-multitag-dropdown-container')
     const input = container.querySelector('.tags-input');
@@ -101,14 +102,14 @@ export default function manageMultitagDropdown(container, options = {createHidde
             selectedTags.delete(value);
             
             // Remove corresponding hidden input
-            const hiddenInput = form.querySelector(`input[name="languages[]"][value="${value}"]`);
+            const hiddenInput = form.querySelector(`input[name="${options.hiddenInputName}[]"][value="${value}"]`);
             if (hiddenInput) {
                 form.removeChild(hiddenInput);
             }
 
             // Optionally remove the hidden input
             if (options.createHiddenInput) {
-                const hiddenInput = form.querySelector(`input[name="languages[]"][value="${value}"]`);
+                const hiddenInput = form.querySelector(`input[name="${options.hiddenInputName}[]"][value="${value}"]`);
                 if (hiddenInput) {
                     form.removeChild(hiddenInput);
                 }
@@ -127,7 +128,7 @@ export default function manageMultitagDropdown(container, options = {createHidde
             // Create hidden input for the tag
             const hiddenInput = document.createElement('input');
             hiddenInput.type = 'hidden';
-            hiddenInput.name = 'languages[]'; // Name for form submission as an array
+            hiddenInput.name = `${options.hiddenInputName}[]`; // Name for form submission as an array
             hiddenInput.value = value;
             form.appendChild(hiddenInput);
             checkTags();
