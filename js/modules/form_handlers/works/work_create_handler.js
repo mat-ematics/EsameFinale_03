@@ -6,17 +6,17 @@ import DOMUtils from "../../_shared/_dom_utils";
  */
 const regexList = {
     "work-name": /^[a-zA-Z\s]{3,50}$/,
-    "work-description": /^[a-zA-Z0-9.,'"\s-]{10,500}$/,
+    "work-description": /^[a-zA-Z0-9.,!'"-\s]{10,500}$/,
 };
 /**
  * List of Error Messages for Work Creation
  */
 const errorMessages = {
-    "work-name": "Invalid Work Name",
-    "work-date": "Insert Work Date",
-    "work-image": "Insert an Image",
+    "work-name": "Work Name must be between 3 and 50 alphabetic characters",
+    "work-date": "Work Date must be valid and non-empty",
+    "work-image": "Insert a Valid Image",
     "work-languages": "Insert at least one language",
-    "work-description": "Invalid Work Description",
+    "work-description": "Work Description must be between 10 and 500 alphabetic and special (.,!-'\") characters",
 };
 
 /**
