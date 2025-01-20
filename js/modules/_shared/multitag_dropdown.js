@@ -17,9 +17,15 @@ export default function manageMultitagDropdown(container, options = {createHidde
     const dropdownMenu = container.querySelector('.dropdown-menu');
     const tagsContainer = container.querySelector('.tags-container');
     const form = container.closest('form'); //If the container is the form, container will be equal to form
-    const errorContainer = form.querySelector(`.errors-container.${input.dataset.type}-errors`) || null;
+    const errorType = input.dataset.type || 'default';
+    const errorContainer = form.querySelector(`.errors-container.${errorType}-errors`) || null;
 
     if (!tagsContainer || !input || !dropdownMenu) return false; // Ensure all required elements are present
+
+    /* Form Existance Control */
+    if (!form) {
+        console.warn('No form found for the dropdown container. Some features may not work.'); //Warn that no form is found
+    }
 
     /* Define Selected Tags Set (unique value list) */
     const selectedTags = new Set();
@@ -53,6 +59,8 @@ export default function manageMultitagDropdown(container, options = {createHidde
 
         /* Show Dropdown */
         dropdownMenu.style.display = 'block';
+        
+        let flagVisibleItems = false; //Flag to check if there are visible items 
 
         /* Filtering Behaviour */
         items.forEach(item => {
@@ -61,10 +69,14 @@ export default function manageMultitagDropdown(container, options = {createHidde
             //Checks for Correspondance
             if (text.includes(filter)) {
                 item.style.display = '';
+                flagVisibleItems = true;
             } else {
                 item.style.display = 'none';
             }
         });
+
+        //Hide Dropdown Menu if there are no visible items (no matches)
+        dropdownMenu.style.display = flagVisibleItems ? 'block' : 'none'; 
     }
     
     // Add tag on selecting from dropdown
@@ -100,12 +112,6 @@ export default function manageMultitagDropdown(container, options = {createHidde
         removeBtn.addEventListener('click', () => {
             tagsContainer.removeChild(tag);
             selectedTags.delete(value);
-            
-            // Remove corresponding hidden input
-            const hiddenInput = form.querySelector(`input[name="${options.hiddenInputName}[]"][value="${value}"]`);
-            if (hiddenInput) {
-                form.removeChild(hiddenInput);
-            }
 
             // Optionally remove the hidden input
             if (options.createHiddenInput) {
@@ -140,12 +146,12 @@ export default function manageMultitagDropdown(container, options = {createHidde
 
     // Hide dropdown on outside click
     container.addEventListener('click', (event) => {
-        if (!event.target.closest('.dropdown-container')) {
+        if (!event.target.closest('.global-multitag-dropdown-container')) {
             dropdownMenu.style.display = 'none';
         }
     });
     // Prevent dropdown from closing on input click
-    input.addEventListener('click', (event) => {
+    input.addEventListener('focus', (event) => {
         event.stopPropagation();
         dropdownMenu.style.display = 'block';
     });
