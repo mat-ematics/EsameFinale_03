@@ -14,7 +14,7 @@ const regexList = {
 const errorMessages = {
     "work-name": "Work Name must be between 3 and 50 alphabetic characters",
     "work-date": "Work Date must be valid and non-empty",
-    "work-image": "Insert a Valid Image",
+    "work-image": "Insert a Valid Image Type (PNG/JPEG/GIF)",
     "work-languages": "Insert at least one language",
     "work-description": "Work Description must be between 10 and 500 alphabetic and special (.,!-'\") characters",
 };
