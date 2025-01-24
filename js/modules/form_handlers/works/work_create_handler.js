@@ -12,6 +12,7 @@ const regexList = {
  * List of Error Messages for Work Creation
  */
 const errorMessages = {
+    "work-category": "No User Selected or Present",
     "work-name": "Work Name must be between 3 and 50 alphabetic characters",
     "work-date": "Work Date must be valid and non-empty",
     "work-image": "Insert a Valid Image Type (PNG/JPEG/GIF)",
@@ -27,17 +28,35 @@ const errorMessages = {
 export default function initializeValidationWorkCreate(form) {
     /* Variable Declaration */
     const inputs = form.querySelectorAll(".input-work"); //All inputs
+    const select = form.querySelector(".select-category"); //The category select
     const submitButton = form.querySelector(".button-submit");
+    let allowEnable = true; //Flag for Category presence
 
-    DOMUtils.initializeErrorMessages(form, inputs, errorMessages); //Assign all error messages 
+    /* Assign all error messages */
+    DOMUtils.initializeErrorMessages(form, inputs, errorMessages);
+    DOMUtils.initializeError(form, select, errorMessages); 
+
     DOMUtils.disableButton(submitButton, true); //Disable initially the submit button
+
+    /* Check if there is at least one option */
+    if (select.options.length == 0) {
+        /* No options found, button disabled */
+        DOMUtils.disableButton(submitButton, true);
+        DOMUtils.displayError(form, select);
+        allowEnable = false; //Update flag
+    }
 
     inputs.forEach(input => {
         input.addEventListener("input", () => {
             DOMUtils.validateInput(form, input, {regexList: regexList});
-            DOMUtils.updateButtonState(inputs, submitButton);
+            /* Check Flag */
+            if (allowEnable) {
+                DOMUtils.updateButtonState(inputs, submitButton);
+            }
         });
     });
+
+    
 
     form.querySelectorAll(".password-toggle").forEach(toggle => {
         const passwordInput = toggle.closest(".password-container").querySelector("input[type=password]");

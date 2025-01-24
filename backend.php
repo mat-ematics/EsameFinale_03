@@ -56,12 +56,12 @@ exit; */
         </menu>
     </main>
     <!-- Form Response -->
-    <?php if($flag_response != 200 && $form_response != '') { ?>
+    <?php if($flag_response['status'] != 200 && $flag_response['status'] != '') { ?>
         <div 
             class="response
             <?php
                 /* Dynamic Validation Style */
-                if (str_starts_with($flag_response, 2)) {
+                if (str_starts_with($flag_response['status'], 2)) {
                     echo 'success';
                 } else {
                     echo 'failure';
@@ -73,17 +73,17 @@ exit; */
                 <!-- Response Status Code -->
                 <?php
                     /* Dynamic Validation Style */
-                    if (str_starts_with($flag_response, 2)) {
+                    if (str_starts_with($flag_response['status'], 2)) {
                         echo 'Success';
                     } else {
                         echo 'Error';
                     } 
-                    echo " " . $flag_response . ": ";
+                    echo " " . $flag_response['status'] . ": ";
                 ?>
             </p>
             <p>
                 <!-- Response Message -->
-                <?php echo $data['responses'][$form_response][$flag_response] ?>
+                <?php echo $data['responses'][$form_submitted][$flag_response['status']] ?>
             </p>
         </div>
     <?php } ?>
@@ -370,9 +370,28 @@ exit; */
 
     <!-- Works Management Area -->
     <div id="areaWorks" class="area-div">
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-work" id="formWorkCreate">
+        <form 
+            action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" 
+            method="post" 
+            class="form-work" 
+            id="formWorkCreate"
+            enctype="multipart/form-data">
             <!-- Form Title -->
             <h3 class="form-title">Create Work</h3>
+
+            <!-- Category Selection -->
+            <label class="label-select">Select Category:
+                <select 
+                    name="work_category" 
+                    class="select-category" 
+                    data-type="work-category"
+                    data-input-type="select">
+                    <?php foreach ($categories as $cat) { ?>
+                        <option value="<?php echo $cat['idCategory'] ?>"><?php echo $cat['name'] ?></option>
+                    <?php } ?>
+                </select>
+            </label>
+            <ul class="errors-container work-category-errors" role="alert"><li></li></ul>
 
             <!-- Input Work Name -->
             <label>Insert Work Name:
@@ -404,7 +423,7 @@ exit; */
                     name="work_image" 
                     data-type="work-image"
                     data-input-type="image"
-                    accept="image/*">
+                    accept="image/png, image/jpeg, image/jpg, image/gif">
             </label>
             <!-- Username Error Message -->
             <ul class="errors-container work-image-errors" role="alert"><li></li></ul>
