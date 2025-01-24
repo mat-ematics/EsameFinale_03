@@ -33,9 +33,9 @@ if (isset($_POST) && !empty($_POST)) {
         ];
     }
 
-    // Output the response
-    echo strumenti::stampaArray($flag_response); // Echo momentarily the response
-    exit;
+    // // Output the response
+    // echo strumenti::stampaArray($flag_response); // Echo momentarily the response
+    // exit;
 }
 
 /* Main Form Handler */

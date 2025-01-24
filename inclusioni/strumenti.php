@@ -988,6 +988,13 @@ class strumenti {
     /**
      * Replaces an existing image with a new one.
      * Includes rollback in case of failure.
+     * Can be used to change the directory of an image by passing the same image.
+     * 
+     * @param string $currentFilePath The path of the Image to Replace
+     * @param array $newFile The Array containing all the New Image Info ($_FILES-style)
+     * @param string $targetDir [optional] The Target Directory of the new Replaced Image
+     * 
+     * @return array An Associative Array Containing all the Response Info (new file name, extension, full path, size, error flag and error message)
      */
     static public function replaceImage(string $currentFilePath, array $newFile, string $targetDir = IMAGE_DIRECTORY): array
     {
@@ -1004,27 +1011,24 @@ class strumenti {
 
         // Validate current file existence
         if (!file_exists($currentFilePath)) {
-            return [
-                'error_flag' => true,
-                'error_message' => "The file to replace does not exist.",
-            ];
+            $response['error_flag'] = true;
+            $response['error_message'] = 'The file to replace does not exist.';
+            return $response;
         }
 
         // Backup the current file in case of rollback
         $backupPath = $currentFilePath . '.backup';
         if (!copy($currentFilePath, $backupPath)) {
-            return [
-                'error_flag' => true,
-                'error_message' => "Failed to create a backup of the current file.",
-            ];
+            $response['error_flag'] = true;
+            $response['error_message'] = 'Failed to create a backup of the current file.';
+            return $response;
         }
 
         // Attempt to delete the current file
         if (!unlink($currentFilePath)) {
-            return [
-                'error_flag' => true,
-                'error_message' => "Failed to delete the existing file.",
-            ];
+            $response['error_flag'] = true;
+            $response['error_message'] = 'Failed to delete the existing file.';
+            return $response;
         }
 
         // Attempt to upload the new file
@@ -1032,60 +1036,58 @@ class strumenti {
         if ($newFileResult['error_flag']) {
             // Rollback: Restore the backup if upload fails
             rename($backupPath, $currentFilePath);
-            return [
-                'error_flag' => true,
-                'error_message' => "Replacement failed: " . $newFileResult['error_message'],
-            ];
+            $response['error_flag'] = true;
+            $response['error_message'] = "Replacement failed: " . $newFileResult['error_message'];
+            return $response;
         }
 
         // Cleanup: Delete the backup after a successful replacement
         unlink($backupPath);
-
+        /* Uses upload image response */
         return $newFileResult;
     }
 
     /**
-     * Deletes an existing image file.
+     * Deletes an existing image.
      * Includes rollback in case of failure.
+     * 
+     * @param string $filePath The path of the Image to Delete
+     * 
+     * @return array An Associative Array Containing all the Response Info (error flag and error message)
      */
     static public function deleteImage(string $filePath): array
     {
-        $flagError = false;
-        $errorMessage = 'None.';
+        /* Response Array */
+        $response = [
+            'error_flag' => true,
+            'error_message' => 'None.',
+        ];
 
         // Validate that the file exists
         if (!file_exists($filePath)) {
-            return [
-                'error_flag' => true,
-                'error_message' => "The file does not exist.",
-            ];
+            $response['error_message'] = "The file does not exist.";
+            return $response;
         }
 
         // Backup the file in case of rollback
         $backupPath = $filePath . '.backup';
         if (!copy($filePath, $backupPath)) {
-            return [
-                'error_flag' => true,
-                'error_message' => "Failed to create a backup before deletion.",
-            ];
+            $response['error_message'] = "Failed to create a backup before deletion.";
+            return $response;
         }
 
         // Attempt to delete the file
         if (!unlink($filePath)) {
-            return [
-                'error_flag' => true,
-                'error_message' => "Failed to delete the file.",
-            ];
+            $response['error_message'] = "Failed to delete the file.";
+            return $response;
         }
 
         // Cleanup: Remove the backup after successful deletion
         unlink($backupPath);
 
-        return [
-            'success' => true,
-            'error_flag' => false,
-            'error_message' => $errorMessage,
-        ];
+        /* Toggle Error Flag off */
+        $response["error_flag"] = false;
+        return $response;
     }
 
     /**
