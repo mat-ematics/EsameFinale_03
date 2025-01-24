@@ -4,229 +4,217 @@ require_once('inclusioni/strumenti.php');
 use assets\strumenti;
 
 /* Regex for Usernames and Passwords for User Creation */
-$regex_create_username = "/^[a-zA-Z_]{6,32}$/";
-$regex_create_password = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@$!%*?&])[A-Za-z0-9@$!%*?&]{8,}$/";
+$regex_username = "/^[a-zA-Z_]{6,32}$/";
+$regex_password = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@$!%*?&])[A-Za-z0-9@$!%*?&]{8,}$/";
 
 $regex_category_name = "/^[a-zA-Z]{3,32}$/";
 
-$flag_response = 200;
-$form_response = '';
+$regex_work_name = "/^[a-zA-Z\s]{3,50}$/";
+$regex_work_description = "/^[a-zA-Z0-9.,!'\"\-\s]{10,500}$/";
+$regex_work_languages = "/^[a-zA-Z]{2,30}$/";
+
+$flag_response = [
+    'status' => 200,
+    'message' => ''
+];
+$form_submitted = "";
 
 /* Check if a Form was Submitted */
 if (isset($_POST) && !empty($_POST)) {
+    $form_submitted = $_POST['button_submit'];
 
-    /* Switch of Type of Form` */
-    switch ($_POST['button_submit']) {
+    /* Try Catch for Errors */
+    try {
+        $flag_response = handleFormSubmission($_POST);
+    } catch (Exception $e) {
+        $flag_response = [
+            'status' => 500,
+            'message' => $e->getMessage()
+        ];
+    }
 
-        /* User Creation Server Validation */
+    // Output the response
+    echo strumenti::stampaArray($flag_response); // Echo momentarily the response
+    exit;
+}
+
+/* Main Form Handler */
+function handleFormSubmission($postData) {
+    global $connection, $form_submitted, $regex_username, $regex_password, $regex_category_name, $regex_work_name, $regex_work_description, $regex_work_languages;
+
+    switch ($form_submitted) {
         case 'user_create':
-            /* Form Submission to Respond */
-            $form_response = 'user_creation'; 
+            return handleUserCreate($postData, $connection, $regex_username, $regex_password);
 
-            /* Get Username, Password and Repeat Password */
-            $username = trim($_POST['username']);
-            $password = trim($_POST['password']);
-            $repeat_password = trim($_POST['repeat_password']);
-            /* Tests of Credentials */
-            $test_username = preg_match($regex_create_username, $username);
-            $test_password = preg_match($regex_create_password, $password);
-            $test_repeat_password = $password == $repeat_password;
-
-            /* Check Credentials Correctedness */
-            if ($test_username === 1 && $test_password === 1 && $test_repeat_password) {
-                // Case of Correct Credentials 
-                $account_exists = strumenti::check_credentials($connection, $username, $password, CHECK_REGISTER);
-                if ($account_exists !== false) {
-                    /* User Already Exists */
-                    $flag_response = 406;
-                } else {
-                    $create_result = strumenti::create_account($connection, $username, $password); 
-                    if ($create_result === true) {
-                        /* Account Successfully Created */
-                        $flag_response = 201;
-                    } else {
-                        /* Failed to Create Account */
-                        $flag_response = 500;
-                    }
-                }
-            } elseif ($test_username === 0 || $test_password === 0) {
-                /* Incorrect Username or Password */
-                $flag_response = 400;
-            } else {
-                /* Server Error */
-                $flag_response = 500.1;
-            }
-
-            /* Breaking of the Case */
-            break;
-
-
-
-        /* User Editing Server Validation */
         case 'user_edit':
-            /* Form Submission to Respond */
-            $form_response = 'user_edit'; 
+            return handleUserEdit($postData, $connection, $regex_username, $regex_password);
 
-            /* Get Username, Password and Repeat Password */
-            $username = trim($_POST['username']);
-            $password = trim($_POST['password']);
-            $repeat_password = trim($_POST['repeat_password']);
-            $idUser = $_POST['selected_user'];
-            /* Tests of Credentials */
-            $test_username = preg_match($regex_create_username, $username) || $username == '';
-            $test_password = preg_match($regex_create_password, $password) || $password == '';
-            $both_empty = $username == '' && $password == '';
-            $test_repeat_password = $password == $repeat_password;
+        case 'user_delete':
+            return handleUserDelete($postData, $connection);
 
-            /* Check Validity of Inputs */
-            if ($test_username == true && $test_password == true && $both_empty == false && $test_repeat_password == true) {
-                //Valid Inputs
-                $account_exists = strumenti::check_credentials($connection, $username, $password, CHECK_REGISTER);
-                
-                /* Check if username already exists */
-                if ($account_exists != false && $account_exists != $idUser) {
-                    //User already Exists
-                    $flag_response = 406;
-                } else {
-                    /* User Modification */
-                    $edit_result = strumenti::edit_user($connection, $idUser, $username, $password); 
-                    
-                    /* Check if operation was successful */
-                    if ($edit_result === true) {
-                        //Account Successfully Modified
-                        $flag_response = 201;
-                    } else {
-                        //Account Modification Failure
-                        $flag_response = 500;
-                    }
-                }
-            } else {
-                //Invalid Inputs
-                $flag_response = 400;
-            }
-
-            /* Breaking of the Case */
-            break;
-
-
-        /* User Deletion Server Validation */
-        case 'user_delete': 
-            /* Form Submission to Respond */
-            $form_response = 'user_deletion';
-            /* ID of the User to delete */
-            $idUser = $_POST['selected_user'];
-            /* User Deletion */
-            $isDeleted = strumenti::delete_user($connection, $idUser);
-            if ($isDeleted === true) {
-                $flag_response = 201;
-            } else {
-                $flag_response = 500;
-            }
-
-            /* Breaking of the Case */
-            break;
-
-
-
-        /* Category Forms Validation */
-        /* Category Creation */
         case 'category_create':
-            $form_response = 'category_creation';
+            return handleCategoryCreate($postData, $connection, $regex_category_name);
 
-            $category_name = trim($_POST['category_name']);
-
-            $test_category_name = preg_match($regex_category_name, $category_name);
-
-            if ($test_category_name === 1) {
-                // Case of Correct Category Name
-                $category_exists = strumenti::check_category($connection, $category_name);
-                if ($category_exists) {
-                    /* Category Already Exists */
-                    $flag_response = 406;
-                } else {
-                    $create_result = strumenti::create_category($connection, $category_name); 
-                    if ($create_result === true) {
-                        /* Category Successfully Created */
-                        $flag_response = 201;
-                    } else {
-                        /* Failed to Create Category */
-                        $flag_response = 500;
-                    }
-                }
-            } elseif ($test_category_name === 0) {
-                /* Incorrect Category Name */
-                $flag_response = 400;
-            } else {
-                /* Server Error */
-                $flag_response = 500.1;
-            }
-
-            /* Breaking of the Case */
-            break;
-
-        /* User Editing Server Validation */
         case 'category_edit':
-            /* Form Submission to Respond */
-            $form_response = 'category_edit'; 
+            return handleCategoryEdit($postData, $connection, $regex_category_name);
 
-            /* Get Category Name and ID */
-            $category_name = trim($_POST['category_name']);
-            $idCategory = $_POST['selected_category'];
+        case 'category_delete':
+            return handleCategoryDelete($postData, $connection);
 
-            /* Tests of Credentials */
-            $test_category_name = preg_match($regex_category_name, $category_name);
-
-            /* Check Validity of Inputs */
-            if ($test_category_name == true) {
-                //Valid Inputs
-                $account_exists = strumenti::check_category($connection, $category_name, true);
-                
-                /* Check if username already exists */
-                if ($account_exists != false && $account_exists != $idCategory) {
-                    //User already Exists
-                    $flag_response = 406;
-                } else {
-                    /* User Modification */
-                    $edit_result = strumenti::edit_category($connection, $idCategory, $category_name); 
-                    
-                    /* Check if operation was successful */
-                    if ($edit_result === true) {
-                        //Account Successfully Modified
-                        $flag_response = 201;
-                    } else {
-                        //Account Modification Failure
-                        $flag_response = 500;
-                    }
-                }
-            } else {
-                //Invalid Inputs
-                $flag_response = 400;
-            }
-
-            /* Breaking of the Case */
-            break;
-
-        /* Category Deletion Server Validation */
-        case 'category_delete': 
-            /* Form Submission to Respond */
-            $form_response = 'category_deletion';
-            /* ID of the Category to delete */
-            $idCategory = $_POST['selected_category'];
-            /* User Deletion */
-            $isDeleted = strumenti::delete_category($connection, $idCategory);
-
-            if ($isDeleted === true) {
-                $flag_response = 201;
-            } else {
-                $flag_response = 500;
-            }
-
-            /* Breaking of the Case */
-            break;
+        case 'work_create':
+            return handleWorkCreate($postData, $connection, $regex_work_name, $regex_work_description, $regex_work_languages);
 
         default:
-            throw new Exception("Error!", 1);
-            
-            break;
+            throw new Exception("Invalid form submission.");
     }
+}
+
+/* User Creation Handler */
+function handleUserCreate($data, $connection, $regexUsername, $regexPassword) {
+    $username = trim($data['username']);
+    $password = trim($data['password']);
+    $repeatPassword = trim($data['repeat_password']);
+
+    $flagValid = strumenti::validateCredentials($username, $password, $regexUsername, $regexPassword, $repeatPassword);
+    if (!$flagValid) {
+        throw new Exception("Invalid Credentials", 1);
+    } 
+
+    if (strumenti::check_credentials($connection, $username, $password, CHECK_REGISTER)) {
+        return strumenti::createResponse(406, 'User already exists.');
+    }
+
+    if (strumenti::create_account($connection, $username, $password)) {
+        return strumenti::createResponse(201, 'Account successfully created.');
+    }
+
+    throw new Exception('Failed to create account.');
+}
+
+/* User Editing Handler */
+function handleUserEdit($data, $connection, $regexUsername, $regexPassword) {
+    $username = trim($data['username']);
+    $password = trim($data['password']);
+    $repeatPassword = trim($data['repeat_password']);
+    $idUser = $data['selected_user'];
+
+    if ($username !== '' || $password !== '') {
+        $flagValid = strumenti::validateCredentials($username, $password, $regexUsername, $regexPassword, $repeatPassword, true);
+        if (!$flagValid) {
+            throw new Exception("Invalid Credentials", 1);
+        } 
+    }
+
+    $existingUser = strumenti::check_credentials($connection, $username, $password, CHECK_REGISTER);
+
+    if ($existingUser && $existingUser != $idUser) {
+        return strumenti::createResponse(406, 'Another user already exists with the same username.');
+    }
+
+    if (strumenti::edit_user($connection, $idUser, $username, $password)) {
+        return strumenti::createResponse(201, 'Account successfully modified.');
+    }
+
+    throw new Exception('Failed to edit user.');
+}
+
+/* User Deletion Handler */
+function handleUserDelete($data, $connection) {
+    $idUser = $data['selected_user'];
+
+    if (strumenti::delete_user($connection, $idUser)) {
+        return strumenti::createResponse(201, 'User successfully deleted.');
+    }
+
+    throw new Exception('Failed to delete user.');
+}
+
+function handleCategoryCreate($data, $connection, $regexCategoryName) {
+    $categoryName = trim($data['category_name']);
+
+    if (!preg_match($regexCategoryName, $categoryName)) {
+        return strumenti::createResponse(400, 'Invalid category name.');
+    }
+
+    if (strumenti::check_category($connection, $categoryName)) {
+        return strumenti::createResponse(406, 'Category already exists.');
+    }
+
+    if (strumenti::create_category($connection, $categoryName)) {
+        return strumenti::createResponse(201, 'Category successfully created.');
+    }
+
+    throw new Exception('Failed to create category.');
+}
+
+/* Category Editing Handler */
+function handleCategoryEdit($data, $connection, $regexCategoryName) {
+    $categoryName = trim($data['category_name']);
+    $idCategory = $data['selected_category'];
+
+    if (!preg_match($regexCategoryName, $categoryName)) {
+        return strumenti::createResponse(400, 'Invalid category name.');
+    }
+
+    $existingCategory = strumenti::check_category($connection, $categoryName, true);
+    if ($existingCategory && $existingCategory != $idCategory) {
+        return strumenti::createResponse(406, 'Another category already exists with the same name.');
+    }
+
+    if (strumenti::edit_category($connection, $idCategory, $categoryName)) {
+        return strumenti::createResponse(201, 'Category successfully modified.');
+    }
+
+    throw new Exception('Failed to edit category.');
+}
+
+/* Category Deletion Handler */
+function handleCategoryDelete($data, $connection) {
+    $idCategory = $data['selected_category'];
+
+    if (strumenti::delete_category($connection, $idCategory)) {
+        return strumenti::createResponse(201, 'Category successfully deleted.');
+    }
+
+    throw new Exception('Failed to delete category.');
+}
+
+function handleWorkCreate($data, $connection, $regexWorkName, $regexWorkDesc, $regexWorkLangs) {
+    $work_name = trim($data['work_name']);
+    $work_date = $data['work_date'];
+    $work_languages = $data['work_languages'];
+    $work_description = trim($data['work_description']);
+    $work_category_id = $data['work_category'];
+    
+    //The Image is sent through the $_FILES superglobal instead of $_POST
+    $work_image = $_FILES['work_image'];
+
+    if (!preg_match($regexWorkName, $work_name)) {
+        return strumenti::createResponse(400, 'Invalid Work Name.');
+    } 
+    
+    if (!strumenti::validate_date($work_date)) {
+        return strumenti::createResponse(400, 'Invalid Work Date.');
+    }
+
+    if (!preg_match($regexWorkDesc, $work_description)) {
+        return strumenti::createResponse(400, 'Invalid Work Description.');
+    }
+
+    if (!strumenti::validate_array_text($work_languages, $regexWorkLangs)) {
+        return strumenti::createResponse(400, 'Invalid Work Languages.');
+    }
+
+    $image_response = strumenti::uploadImage($work_image);
+    if ($image_response['error_flag']) {
+        return strumenti::createResponse(400, $image_response['error_message']);
+    }
+
+    $image_full_path = $image_response['full_path'];
+    
+    if (strumenti::create_work($connection, $work_category_id, $work_name, $work_description, $work_date, $image_full_path, $work_languages)) {
+        return strumenti::createResponse(201, 'Work successfully created.');
+    }
+
+    throw new Exception('Failed to create work.');
 }

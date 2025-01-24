@@ -343,7 +343,7 @@
         "page_title": "Backend",
         "style_sheet": "backend.min.css",
         "responses": {
-            "user_creation": {
+            "user_create": {
                 "201": "User Succesfully Created",
                 "400": "Invalid Username and/or Password (User not Created)",
                 "406": "User Already Exists",
@@ -356,11 +356,11 @@
                 "406": "Username Already Exists, changes reverted",
                 "500": "Failed to Modify Account"
             },
-            "user_deletion": {
+            "user_delete": {
                 "201": "User Succesfully Deleted",
                 "500": "Failed to Delete User"
             },
-            "category_creation": {
+            "category_create": {
                 "201": "Category Succesfully Created",
                 "400": "Invalid Category Name (Category not Created)",
                 "406": "Category Already Exists",
@@ -373,7 +373,7 @@
                 "406": "Category Already Exists, changes reverted",
                 "500": "Failed to Modify Category"
             },
-            "category_deletion": {
+            "category_delete": {
                 "201": "Category Succesfully Deleted",
                 "500": "Failed to Delete Category"
             }

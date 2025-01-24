@@ -12,6 +12,7 @@ define('EXTENSION_MYSQLI', 'MYSQLI');
 define('EXTENSION_PDO', 'PDO');
 define('CHECK_LOGIN', 0);
 define('CHECK_REGISTER', 1);
+define('IMAGE_DIRECTORY', "images/");
 
 /**
  * Classe contente strumenti utili
@@ -852,6 +853,341 @@ class strumenti {
                 /* Failure Handling and Rollback */
                 $connection->rollBack();
                 return $e->getMessage(); 
+            }
+        }
+    }
+
+    /**
+     * Creates a Response associative Array (e.g.: for form submission) with given status and message
+     * 
+     * @param int $status The Status Code of the Response
+     * @param string $message The Message of the Response
+     * 
+     * @return array The newly created array
+     */
+    static public function createResponse(int $status, string $message) {
+        return [
+            'status' => $status,
+            'message' => $message
+        ];
+    }
+
+    /**
+     * Checks if the provided credentials are correct and match the provided regex
+     * 
+     * @param string $username The Username to validate
+     * @param string $password The Password to validate
+     * @param string $regexUsername The Regex of the Username
+     * @param string $regexPassword The Regex of the Password
+     * @param string $repeatPassword [optional] The Password inside Repeat Password
+     * @param bool $allowEmpty [optional] Whether to allow empty values
+     * 
+     * @return boolean `True` if valid, `false` if invalid
+     */
+    /* Credential Validation */
+    static public function validateCredentials(string $username, string $password, string $regexUsername, string $regexPassword, string $repeatPassword = null, bool $allowEmpty = false) {
+        $flagValid = true;
+
+        if (!preg_match($regexUsername, $username) || !preg_match($regexPassword, $password)) {
+            $flagValid = false;
+        }
+
+        if ($allowEmpty && ($username == '' || $password == '') && !($username == '' && $password == '')) {
+            $flagValid = true;
+        }
+
+        if (!is_null($repeatPassword) && $password !== $repeatPassword) {
+            $flagValid = false;
+        }
+
+        return $flagValid;
+    }
+
+    /**
+     * Handles image upload, validates that the uploaded file is an image,
+     * and saves it in the provided directory.
+     * 
+     * @param array $file The uploaded file from the `$_FILES` array.
+     * @param string $targetDir The target directory of the image. If not present, an attempt to create one is made
+     * @param int $maxSize [optional] The Max Size in MegaBytes allowed
+     * @return array An Associative Array containing all the image info (name, extension, full path, size, error flag and error message).
+     */
+    static public function uploadImage(array $file, string $targetDir = IMAGE_DIRECTORY, $max_size = 5): array
+    {
+        /* Response Array */
+        $response = [
+            'name' => '',
+            'extension' => '',
+            'full_path' => '',
+            'size' => $file['size'],
+            'error_flag' => false,
+            'error_message' => 'None.',
+        ];
+
+        // Check if the target directory exists; if not, attempt to create it
+        if (!is_dir($targetDir)) {
+            if (!mkdir($targetDir, 0755, true)) {
+                /* Update Error Variables */
+                $response['error_flag'] = true;
+                $response['error_message'] = "Failed to create the target directory.";
+                /* Early Return */
+                return $response;
+            }
+        }
+
+        // Validate file upload
+        if (!isset($file['tmp_name']) || !is_uploaded_file($file['tmp_name'])) {
+            $response['error_flag'] = true;
+            $response['error_message'] = "No file was uploaded.";
+            return $response;
+        }
+
+        // Validate file size (max 5MB)
+        if ($file['size'] > $max_size * 1024 * 1024) {
+            $response['error_flag'] = true;
+            $response['error_message'] = "File size exceeds the 5MB limit.";
+            return $response;
+        }
+
+        // Validate file type using MIME type
+        $validMimeTypes = ['image/jpeg', 'image/png', 'image/gif'];
+        $fileMimeType = mime_content_type($file['tmp_name']);
+        if (!in_array($fileMimeType, $validMimeTypes)) {
+            $response['error_flag'] = true;
+            $response['error_message'] = "Invalid file type. Only JPEG, PNG, and GIF are allowed.";
+            return $response;
+        }
+
+        // Generate unique filename
+        $fileExtension = pathinfo($file['name'], PATHINFO_EXTENSION);
+        $uniqueFileName = uniqid('img_', true) . '.' . $fileExtension;
+        $targetFile = $targetDir . $uniqueFileName;
+
+        // Attempt to move the uploaded file
+        if (!move_uploaded_file($file['tmp_name'], $targetFile)) {
+            $response['error_flag'] = true;
+            $response['error_message'] = "Failed to save the uploaded file.";
+            return $response;
+        }
+
+        // Ensure rollback for unexpected failure during final validation
+        if (!file_exists($targetFile)) {
+            unlink($targetFile);
+            $response['error_flag'] = true;
+            $response['error_message'] = "Uploaded file is missing after save operation. Rollback triggered.";
+            return $response;
+        }
+
+        /* Update Respnonse for Successful Update */
+        $response['name'] = $uniqueFileName;
+        $response['extension'] = $fileExtension;
+        $response['full_path'] = $targetFile;
+        return $response;
+    }
+
+    /**
+     * Replaces an existing image with a new one.
+     * Includes rollback in case of failure.
+     */
+    static public function replaceImage(string $currentFilePath, array $newFile, string $targetDir = IMAGE_DIRECTORY): array
+    {
+        /* Response Array */
+        $response = [
+            'name' => '',
+            'extension' => '',
+            'full_path' => '',
+            'size' => $newFile['size'],
+            'error_flag' => false,
+            'error_message' => 'None.',
+        ];
+        $newFileResult = null;
+
+        // Validate current file existence
+        if (!file_exists($currentFilePath)) {
+            return [
+                'error_flag' => true,
+                'error_message' => "The file to replace does not exist.",
+            ];
+        }
+
+        // Backup the current file in case of rollback
+        $backupPath = $currentFilePath . '.backup';
+        if (!copy($currentFilePath, $backupPath)) {
+            return [
+                'error_flag' => true,
+                'error_message' => "Failed to create a backup of the current file.",
+            ];
+        }
+
+        // Attempt to delete the current file
+        if (!unlink($currentFilePath)) {
+            return [
+                'error_flag' => true,
+                'error_message' => "Failed to delete the existing file.",
+            ];
+        }
+
+        // Attempt to upload the new file
+        $newFileResult = self::uploadImage($newFile, $targetDir);
+        if ($newFileResult['error_flag']) {
+            // Rollback: Restore the backup if upload fails
+            rename($backupPath, $currentFilePath);
+            return [
+                'error_flag' => true,
+                'error_message' => "Replacement failed: " . $newFileResult['error_message'],
+            ];
+        }
+
+        // Cleanup: Delete the backup after a successful replacement
+        unlink($backupPath);
+
+        return $newFileResult;
+    }
+
+    /**
+     * Deletes an existing image file.
+     * Includes rollback in case of failure.
+     */
+    static public function deleteImage(string $filePath): array
+    {
+        $flagError = false;
+        $errorMessage = 'None.';
+
+        // Validate that the file exists
+        if (!file_exists($filePath)) {
+            return [
+                'error_flag' => true,
+                'error_message' => "The file does not exist.",
+            ];
+        }
+
+        // Backup the file in case of rollback
+        $backupPath = $filePath . '.backup';
+        if (!copy($filePath, $backupPath)) {
+            return [
+                'error_flag' => true,
+                'error_message' => "Failed to create a backup before deletion.",
+            ];
+        }
+
+        // Attempt to delete the file
+        if (!unlink($filePath)) {
+            return [
+                'error_flag' => true,
+                'error_message' => "Failed to delete the file.",
+            ];
+        }
+
+        // Cleanup: Remove the backup after successful deletion
+        unlink($backupPath);
+
+        return [
+            'success' => true,
+            'error_flag' => false,
+            'error_message' => $errorMessage,
+        ];
+    }
+
+    /**
+     * Validates an Array of text agaisnt a given regex
+     * 
+     * @param array $array The array to validate
+     * @param string $regex [optional] The Regex to check against. It has a default regex of alphabetic and single space, betwen 2 and 30 characters
+     * 
+     * @return bool `true` if the all elements are valid, `false` otherwise.
+     */
+    static public function validate_array_text(array $array, string $regex = "/^[a-zA-Z ]{2,30}$/") :bool {
+        if (!is_array($array) || empty($array)) {
+            return false;
+        }
+        foreach ($array as $value) {
+            if (!preg_match($regex, $value)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Validates a Date with a given format
+     * 
+     * @param string $date The Date to validate
+     * @param string $format [optional] The Format of the date to validate. Defaults to YYYY-MM-DD
+     */
+    static public function validate_date(string $date, string $format = 'Y-m-d') :bool {
+        /* Crates a Date with the specific format and checks if it is correct */
+        return \DateTime::createFromFormat($format, $date) !== false;
+    }
+    
+    /**
+     * Creates a New Work in the provided Database
+     * 
+     * @param object $connection The Connection Object with the Database
+     * @param int $category_id The ID of the Category to associate the work with
+     * @param string $work_name The Name of the new work
+     * @param string $work_description The description of the new work
+     * @param string $work_date The Date of the new work
+     * @param string $work_image_path The Full Path of the Image of the new work
+     * @param array $work_languages The Languages used in the new work
+     * @param bool $print_errors [optional] If `true`, prints error messages. Defaults to `false`
+     * 
+     * @return bool|string `true` if successful, otherwise `false` or the failure message is returned
+     */
+    static public function create_work(object $connection, int $category_id, string $work_name, string $work_description, string $work_date, string $work_image_path, array $work_languages, bool $print_errors = false) {
+        
+        $languages_encoded = json_encode($work_languages);
+
+        // Try with MySQLi
+        if ($connection instanceof mysqli) {
+            // SQL Statement with MySQLi parameters that creates the Account
+            $sql_create_work = "INSERT INTO works (idCategory, `name`, `date`, image_path, languages, `description`) VALUES (?, ?, ?, ?, ?, ?)";
+            
+            $connection->begin_transaction(); // Transaction For Security
+            /* Creation of Account */
+            try {
+                // Preparation of the statement
+                $query_create_work = $connection->prepare($sql_create_work);
+                // Parameter Binding and Query Execution
+                $query_create_work->bind_param("isssss", $category_id, $work_name, $work_date, $work_image_path, $languages_encoded, $work_description);
+                $query_create_work->execute();
+
+                /* Commit Changes and Return True on Success */
+                $connection->commit();
+                return true;               
+            } catch (Exception $e) {
+                /* Failure Handling */
+                $connection->rollback(); // Rollback of changes
+                if ($print_errors) {
+                    return $e->getMessage(); 
+                }
+                return false;
+            }
+        } elseif ($connection instanceof PDO) {
+            $sql_create_work = "INSERT INTO works (idCategory, `name`, `date`, image_path, languages, `description`) VALUES (:idCat, :wrk_name, :wrk_date, :img_path, :langs, :wrk_desc)";
+            $connection->beginTransaction();
+            try {
+                // Preparation of the statement
+                $query_create_work = $connection->prepare($sql_create_work);
+                /* Parameter Binding and Query Execution */
+                $query_create_work->bindParam(":idCat", $category_id);
+                $query_create_work->bindParam(":wrk_name", $work_name);
+                $query_create_work->bindParam(":wrk_date", $work_date);
+                $query_create_work->bindParam(":img_path", $work_image_path);
+                $query_create_work->bindParam(":langs", $languages_encoded);
+                $query_create_work->bindParam(":wrk_desc", $work_description);
+                /* Execute Statement */
+                $query_create_work->execute();
+
+                /* Commit Changes and Return True on Success */
+                $connection->commit();
+                return true;               
+            } catch (PDOException $e) {
+                /* Failure Handling */
+                $connection->rollback(); // Rollback of changes
+                if ($print_errors) {
+                    return $e->getMessage(); 
+                }
+                return false;            
             }
         }
     }
