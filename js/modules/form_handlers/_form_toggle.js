@@ -10,6 +10,7 @@ import initializeValidationCategoryEdit from "./categories/category_edit_handler
 import initializeValidationCategoryDelete from "./categories/category_delete_handler.js";
 /* Work Froms Validation Imports */
 import initializeValidationWorkCreate from "./works/work_create_handler.js";
+import initializeValidationWorkEdit from "./works/work_edit_handler.js";
 
 /**
  * Initialize the Validation of a Form based on its type
@@ -42,6 +43,9 @@ export default function initializeForm(type, formElement) {
             break;
         case "workCreate":
             initializeValidationWorkCreate(formElement);
+            break;
+        case "workEdit":
+            initializeValidationWorkEdit(formElement);
             break;
         default:
             throw new Error(`Unknown form type: ${type}`);

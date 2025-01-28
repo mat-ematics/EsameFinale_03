@@ -1120,6 +1120,45 @@ class strumenti {
         /* Crates a Date with the specific format and checks if it is correct */
         return \DateTime::createFromFormat($format, $date) !== false;
     }
+
+    /**
+     * Retrieves Works from the provided Database
+     * 
+     * @param object $connection The Connection Object with the Database
+     * 
+     * @return array|string An associative array with the Works if successful, otherwise the failure message is returned
+     */
+    static public function get_works(object $connection) :array {
+        //Query
+        $sql_get_works = "SELECT idWork, idCategory, `name`, `date`, image_path, languages, `description` FROM works";
+
+        // Try with MySQLi
+        if ($connection instanceof mysqli) {
+            /* Creation of Account */
+            try {
+                // Query of the statement
+                $query_get_works = $connection->query($sql_get_works);
+                
+                $result = $query_get_works->fetch_all(MYSQLI_ASSOC);
+                
+                return $result;
+            } catch (Exception $e) {
+                return $e->getMessage();
+            }
+        } elseif ($connection instanceof PDO) {
+            try {
+                // Query of the statement
+                $query_get_works = $connection->query($sql_get_works);
+                
+                $result = $query_get_works->fetchAll(PDO::FETCH_ASSOC);
+                
+                return $result;
+            } catch (PDOException $e) {
+                /* Failure Handling */
+                return $e->getMessage(); 
+            }
+        }
+    }
     
     /**
      * Creates a New Work in the provided Database

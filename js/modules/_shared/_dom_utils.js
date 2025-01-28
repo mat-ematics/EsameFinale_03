@@ -263,7 +263,27 @@ export default class DOMUtils {
         else {
             /* hasErrors is true when at least one input is invalid or all inputs are empty */
             const hasInvalidInputs = Array.from(inputs).some(input => input.classList.contains("invalid"));
-            const allInputsEmpty = Array.from(inputs).every(input => !input.value);
+            /* Check if all inputs are empty */
+            const allInputsEmpty = Array.from(inputs).every(input => {
+
+                let result = false; //Flag to check for emptyness
+
+                if (input.dataset.inputType === 'multitag-select') {
+                    // Check if tags-container is empty for multitag-select
+                    const tagsContainer = input.parentElement.querySelector('.tags-container');
+                    /* Returns true (empty) if there are no tags */
+                    result = tagsContainer && tagsContainer.children.length === 0;
+                } else if (input.dataset.inputType === 'select') {
+                    const value = input.value;
+                    result = value === 'null';
+                } else {
+                    result = !input.value;
+                }
+                return result;
+            });
+
+            console.log(allInputsEmpty)
+
             hasErrors = hasInvalidInputs || allInputsEmpty;
         } 
 

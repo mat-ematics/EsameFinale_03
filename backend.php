@@ -24,13 +24,13 @@ if (!isset($_SESSION) || !isset($_SESSION['is_auth']) || $_SESSION['is_auth'] !=
 $connection = strumenti::create_connection(EXTENSION_MYSQLI, 'localhost', 'portfolio', 'root');
 
 $data = strumenti::leggiJSON("json/data.json", true)["backend"];
-$works = strumenti::leggiJSON("json/data.json", true)['projects'];
 
 //Importazione Validazione Server del Backend
 require_once('inclusioni/backend_validation.php');
 
 $users = strumenti::get_admins($connection);
 $categories = strumenti::get_categories($connection);
+$works = strumenti::get_works($connection);
 
 /* strumenti::stampaArray($_POST);
 exit; */
@@ -370,6 +370,7 @@ exit; */
 
     <!-- Works Management Area -->
     <div id="areaWorks" class="area-div">
+        <!-- Work Creation -->
         <form 
             action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" 
             method="post" 
@@ -472,74 +473,123 @@ exit; */
             </button>
         </form>
 
-        <!-- Edit Account form -->
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-users" id="formEditUser">
+        <!-- Edit Work form -->
+        <form 
+            action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" 
+            method="post" 
+            class="form-work" 
+            id="formWorkEdit"
+            enctype="multipart/form-data">
             <!-- Form Title -->
-            <h3 class="form-title">Edit Account</h3>
+            <h3 class="form-title">Edit Work</h3>
 
-            <label class="label-select">User:
-                <select name="selected_user" class="select-user">
-                    <?php foreach ($users as $user) { ?>
-                        <option value="<?php echo $user['idAdmin'] ?>"><?php echo $user['username'] ?></option>
+             <!-- Category Selection -->
+             <label class="label-select">Select Work:
+                <select 
+                    name="work_select" 
+                    class="select-work" 
+                    data-type="work-select"
+                    data-input-type="select">
+                    <?php foreach ($works as $work) { ?>
+                        <option value="<?php echo $work['idWork'] ?>" data-category-id="<?php echo $work['idCategory'] ?>">
+                            <?php echo $work['name'] ?>
+                        </option>
                     <?php } ?>
                 </select>
             </label>
+            <ul class="errors-container work-select-errors" role="alert"><li></li></ul>
 
-            <!-- Input Username -->
-            <label>Insert Username:
+            <!-- Category Selection -->
+            <label class="label-select">Select Category:
+                <select 
+                    name="work_category" 
+                    class="select-category" 
+                    data-type="work-category"
+                    data-input-type="select">
+                    <option value="null">No Category Selected</option>
+                    <?php foreach ($categories as $cat) { ?>
+                        <option value="<?php echo $cat['idCategory'] ?>"><?php echo $cat['name'] ?></option>
+                    <?php } ?>
+                </select>
+            </label>
+            <ul class="errors-container work-category-errors" role="alert"><li></li></ul>
+
+            <!-- Input Work Name -->
+            <label>Insert Work Name:
                 <input type="text" 
-                    class="input-credential" 
-                    name="username" 
-                    data-type="username" 
-                    placeholder="Username">
+                    class="input-work" 
+                    name="work_name" 
+                    data-type="work-name"
+                    data-input-type="text"
+                    placeholder="Work Name">
             </label>
             <!-- Username Error Message -->
-            <ul class="errors-container username-errors" data-type="username" role="alert"><li></li></ul>
+            <ul class="errors-container work-name-errors" role="alert"><li></li></ul>
 
-            <!-- Input Password -->
-            <label>Password:
-            <!-- Password Container -->
-                <div class="password-container">
-                    <!-- Password Input -->
-                    <input type="password" 
-                        class="input-credential" 
-                        name="password" 
-                        data-type="password" 
-                        placeholder="Password">
-                    <!-- "Show Password" Icon -->
-                    <span class="iconShowPassword">
-                        <i class="password-toggle fa-solid fa-eye show"></i>
-                    </span>
-                </div>
+            <!-- Input Work Date -->
+            <label>Insert Work Date:
+            <input type="date" 
+                class="input-work" 
+                name="work_date" 
+                data-type="work-date"
+                data-input-type="date">
             </label>
-            <!-- Password Error Message -->
-            <ul class="errors-container password-errors" data-type="password" role="alert"><li></li></ul>
+            <!-- Username Error Message -->
+            <ul class="errors-container work-date-errors" role="alert"><li></li></ul>
 
-            <!-- Input Repeat Password -->
-            <label>Repeat Password:
-                <!-- Repeat Password Container -->
-                <div class="password-container">
-                    <!-- Repeat Password Input -->
-                    <input type="password" 
-                        class="input-credential" 
-                        name="repeat_password" 
-                        data-type="repeat-password" 
-                        placeholder="Repeat Password">
-                    <!-- "Show Password" Icon -->
-                    <span class="iconShowPassword">
-                        <i class="repeat-password password-toggle fa-solid fa-eye show"></i>
-                    </span>
-                </div>
+            <!-- Input Work Image -->
+            <label>Insert Image of the Work:
+                <input type="file" 
+                    class="input-work" 
+                    name="work_image" 
+                    data-type="work-image"
+                    data-input-type="image"
+                    accept="image/png, image/jpeg, image/jpg, image/gif">
             </label>
-            <!-- Repeat Password Error Message -->
-            <ul class="errors-container repeat-password-errors" data-type="repeat-password" role="alert"><li></li></ul>
+            <!-- Username Error Message -->
+            <ul class="errors-container work-image-errors" role="alert"><li></li></ul>
+
+            <!-- Input Work Languages -->
+            
+            <div class="global-multitag-dropdown-container">
+                <div class="tags-container"></div>
+                <input 
+                    type="text" 
+                    class="input-work tags-input"
+                    data-type="work-languages"
+                    data-input-type="multitag-select"
+                    placeholder="Type or select a language" 
+                    autocomplete="off">
+                <!-- Dropdown Menu -->
+                <ul class="dropdown-menu">
+                    <li data-value="Python">Python</li>
+                    <li data-value="JavaScript">JavaScript</li>
+                    <li data-value="Java">Java</li>
+                    <li data-value="C++">C++</li>
+                    <li data-value="Ruby">Ruby</li>
+                    <li data-value="Go">Go</li>
+                    <li data-value="PHP">PHP</li>
+                    <li data-value="Swift">Swift</li>
+                </ul>
+            </div>
+            <!-- Languages Error Message -->
+            <ul class="errors-container work-languages-errors" role="alert"><li></li></ul>
+
+            <textarea 
+                name="work_description" 
+                class="input-work"
+                data-type="work-description"
+                data-input-type="text"
+                placeholder="This is Work number 1..."></textarea>
+            <!-- Description Error Message -->
+            <ul class="errors-container work-description-errors" role="alert"><li></li></ul>
 
             <!-- Submit Button -->
             <button type="submit" 
                     name="button_submit" 
-                    value="user_edit" 
+                    value="work_create" 
                     class="button-submit">
-                <span class="buttonText">Edit User</span>
+                <span class="buttonText">Create Work</span>
             </button>
         </form>
 

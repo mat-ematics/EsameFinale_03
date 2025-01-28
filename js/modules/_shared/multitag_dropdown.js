@@ -8,9 +8,21 @@ import DOMUtils from "./_dom_utils";
  * @param {Object} options An object containing the options for the dropdown
  * @param {boolean} options.createHiddenInput If true (default), creates hidden inputs for each tag
  * @param {string} options.hiddenInputName The Name of the Hidden Inputs (collected as array). Works only if createHiddenInput is true
+ * @param {boolean} options.allowEmpty If `true`, allows for no tags (defaults to false)
  * @returns {boolean} True on initialization success, otherwise false (necessary elements not found)
  */
-export default function manageMultitagDropdown(container, options = {createHiddenInput: true, hiddenInputName: 'tag'}) {
+export default function manageMultitagDropdown(container, options = {createHiddenInput: true, hiddenInputName: 'tag', allowEmpty: false}) {
+
+    const passedOptions = {
+        ...{
+            createHiddenInput: true,
+            hiddenInputName: 'tag',
+            allowEmpty: false
+        },
+
+        ...options,
+    }
+
     /* Define all Inputs */
     const dropdownContainer = container.querySelector('.global-multitag-dropdown-container')
     const input = container.querySelector('.tags-input');
@@ -32,19 +44,19 @@ export default function manageMultitagDropdown(container, options = {createHidde
     
     // Function to check tags presence and adds validity
     function checkTags() {
-    	const tagsPresent = tagsContainer.children.length != 0;
-
-        if (tagsPresent) {
+        const tagsPresent = tagsContainer.children.length !== 0;
+    
+        if (tagsPresent || passedOptions.allowEmpty) {
             dropdownContainer.classList.add('valid');
-            dropdownContainer.classList.remove("invalid");
-            
+            dropdownContainer.classList.remove('invalid');
+    
             if (errorContainer) {
                 DOMUtils.toggleErrorMessage(errorContainer, false);
             }
         } else {
             dropdownContainer.classList.remove('valid');
-            dropdownContainer.classList.add("invalid");
-
+            dropdownContainer.classList.add('invalid');
+    
             if (errorContainer) {
                 DOMUtils.toggleErrorMessage(errorContainer, true);
             }
@@ -114,8 +126,8 @@ export default function manageMultitagDropdown(container, options = {createHidde
             selectedTags.delete(value);
 
             // Optionally remove the hidden input
-            if (options.createHiddenInput) {
-                const hiddenInput = form.querySelector(`input[name="${options.hiddenInputName}[]"][value="${value}"]`);
+            if (passedOptions.createHiddenInput) {
+                const hiddenInput = form.querySelector(`input[name="${passedOptions.hiddenInputName}[]"][value="${value}"]`);
                 if (hiddenInput) {
                     form.removeChild(hiddenInput);
                 }
@@ -130,11 +142,11 @@ export default function manageMultitagDropdown(container, options = {createHidde
         tagsContainer.appendChild(tag);
         
         //Optionally removes the (optional) hidden input
-        if (options.createHiddenInput) {
+        if (passedOptions.createHiddenInput) {
             // Create hidden input for the tag
             const hiddenInput = document.createElement('input');
             hiddenInput.type = 'hidden';
-            hiddenInput.name = `${options.hiddenInputName}[]`; // Name for form submission as an array
+            hiddenInput.name = `${passedOptions.hiddenInputName}[]`; // Name for form submission as an array
             hiddenInput.value = value;
             form.appendChild(hiddenInput);
             checkTags();
