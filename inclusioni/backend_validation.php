@@ -11,7 +11,7 @@ $regex_category_name = "/^[a-zA-Z]{3,32}$/";
 
 $regex_work_name = "/^[a-zA-Z\s]{3,50}$/";
 $regex_work_description = "/^[a-zA-Z0-9.,!'\"\-\s]{10,500}$/";
-$regex_work_languages = "/^[a-zA-Z]{2,30}$/";
+$regex_work_languages = "/^[a-zA-Z][a-zA-Z0-9#\+\-]{0,29}$/";
 
 $flag_response = [
     'status' => 200,
@@ -33,7 +33,7 @@ if (isset($_POST) && !empty($_POST)) {
         ];
     }
 
-    // // Output the response
+    // Output the response
     // echo strumenti::stampaArray($flag_response); // Echo momentarily the response
     // exit;
 }
@@ -64,6 +64,9 @@ function handleFormSubmission($postData) {
         case 'work_create':
             return handleWorkCreate($postData, $connection, $regex_work_name, $regex_work_description, $regex_work_languages);
 
+        case 'work_edit':
+            return handleWorkEdit($postData, $connection, $regex_work_name, $regex_work_description, $regex_work_languages);
+            break;
         default:
             throw new Exception("Invalid form submission.");
     }
@@ -84,7 +87,8 @@ function handleUserCreate($data, $connection, $regexUsername, $regexPassword) {
         return strumenti::createResponse(406, 'User already exists.');
     }
 
-    if (strumenti::create_account($connection, $username, $password)) {
+    $create_result = strumenti::create_account($connection, $username, $password);
+    if ($create_result === true) {
         return strumenti::createResponse(201, 'Account successfully created.');
     }
 
@@ -111,7 +115,8 @@ function handleUserEdit($data, $connection, $regexUsername, $regexPassword) {
         return strumenti::createResponse(406, 'Another user already exists with the same username.');
     }
 
-    if (strumenti::edit_user($connection, $idUser, $username, $password)) {
+    $edit_result = strumenti::edit_user($connection, $idUser, $username, $password);
+    if ($edit_result === true) {
         return strumenti::createResponse(201, 'Account successfully modified.');
     }
 
@@ -122,7 +127,8 @@ function handleUserEdit($data, $connection, $regexUsername, $regexPassword) {
 function handleUserDelete($data, $connection) {
     $idUser = $data['selected_user'];
 
-    if (strumenti::delete_user($connection, $idUser)) {
+    $delete_result = strumenti::delete_user($connection, $idUser);
+    if ($delete_result === true) {
         return strumenti::createResponse(201, 'User successfully deleted.');
     }
 
@@ -140,7 +146,8 @@ function handleCategoryCreate($data, $connection, $regexCategoryName) {
         return strumenti::createResponse(406, 'Category already exists.');
     }
 
-    if (strumenti::create_category($connection, $categoryName)) {
+    $create_result = strumenti::create_category($connection, $categoryName);
+    if ($create_result === true) {
         return strumenti::createResponse(201, 'Category successfully created.');
     }
 
@@ -161,7 +168,8 @@ function handleCategoryEdit($data, $connection, $regexCategoryName) {
         return strumenti::createResponse(406, 'Another category already exists with the same name.');
     }
 
-    if (strumenti::edit_category($connection, $idCategory, $categoryName)) {
+    $edit_result = strumenti::edit_category($connection, $idCategory, $categoryName);
+    if ($edit_result === true) {
         return strumenti::createResponse(201, 'Category successfully modified.');
     }
 
@@ -172,7 +180,8 @@ function handleCategoryEdit($data, $connection, $regexCategoryName) {
 function handleCategoryDelete($data, $connection) {
     $idCategory = $data['selected_category'];
 
-    if (strumenti::delete_category($connection, $idCategory)) {
+    $delete_result = strumenti::delete_category($connection, $idCategory);
+    if ($delete_result === true) {
         return strumenti::createResponse(201, 'Category successfully deleted.');
     }
 
@@ -212,9 +221,91 @@ function handleWorkCreate($data, $connection, $regexWorkName, $regexWorkDesc, $r
 
     $image_full_path = $image_response['full_path'];
     
-    if (strumenti::create_work($connection, $work_category_id, $work_name, $work_description, $work_date, $image_full_path, $work_languages)) {
+    $create_result = strumenti::create_work($connection, $work_category_id, $work_name, $work_description, $work_date, $image_full_path, $work_languages);
+    if ($create_result === true) {
         return strumenti::createResponse(201, 'Work successfully created.');
     }
 
+    /* Delete image on failure */
+    strumenti::deleteImage($image_full_path);
+
     throw new Exception('Failed to create work.');
+}
+
+function handleWorkEdit($data, $connection, $regexWorkName, $regexWorkDesc, $regexWorkLangs) {
+
+    // strumenti::stampaArray($data);
+    // strumenti::stampaArray($_FILES);
+    // strumenti::stampaArray(strumenti::get_single_work($connection, $work_id));
+    // exit;
+    
+    $work_id = $data['work_select'];
+    $work_name = trim($data['work_name']);
+    $work_date = $data['work_date'];
+    $work_languages = $data['work_languages'] ?? null;
+    $work_description = trim($data['work_description']);
+    $work_category_id = $data['work_category'];
+    if ($work_category_id === 'null') {
+        $work_category_id = '';
+    }
+    /* Response Declaration */
+    $image_response = [];
+    /* Old Image Path */
+    $old_image = strumenti::get_single_work($connection, $work_id)['image_path'];
+
+    
+    //The Image is sent through the $_FILES superglobal instead of $_POST
+    $work_image = $_FILES['work_image'];
+
+    if ($work_image['error'] === 4 && implode('', [$work_name, $work_date, $work_languages, $work_description, $work_category_id]) === '') {
+        return strumenti::createResponse(400, 'All Inputs are empty.');
+    }
+
+    if ($work_name !== '' && !preg_match($regexWorkName, $work_name)) {
+        return strumenti::createResponse(400, 'Invalid Work Name.');
+    } 
+
+    if (strumenti::check_work($connection, $work_name)) {
+        return strumenti::createResponse(406, 'Work Name already Exists.');
+    }
+    
+    if ($work_date !== '' && !strumenti::validate_date($work_date)) {
+        return strumenti::createResponse(400, 'Invalid Work Date.');
+    }
+
+    if ($work_description !== '' && !preg_match($regexWorkDesc, $work_description)) {
+        return strumenti::createResponse(400, 'Invalid Work Description.');
+    }
+
+    if (!empty($work_languages) && !strumenti::validate_array_text($work_languages, $regexWorkLangs)) {
+        return strumenti::createResponse(400, 'Invalid Work Languages.');
+    }
+
+    if ($work_image['error'] !== 4) {
+        $image_response = strumenti::uploadImage($work_image);
+        if ($image_response['error_flag']) {
+            return strumenti::createResponse(400, $image_response['error_message']);
+        }
+    }
+
+    /* Check for Null/Empty values */
+    $image_full_path = $image_response['full_path'] ?? ''; //Check if a new image is present
+    $work_category_id = is_numeric($work_category_id) ? (int) $work_category_id : null; //Change to Integer or Null the category id
+
+    /* Edit Work */
+    $edit_result = strumenti::edit_work($connection, $work_id, $work_category_id, $work_name, $work_description, $work_date, $image_full_path, $work_languages);
+    // echo $edit_result;
+
+    if ($edit_result === true) {
+        $prev_image_del = strumenti::deleteImage($old_image);
+        if ($prev_image_del['error_flag']) {
+            return strumenti::createResponse(500, "Couldn't delete previous image");
+        }
+        return strumenti::createResponse(201, 'Work successfully modified.');
+    }
+
+    /* Delete Image on Error */
+    strumenti::deleteImage($image_full_path);
+
+    throw new Exception('Failed to Create Work.');
 }

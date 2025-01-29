@@ -587,9 +587,9 @@ exit; */
             <!-- Submit Button -->
             <button type="submit" 
                     name="button_submit" 
-                    value="work_create" 
+                    value="work_edit" 
                     class="button-submit">
-                <span class="buttonText">Create Work</span>
+                <span class="buttonText">Edit Work</span>
             </button>
         </form>
 

@@ -908,11 +908,12 @@ class strumenti {
      * and saves it in the provided directory.
      * 
      * @param array $file The uploaded file from the `$_FILES` array.
-     * @param string $targetDir The target directory of the image. If not present, an attempt to create one is made
+     * @param string $specificName The name with which to save the image. If it is null, a unique one is generated
+     * @param string $targetDir [optional] The target directory of the image. If not present, an attempt to create one is made
      * @param int $maxSize [optional] The Max Size in MegaBytes allowed
      * @return array An Associative Array containing all the image info (name, extension, full path, size, error flag and error message).
      */
-    static public function uploadImage(array $file, string $targetDir = IMAGE_DIRECTORY, $max_size = 5): array
+    static public function uploadImage(array $file, string $specificName = null, string $targetDir = IMAGE_DIRECTORY, $max_size = 5): array
     {
         /* Response Array */
         $response = [
@@ -960,7 +961,7 @@ class strumenti {
 
         // Generate unique filename
         $fileExtension = pathinfo($file['name'], PATHINFO_EXTENSION);
-        $uniqueFileName = uniqid('img_', true) . '.' . $fileExtension;
+        $uniqueFileName = $specificName ?? uniqid('img_', true) . '.' . $fileExtension;
         $targetFile = $targetDir . $uniqueFileName;
 
         // Attempt to move the uploaded file
@@ -1159,6 +1160,56 @@ class strumenti {
             }
         }
     }
+
+    /**
+     * Retrieves the Work with the matching given ID from the provided Database
+     * 
+     * @param object $connection The Connection Object with the Database
+     * @param int $idWork The ID of the Work to retrieve
+     * 
+     * @return array|string An associative array with the Works if successful, otherwise the failure message is returned
+     */
+    static public function get_single_work(object $connection, int $idWork) :array|bool {
+        $result = [];
+
+        // Try with MySQLi
+        if ($connection instanceof mysqli) {
+
+            //Query
+            $sql_get_spec_work = "SELECT idWork, idCategory, `name`, `date`, image_path, languages, `description` FROM works WHERE idWork = ?";
+
+            /* Creation of Account */
+            try {
+                // Query of the statement
+                $query_get_spec_work = $connection->prepare($sql_get_spec_work);
+                $query_get_spec_work->bind_param('i', $idWork);
+                // $query_get_spec_work->bind_result($result);
+                $query_get_spec_work->execute();
+                $result = $query_get_spec_work->get_result()->fetch_assoc();
+                            
+                return $result;
+            } catch (Exception $e) {
+                return $e->getMessage();
+            }
+        } elseif ($connection instanceof PDO) {
+
+            //Query
+            $sql_get_spec_work = "SELECT idWork, idCategory, `name`, `date`, image_path, languages, `description` FROM works WHERE idWork = :id";
+
+            try {
+                // Query of the statement
+                $query_get_spec_work = $connection->prepare($sql_get_spec_work);
+                $query_get_spec_work->bindParam(":id", $idWork);
+                
+                $result = $query_get_spec_work->fetchAll(PDO::FETCH_ASSOC);
+                
+                return $result;
+            } catch (PDOException $e) {
+                /* Failure Handling */
+                return $e->getMessage(); 
+            }
+        }
+    }
     
     /**
      * Creates a New Work in the provided Database
@@ -1230,6 +1281,191 @@ class strumenti {
                 }
                 return false;            
             }
+        }
+    }
+
+    /**
+     * Modifies an existing work
+     * 
+     * @param object $connection The Connection Object with the Database
+     * @param int $idWork The ID of the work to modify
+     * @param int $idCat The ID of the New Category to assign
+     * @param string $name The New Name of the Work
+     * @param string $desc The New Description of the Work
+     * @param string $date The New Date of the Work
+     * @param string $path The Full Path of the New Image
+     * @param array $languages The New Languages used in the Work
+     * 
+     * @return true|string True if successful, otherwise the failure message is returned
+     */
+    static public function edit_work(object $connection, int $idWork, int $idCat = null, string $name = '', string $desc = '', string $date = '', string $imagePath = '', array $languages = null) :true|string {
+        /* Arrays for Database Update */
+        $updates = [];
+        $params = [];
+        $types = "";
+        
+        /* Query Creation */
+        $sql_update_work = "UPDATE works SET "; // Query start
+        
+        // Assign fields dynamically
+        if ($idCat !== null || $idCat !== '') {
+            $updates[] = "idCategory = ?";
+            $params[] = $idCat;
+            $types .= 'i';
+        }
+        if ($name !== '') {
+            $updates[] = "`name` = ?";
+            $params[] = $name;
+            $types .= 's';
+        }
+        if ($desc !== '') {
+            $updates[] = "`description` = ?";
+            $params[] = $desc;
+            $types .= 's';
+        }
+        if ($date !== '') {
+            $updates[] = "`date` = ?";
+            $params[] = $date;
+            $types .= 's';
+        }
+        if ($imagePath !== '') {
+            $updates[] = "image_path = ?";
+            $params[] = $imagePath;
+            $types .= 's';
+        }
+        if ($languages !== null || !empty($languages)) {
+            $updates[] = "languages = ?";
+            $params[] = json_encode($languages);
+            $types .= 's';
+        }
+        
+        // Ensure there are updates to make
+        if (empty($updates)) {
+            return "No fields to update.";
+        }
+        
+        // Build final query
+        $sql_update_work .= implode(', ', $updates) . " WHERE idWork = ?";
+        $params[] = $idWork;
+        $types .= 'i';
+        
+        // Try with MySQLi
+        if ($connection instanceof mysqli) {
+            $connection->begin_transaction(); //Start Transaction
+            try {
+                /* Prepare Statement */
+                $stmt = $connection->prepare($sql_update_work); 
+
+                /* Dynamic Binding */
+                $bind_names = [$types]; // First element: string of data types
+                foreach ($params as $key => $value) {
+                    $bind_names[] = &$params[$key]; // Pass by reference (IMPORTANT! bind_param ONLY ACCEPTS REFERENCES)
+                }
+                call_user_func_array([$stmt, "bind_param"], $bind_names); //Call bind_param on the array (not directly supported)
+
+                /* Execute Statement */
+                $result = $stmt->execute();
+
+                /* Commit Result */
+                $connection->commit();
+                return $result; //Return true
+            } catch (Exception $e) {
+                $connection->rollback();
+                return $e->getMessage();
+            }
+        } elseif ($connection instanceof PDO) {
+            $connection->beginTransaction(); //Start Transaction
+            try {
+                /* Prepare the Statement */
+                $stmt = $connection->prepare($sql_update_work);
+
+                /* Bind Parameters Dynamically */
+                $i = 1; //Param Counter
+                foreach ($params as $value) {
+                    $type = PDO::PARAM_STR; //Parameter String is default
+                    if (is_int($value)) { //Only other Type is int
+                        $type = PDO::PARAM_INT;
+                    }
+                    $stmt->bindParam($i, $value, $type); //Parameter Binding
+                    $i++; //Counter Update
+                }
+
+                /* Execution */
+                $result = $stmt->execute();
+
+                /* Commit */
+                $connection->commit();
+                return $result; //Return True
+            } catch (PDOException $e) {
+                $connection->rollBack();
+                return $e->getMessage();
+            }
+        }
+    }
+
+    /**
+     * Checks if given work name is present on a given Database
+     * 
+     * @param object $connection The Connection Object with the Database
+     * @param string $work The Name of the Category to check
+     * @param bool $return_id If `true`, returns the ID matched on success (otherwise a booelan)
+     * 
+     * @return int|bool On success, the ID of the Account matched if found or true , false otherwise
+     */
+    static public function check_work(object $connection, string $work, bool $return_id = false) {
+
+        // Try with MySQLi
+        if ($connection instanceof mysqli) {
+            // SQL Statement with MySQLi parameters that performs the match
+            $sql_check_work = "SELECT idWork FROM works WHERE `name` = ?";
+            // Execution of the statement
+            $query_check_work = $connection->prepare($sql_check_work);
+            $query_check_work->bind_param("s", $work);
+            $query_check_work->execute();
+           
+            // Store the Login Result
+            $query_check_work->store_result();
+
+            /* Result Binding */
+            $query_check_work->bind_result($idWork);
+            $query_check_work->fetch();
+
+            // Check if it is empty
+            if ($query_check_work->num_rows() > 0) {
+                // Determine Credentials Check Type
+                if ($return_id) {
+                    /* Register Case */
+                    return $idWork; //Return the ID of the user
+                } else {
+                    return true; //Return true
+                }
+            } else {
+                return false;
+            }
+
+        } elseif ($connection instanceof PDO) {
+            // SQL Statement with PDO parameters
+            $sql_check_work = "SELECT idCategory FROM categories WHERE `name` = :inputName";
+            // Execution of the statement
+            $query_check_work = $connection->prepare($sql_check_work);
+            $query_check_work->bindParam(":inputName", $work, PDO::PARAM_STR); // Name Binding
+            $query_check_work->execute();
+            // Binding of the Result
+            if ($query_check_work->rowCount() > 0) {
+                // Determine Credentials Check Type
+                if ($return_id) {
+                    /* ID case */
+                    $idWork = $query_check_work->fetch(PDO::FETCH_NUM);
+                    return $idWork; //Returns the ID
+                } else {
+                    /* Boolean Case */
+                    return true; // Return true
+                }
+            } else {
+                return false;
+            }
+        } else {
+            throw new InvalidArgumentException("ERROR: Invalid Connection Type");
         }
     }
 }

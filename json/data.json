@@ -376,6 +376,18 @@
             "category_delete": {
                 "201": "Category Succesfully Deleted",
                 "500": "Failed to Delete Category"
+            },
+            "work_create": {
+                "201": "Work Succesfully Created",
+                "400": "Invalid Work Input (Work not Created)",
+                "406": "Work Already Exists",
+                "500": "Failed to Create Work"
+            },
+            "work_edit": {
+                "201": "Work Successfully Modified",
+                "400": "Invalid Work Data (Work not Modified)",
+                "406": "Work Already Exists, changes reverted",
+                "500": "Failed to Modify Work"
             }
         }
     }
