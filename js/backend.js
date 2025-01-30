@@ -33,6 +33,7 @@ initializeForm('categoryDelete', document.getElementById('formCategoryDelete'));
 /* Work Forms Validation Initialization */
 initializeForm('workCreate', document.getElementById("formWorkCreate"));
 initializeForm('workEdit', document.getElementById("formWorkEdit"));
+initializeForm('workDelete', document.getElementById('formWorkDelete'));
 
 /* Multilanguage Dropdown Behaviour */
 manageMultitagDropdown(document.getElementById('formWorkCreate'), {createHiddenInput: true, hiddenInputName: 'work_languages'});

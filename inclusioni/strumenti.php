@@ -12,7 +12,7 @@ define('EXTENSION_MYSQLI', 'MYSQLI');
 define('EXTENSION_PDO', 'PDO');
 define('CHECK_LOGIN', 0);
 define('CHECK_REGISTER', 1);
-define('IMAGE_DIRECTORY', "images/");
+define('IMAGE_DIRECTORY', "uploads/images/");
 
 /**
  * Classe contente strumenti utili
@@ -1183,10 +1183,15 @@ class strumenti {
                 // Query of the statement
                 $query_get_spec_work = $connection->prepare($sql_get_spec_work);
                 $query_get_spec_work->bind_param('i', $idWork);
-                // $query_get_spec_work->bind_result($result);
+
+                /* Execute */
                 $query_get_spec_work->execute();
-                $result = $query_get_spec_work->get_result()->fetch_assoc();
-                            
+
+                /* Result Retrieval */
+                $work_data = $query_get_spec_work->get_result();
+                $result = $work_data->fetch_assoc();
+
+                /* Return the Result */
                 return $result;
             } catch (Exception $e) {
                 return $e->getMessage();
@@ -1466,6 +1471,60 @@ class strumenti {
             }
         } else {
             throw new InvalidArgumentException("ERROR: Invalid Connection Type");
+        }
+    }
+
+    /**
+     * Deletes an existing Work
+     * 
+     * @param object $connection The Connection Object with the Database
+     * @param int $idWork The ID number of the Work to delete
+     * 
+     * @return bool|string Either True if successful, the failure message, or a non-exception-caught failure is returned
+     */
+    static public function delete_work(object $connection, int $idWork) {
+        
+        // Try with MySQLi
+        if ($connection instanceof mysqli) {
+            //SQL statement
+            $sql_delete_work = "DELETE FROM works WHERE idWork = ?";
+            
+            /* Deletion */
+            $connection->begin_transaction(); //Start of Transaction
+            try {
+                // Query of the statement
+                $query_delete_work = $connection->prepare($sql_delete_work); //Prepare the statement
+                $query_delete_work->bind_param('i', $idWork);
+                $result = $query_delete_work->execute(); //Statement Execution
+
+                /* Return of the Result and Commit Changes */
+                $connection->commit();
+                return $result;
+            } catch (Exception $e) {
+                /* Return Error Message and Rollback changes */
+                $connection->rollback();
+                return $e->getMessage();
+            }
+        } elseif ($connection instanceof PDO) {
+            //SQL statement
+            $sql_delete_work = "DELETE FROM works WHERE idWork = :id";
+
+            /* Deletion */
+            $connection->beginTransaction();
+            try {
+                // Query of the statement
+                $query_delete_work = $connection->prepare($sql_delete_work); //Prepare the statement
+                $query_delete_work->bindParam(':id', $idCategory, PDO::PARAM_INT); // Parameter Binding
+                $result = $query_delete_work->execute(); //Statement Execution
+
+                /* Return of the Result and Commit Changes */
+                $connection->commit();
+                return $result;
+            } catch (PDOException $e) {
+                /* Failure Handling and Rollback */
+                $connection->rollBack();
+                return $e->getMessage(); 
+            }
         }
     }
 }

@@ -593,25 +593,37 @@ exit; */
             </button>
         </form>
 
-        <!-- Delete (Admin) User form -->
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-users" id="formDeleteUser">
+        <!-- Edit Work form -->
+        <form 
+            action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" 
+            method="post" 
+            class="form-work" 
+            id="formWorkDelete">
             <!-- Form Title -->
-            <h3 class="form-title">Delete User</h3>
+            <h3 class="form-title">Delete Work</h3>
 
-            <label class="label-select">User:
-                <select name="selected_user" class="select-user">
-                    <?php foreach ($users as $user) { ?>
-                        <option value="<?php echo $user['idAdmin'] ?>"><?php echo $user['username'] ?></option>
+             <!-- Category Selection -->
+             <label class="label-select">Select Work:
+                <select 
+                    name="work_select" 
+                    class="select-work" 
+                    data-type="work-select"
+                    data-input-type="select">
+                    <?php foreach ($works as $work) { ?>
+                        <option value="<?php echo $work['idWork'] ?>">
+                            <?php echo $work['name'] ?>
+                        </option>
                     <?php } ?>
                 </select>
             </label>
+            <ul class="errors-container work-select-errors" role="alert"><li></li></ul>
 
             <!-- Submit Button -->
             <button type="submit" 
                     name="button_submit" 
-                    value="user_delete" 
+                    value="work_delete" 
                     class="button-submit">
-                <span class="buttonText">Delete User</span>
+                <span class="buttonText">Delete Work</span>
             </button>
         </form>
     </div>

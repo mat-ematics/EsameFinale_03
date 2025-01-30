@@ -67,6 +67,11 @@ function handleFormSubmission($postData) {
         case 'work_edit':
             return handleWorkEdit($postData, $connection, $regex_work_name, $regex_work_description, $regex_work_languages);
             break;
+        
+        case 'work_delete':
+            return handleWorkDelete($postData, $connection);
+            break;
+
         default:
             throw new Exception("Invalid form submission.");
     }
@@ -265,6 +270,7 @@ function handleWorkEdit($data, $connection, $regexWorkName, $regexWorkDesc, $reg
         return strumenti::createResponse(400, 'Invalid Work Name.');
     } 
 
+    /* Check if Workn Name already Exists */
     if (strumenti::check_work($connection, $work_name)) {
         return strumenti::createResponse(406, 'Work Name already Exists.');
     }
@@ -308,4 +314,21 @@ function handleWorkEdit($data, $connection, $regexWorkName, $regexWorkDesc, $reg
     strumenti::deleteImage($image_full_path);
 
     throw new Exception('Failed to Create Work.');
+}
+
+/* Work Deletion Handler */
+function handleWorkDelete($data, $connection) {
+    $idWork = $data['work_select'];
+
+    $image_path = strumenti::get_single_work($connection, $idWork)['image_path'];
+
+    $delete_result = strumenti::delete_work($connection, $idWork);
+    if ($delete_result === true) {
+        $image_delete = strumenti::deleteImage($image_path);
+            if ($image_delete['error_flag']) {
+                return strumenti::createResponse(500, "Couldn't delete work image");
+            }
+        return strumenti::createResponse(201, 'Category successfully deleted.');
+    }
+    throw new Exception('Failed to delete category.');
 }
