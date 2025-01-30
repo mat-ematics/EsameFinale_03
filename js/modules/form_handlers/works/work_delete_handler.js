@@ -24,7 +24,7 @@ export default function initializeValidationWorkDelete(form) {
     DOMUtils.initializeError(form, select, errorMessages); 
 
     /* Check if there is at least one option */
-    if (select.options.length == 0) {
+    if (select.options.length == 0 || !select.value) {
         /* No options found, button disabled */
         DOMUtils.disableButton(submitButton, true);
         DOMUtils.displayError(form, select);

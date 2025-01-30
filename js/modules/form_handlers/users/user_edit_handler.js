@@ -35,7 +35,7 @@ export default function initializeValidationUserEdit(form) {
     DOMUtils.initializeError(form, select, errorMessages);
 
     /* Check if there is at least one option */
-    if (select.options.length == 0) {
+    if (select.options.length == 0 || !select.value) {
         /* No options found, button disabled */
         DOMUtils.displayError(form, select);
         allowEnable = false;

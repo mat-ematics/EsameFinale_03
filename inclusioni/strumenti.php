@@ -1313,7 +1313,7 @@ class strumenti {
         $sql_update_work = "UPDATE works SET "; // Query start
         
         // Assign fields dynamically
-        if ($idCat !== null || $idCat !== '') {
+        if ($idCat !== null && $idCat !== '') {
             $updates[] = "idCategory = ?";
             $params[] = $idCat;
             $types .= 'i';
@@ -1338,7 +1338,7 @@ class strumenti {
             $params[] = $imagePath;
             $types .= 's';
         }
-        if ($languages !== null || !empty($languages)) {
+        if ($languages !== null && !empty($languages)) {
             $updates[] = "languages = ?";
             $params[] = json_encode($languages);
             $types .= 's';

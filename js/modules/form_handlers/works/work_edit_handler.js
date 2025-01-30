@@ -45,7 +45,7 @@ export default function initializeValidationWorkEdit(form) {
     DOMUtils.disableButton(submitButton, true); //Disable initially the submit button
 
     /* Check if there is at least one option */
-    if (selectWork.options.length == 0) {
+    if (selectWork.options.length == 0 || !selectWork.value) {
         /* No options found, button disabled */
         DOMUtils.disableButton(submitButton, true);
         DOMUtils.displayError(form, selectWork);

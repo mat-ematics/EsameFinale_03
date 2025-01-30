@@ -105,7 +105,11 @@ function handleUserEdit($data, $connection, $regexUsername, $regexPassword) {
     $username = trim($data['username']);
     $password = trim($data['password']);
     $repeatPassword = trim($data['repeat_password']);
-    $idUser = $data['selected_user'];
+    $idUser = $data['selected_user'] ?? null;
+    
+    if (!isset($data['selected_user'])) {
+        return strumenti::createResponse(406, 'No user selected.');
+    }
 
     if ($username !== '' || $password !== '') {
         $flagValid = strumenti::validateCredentials($username, $password, $regexUsername, $regexPassword, $repeatPassword, true);
@@ -130,7 +134,11 @@ function handleUserEdit($data, $connection, $regexUsername, $regexPassword) {
 
 /* User Deletion Handler */
 function handleUserDelete($data, $connection) {
-    $idUser = $data['selected_user'];
+    $idUser = $data['selected_user'] ?? null;
+
+    if (!isset($data['selected_user'])) {
+        return strumenti::createResponse(406, 'No user selected.');
+    }
 
     $delete_result = strumenti::delete_user($connection, $idUser);
     if ($delete_result === true) {
@@ -162,7 +170,11 @@ function handleCategoryCreate($data, $connection, $regexCategoryName) {
 /* Category Editing Handler */
 function handleCategoryEdit($data, $connection, $regexCategoryName) {
     $categoryName = trim($data['category_name']);
-    $idCategory = $data['selected_category'];
+    $idCategory = $data['selected_category'] ?? null;
+
+    if (!isset($data['selected_category'])) {
+        return strumenti::createResponse(406, 'No category selected.');
+    }
 
     if (!preg_match($regexCategoryName, $categoryName)) {
         return strumenti::createResponse(400, 'Invalid category name.');
@@ -183,7 +195,11 @@ function handleCategoryEdit($data, $connection, $regexCategoryName) {
 
 /* Category Deletion Handler */
 function handleCategoryDelete($data, $connection) {
-    $idCategory = $data['selected_category'];
+    $idCategory = $data['selected_category'] ?? null;
+
+    if (!isset($data['selected_category'])) {
+        return strumenti::createResponse(406, 'No category selected.');
+    }
 
     $delete_result = strumenti::delete_category($connection, $idCategory);
     if ($delete_result === true) {
@@ -244,7 +260,7 @@ function handleWorkEdit($data, $connection, $regexWorkName, $regexWorkDesc, $reg
     // strumenti::stampaArray(strumenti::get_single_work($connection, $work_id));
     // exit;
     
-    $work_id = $data['work_select'];
+    $work_id = $data['work_select'] ?? null;
     $work_name = trim($data['work_name']);
     $work_date = $data['work_date'];
     $work_languages = $data['work_languages'] ?? null;
@@ -258,6 +274,9 @@ function handleWorkEdit($data, $connection, $regexWorkName, $regexWorkDesc, $reg
     /* Old Image Path */
     $old_image = strumenti::get_single_work($connection, $work_id)['image_path'];
 
+    if (!isset($data['work_select'])) {
+        return strumenti::createResponse(406, 'No category selected.');
+    }
     
     //The Image is sent through the $_FILES superglobal instead of $_POST
     $work_image = $_FILES['work_image'];
@@ -271,7 +290,9 @@ function handleWorkEdit($data, $connection, $regexWorkName, $regexWorkDesc, $reg
     } 
 
     /* Check if Workn Name already Exists */
-    if (strumenti::check_work($connection, $work_name)) {
+    $check_result = strumenti::check_work($connection, $work_name, true);
+
+    if ($check_result !== false && $check_result != $work_id) {
         return strumenti::createResponse(406, 'Work Name already Exists.');
     }
     
@@ -318,7 +339,11 @@ function handleWorkEdit($data, $connection, $regexWorkName, $regexWorkDesc, $reg
 
 /* Work Deletion Handler */
 function handleWorkDelete($data, $connection) {
-    $idWork = $data['work_select'];
+    $idWork = $data['work_select'] ?? null;
+
+    if (!isset($data['work_select'])) {
+        return strumenti::createResponse(406, 'No category selected.');
+    }
 
     $image_path = strumenti::get_single_work($connection, $idWork)['image_path'];
 
