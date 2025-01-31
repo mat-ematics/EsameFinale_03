@@ -23,10 +23,4 @@ use assets\strumenti;
 <meta name="description" content="Matt's Portfolio - <?php echo $data['page_title'] ?>">
 <!-- Autore del Sito -->
 <meta name="author" content="Matt">
-
-<style>
-    div#<?php echo strtolower($data['page_title']) ?> {
-    color: white;
-    border-bottom: 2px solid rgb(0, 162, 255);
-}
 </style>

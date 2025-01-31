@@ -10,6 +10,11 @@
             "Projects": "projects.php",
             "About": "about.php",
             "Contacts": "contacts.php"
+        },
+        "login": {
+            "text": "Log In",
+            "title": "Log In to backend",
+            "link": "login.php"
         }
     },
 

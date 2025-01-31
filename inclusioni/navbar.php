@@ -19,13 +19,19 @@ $header = strumenti::leggiJSON("json/data.json", true)["header"];
             <li id="navSections" class="sections">
                 <div id="navMenu">
                     <?php foreach ($header['navbar'] as $item => $link) { ?>
-                        <div class="navItems" <?php if ($item == $data['page_title']) { ?> id="<?php echo strtolower($data['page_title']) ?>" <?php } ?>>
+                        <div class="navItems <?php if ($item == $data['page_title']) echo "selected-page" ?>">
                             <a href="<?php echo $link ?>" title="<?php echo $item ?>"><?php echo $item ?></a>
                         </div>
                     <?php } ?>
                 </div>
             </li>
             <li class="navSides">
+                <!-- Log In -->
+                <div id="loginButton" class="<?php if ($data['page_title'] == "Log In") echo "selected-page" ?>">
+                    <a href="<?php echo $header['login']['link'] ?>" title="<?php echo $header['login']['title'] ?>">
+                        <?php echo $header['login']['text'] ?>
+                    </a>
+                </div>
                 <!-- Menu -->
                 <div id="menuIcon">
                     <a href="javascript:void(0)" onclick="menu()"><i class="fa-solid fa-bars"></i></a>
