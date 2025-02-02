@@ -4,7 +4,7 @@ use assets\strumenti;
 
 /* Session */
 session_start(); // Session Start
-require_once("inclusioni/session_security.php"); // Session Check
+require_once("inclusioni/security/session_security.php"); // Session Check
 
 $connection = strumenti::connect_database(PUBLIC_USER);
 

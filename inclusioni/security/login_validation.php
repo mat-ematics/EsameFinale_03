@@ -11,8 +11,8 @@ $flag = 0;
 if (!empty($_POST)) {
     $username = trim($_POST['username']);
     $password = trim($_POST['password']);
-    $test_username = preg_match($data['regex_username'], $username);
-    $test_password = preg_match($data['regex_password'], $password);
+    $test_username = preg_match($regex_username, $username);
+    $test_password = preg_match($regex_password, $password);
     if ($test_username === 1 && $test_password === 1) {
         // Check presence of Account
 
