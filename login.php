@@ -1,54 +1,16 @@
 <?php
-
-/* File di Configurazione */
-require_once("config/config.php");
-
-session_start(); // Inizializzazione della Sessione
-
-// Importazione Sicurezza della Sessione
-require_once("inclusioni/session_security.php");
-
-// Importo strumenti e Dati dal JSON
-require_once("inclusioni/strumenti.php");
+require_once("inclusioni/strumenti.php"); // Tools
 use assets\strumenti;
+
+/* Session */
+session_start(); // Session Start
+require_once("inclusioni/session_security.php"); // Session Check
+
+$connection = strumenti::connect_database(PUBLIC_USER);
+
 $data = strumenti::leggiJSON("json/data.json", true)["login"];
-$flag = 0;
 
-/* Validazione Lato Server */
-if (!empty($_POST)) {
-    $username = trim($_POST['username']);
-    $password = trim($_POST['password']);
-    $test_username = preg_match($data['regex_username'], $username);
-    $test_password = preg_match($data['regex_password'], $password);
-    if ($test_username === 1 && $test_password === 1) {
-        // Check presence of Account
-        $connection = strumenti::create_connection(EXTENSION_MYSQLI, "localhost", "portfolio", "root");
-        $result = strumenti::check_credentials($connection, $username, $password);
-        if ($result) {
-            // Account Found
-            $flag = 201; // Flag di Successo
-
-            /* Rigenerazione di Sicurezza dell'ID della Sessione */
-            session_regenerate_id(true); // Cancellazione della Sessione Precedente
-
-            /* Variabili di Sessione */
-            $_SESSION['username'] = $username;
-            $_SESSION['is_auth'] = true;
-            
-            /* Ridirezionamento nella pagina di Backend */
-            header("Location: backend.php");
-            exit(); // Termine anticipato dello sviluppo di codice
-        } else {
-            // Account Not Found
-            $flag = 400;
-        }
-    } elseif ($test_username === 0 || $test_password === 0) {
-        $flag = 400;
-    } else {
-        $flag = 500;
-    }
-}
-
+require_once('inclusioni/security/login_validation.php');
 ?>
 
 <!DOCTYPE html>

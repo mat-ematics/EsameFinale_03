@@ -13,7 +13,9 @@ define('EXTENSION_PDO', 'PDO');
 define('CHECK_LOGIN', 0);
 define('CHECK_REGISTER', 1);
 define('IMAGE_DIRECTORY', "uploads/images/");
-
+define('PUBLIC_USER', 0);
+define('ADMIN_USER', 1);
+define('ROOT', $_SERVER['DOCUMENT_ROOT']);
 /**
  * Classe contente strumenti utili
  * 
@@ -243,27 +245,30 @@ class strumenti {
      * 
      * @return class Returns a Connection of the Selected Type
      */
-    static public function create_connection(string $extension = EXTENSION_PDO, string $host, string $database, string $user = null, string $password = null) {
-        /**
-       * Public variable that Stores the Connection 
-       */
-        $connection = null;
-        if ($extension == EXTENSION_MYSQLI) {
-            $connection = new \mysqli($host, $user, $password, $database);
-            if ($connection->connect_error) {
-                throw new \Exception("MySQLi Connection failed: " . $connection->connect_error);
+    static public function create_connection(
+        string $extension = EXTENSION_PDO,
+        string $host,
+        string $database,
+        string $user = null,
+        string $password = null
+    ) {
+        try {
+            if ($extension === EXTENSION_MYSQLI) {
+                $connection = new \mysqli($host, $user, $password, $database);
+                if ($connection->connect_error) {
+                    throw new \Exception("MySQLi Connection failed: " . $connection->connect_error);
+                }
+            } elseif ($extension === EXTENSION_PDO) {
+                $connection = new \PDO("mysql:host=$host;dbname=$database", $user, $password, [
+                    \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION
+                ]);
+            } else {
+                throw new \InvalidArgumentException("ERROR: Invalid extension type.");
             }
-        } elseif ($extension == EXTENSION_PDO) {
-            try {
-                $connection = new \PDO("mysql:host=".$host.";dbname=".$database, $user, $password);
-                $connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-            } catch (\PDOException $e) {
-                throw new \Exception("PDO Connection Failed: " . $e->getMessage());
-            }
-        } else {
-            throw new \Error("ERROR: select a correct Extension Constant");
+            return $connection;
+        } catch (\Throwable $e) {
+            return $e->getMessage();
         }
-        return $connection;
     }
 
     /**
@@ -1526,5 +1531,89 @@ class strumenti {
                 return $e->getMessage(); 
             }
         }
+    }
+
+    /**
+     * Retrieves a specified amount of Works in decreasing order of date from the provided Database
+     * 
+     * @param object $connection The Connection Object with the Database
+     * @param int $n The number of last works to retrieve
+     * 
+     * @return array|string An associative array with the Works if successful, otherwise the failure message is returned
+     */
+    static public function get_last_n_works(object $connection, int $n) :array|string {
+        //Query
+        $sql_get_works = "SELECT idWork, idCategory, `name`, `date`, image_path, languages, `description`
+                            FROM works
+                            ORDER BY `date` DESC
+                            LIMIT ?";
+
+        // Try with MySQLi
+        if ($connection instanceof mysqli) {
+            /* Creation of Account */
+            try {
+                // Query of the statement
+                $query_get_works = $connection->prepare($sql_get_works);
+                $query_get_works->bind_param('i', $n);
+                $query_get_works->execute();
+
+                $works_data = $query_get_works->get_result();
+                
+                $result = $works_data->fetch_all(MYSQLI_ASSOC);
+                
+                return $result;
+            } catch (Exception $e) {
+                return $e->getMessage();
+            }
+        } elseif ($connection instanceof PDO) {
+            try {
+                // Query of the statement
+                $query_get_works = $connection->prepare($sql_get_works);
+                $query_get_works->bindParam(1, $n, pDO::PARAM_INT);
+                
+                $result = $query_get_works->fetchAll(PDO::FETCH_ASSOC);
+                
+                return $result;
+            } catch (PDOException $e) {
+                /* Failure Handling */
+                return $e->getMessage(); 
+            }
+        }
+    }
+
+    /**
+     * Deletes an ongoing session and redirects to the specified page
+     * @param string $dest The Destination of the redirect
+     * @return bool `true` on success, `false` on error
+     */
+    static public function delete_session(string $dest) :bool {
+        try {
+            session_unset(); // Data Dissociation
+            session_destroy(); // Current Session Deletion
+            header(`Location: $dest`); // Redirecting
+            return true;
+        } catch (\Throwable $error) {
+            return false;
+        }
+    }
+
+    /**
+     * Connect to a Database through a general user
+     * @param int $user_type The User Type to establish connection with
+     * @return object|bool The connection on success, `false` on error
+     */
+    static public function connect_database(int $user_type) :object|bool {
+        $config = include ROOT . '/config/database.php';
+
+        switch ($user_type) {
+            case ADMIN_USER:
+                $user = $config['public_user'];
+                break;
+            case PUBLIC_USER:
+                $user = $config['admin_user'];
+        }
+
+        $connection = strumenti::create_connection(EXTENSION_MYSQLI, $user['host'], $user['database'], $user['username'], $user['password']);
+        return $connection;
     }
 }

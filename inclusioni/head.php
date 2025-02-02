@@ -1,7 +1,3 @@
-<?php
-require_once("strumenti.php");
-use assets\strumenti;
-?> 
 <!-- Titolo pagina Home -->
 <title><?php echo $data['page_title'] ?></title>
 <!-- Font e icone varie -->

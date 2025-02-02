@@ -1,32 +1,24 @@
 <?php 
-
-/* File di Configurazione */
-require_once("config/config.php");
-
-session_start(); // Inizializzazione della Sessione
-
-// Importazione Sicurezza della Sessione
-require_once("inclusioni/session_security.php");
-
 // Importo Strumenti
 require_once("inclusioni/strumenti.php");
 use assets\strumenti;
 
-/* Controllo dell'Autenticazione */
-if (!isset($_SESSION) || !isset($_SESSION['is_auth']) || $_SESSION['is_auth'] != true) {
-    session_unset(); // Dissociazione Dati della Sessione Corrente
-    session_destroy(); // Eliminazione della Sessione Corrente
-    header("Location: login.php"); // Reindirizzamento alla pagina di Login
-    exit; // Chiusura Caricamento pagina corrente
+/* Session Check */
+session_start(); // Session Initialiization
+// Session Check
+if (!isset($_SESSION) || !isset($_SESSION['is_auth']) || $_SESSION['is_auth'] != true || $_SESSION['role'] != 'admin') {
+    strumenti::delete_session('login.php');
+    exit;
 }
+require_once("inclusioni/security/session_security.php"); // Session Security
 
-/* Creazione della Connessione con Database */
-$connection = strumenti::create_connection(EXTENSION_MYSQLI, 'localhost', 'portfolio', 'root');
+/* Database Connection */
+$connection = strumenti::connect_database(ADMIN_USER);
+
+/* Backend Validation */
+require_once('inclusioni/security/backend_validation.php');
 
 $data = strumenti::leggiJSON("json/data.json", true)["backend"];
-
-//Importazione Validazione Server del Backend
-require_once('inclusioni/backend_validation.php');
 
 $users = strumenti::get_admins($connection);
 $categories = strumenti::get_categories($connection);
