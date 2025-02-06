@@ -3,7 +3,13 @@
 require_once("inclusioni/strumenti.php");
 use assets\strumenti;
 $data = strumenti::leggiJSON("json/data.json", true)["projects"];
-/* strumenti::stampaArray($data);
+
+$connection = strumenti::connect_database(PUBLIC_USER);
+
+$work_list = strumenti::get_works($connection);
+$category_list = strumenti::get_categories($connection, true);
+
+/* strumenti::stampaArray($category_list);
 exit; */
 ?>
 
@@ -27,31 +33,27 @@ exit; */
             <!-- Lavori -->
             <div id="works">
                 <?php 
-                    $loopCounter = 0;
-                    foreach ($data['project_list'] as $project) {
+                    foreach ($work_list as $project) {
                 ?>
-                <!-- Sezione di Un lavoro -->
-                <div class="singleProject">
-                    <!-- Immagine -->
-                    <div class="cards <?php echo $loopCounter % 2 == 0 ? "left" : "right" ?>">
-                        <a href="single_project.php?id=<?php echo $project['project_id'] ?>" title="<?php echo $project['image']['title'] ?>">
-                            <img src="<?php echo $project['image']['link'] ?>" alt="<?php echo $project['image']['alt_text'] ?>">
-                        </a>
-                    </div>
-                    <!-- Testo -->
-                    <div class="projectDescription">
+                    <!-- Sezione di Un lavoro -->
+                    <div class="singleProject">
+                        <!-- Immagine -->
+                        <div class="cards">
+                            <a href="single_project.php?id=<?php echo $project['idWork'] ?>" title="Go to the page of project '<?php echo $project['name'] ?>'">
+                                <img src="<?php echo $project['image_path'] ?>" alt="Image of project '<?php echo $project['name'] ?>'">
+                            </a>
+                        </div>
                         <!-- Titolo del Progetto -->
                         <div class="descriptionTitle">
-                            <p><?php echo $project['project_title'] ?></p>
-                        </div>
-                        <!-- Descrizione del Progetto -->
-                        <div class="descriptionText">
-                            <p><?php echo $project['project_description_short'] ?></p>
+                            <p class="title">
+                                <?php echo $project['name'] ?>
+                            </p>
+                            <p class="category">
+                                <?php echo $category_list[$project['idCategory']] ?>
+                            </p>
                         </div>
                     </div>
-                </div>
                 <?php
-                    $loopCounter++;
                     } 
                 ?>
             </div>

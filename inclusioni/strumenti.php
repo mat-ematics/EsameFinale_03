@@ -715,10 +715,11 @@ class strumenti {
      * Retrieves Categories from the provided Database
      * 
      * @param object $connection The Connection Object with the Database
+     * @param bool $idKeys If `true`, the returned array is in the form id => name (defaults to `false`)
      * 
      * @return array|string Categories if successful, otherwise the failure message is returned
      */
-    static public function get_categories(object $connection) {
+    static public function get_categories(object $connection, bool $idKeys = false) {
         //Query
         $sql_get_cat = "SELECT idCategory, `name` FROM categories";
 
@@ -730,8 +731,6 @@ class strumenti {
                 $query_get_cat = $connection->query($sql_get_cat);
                 
                 $result = $query_get_cat->fetch_all(MYSQLI_ASSOC);
-                
-                return $result;
             } catch (Exception $e) {
                 return $e->getMessage();
             }
@@ -741,13 +740,22 @@ class strumenti {
                 $query_get_cat = $connection->query($sql_get_cat);
                 
                 $result = $query_get_cat->fetchAll(PDO::FETCH_ASSOC);
-                
-                return $result;
             } catch (PDOException $e) {
                 /* Failure Handling */
                 return $e->getMessage(); 
             }
+        } else {
+            return "Invalid Connection Type.";
         }
+
+        if ($idKeys) {
+            foreach ($result as $key => $category) {
+                unset($result[$key]);
+                $result[$category['idCategory']] = $category['name'];
+            }
+        }
+
+        return $result;
     }
 
     /**
@@ -1582,16 +1590,16 @@ class strumenti {
     }
 
     /**
-     * Deletes an ongoing session and redirects to the specified page
+     * Deletes an ongoing session and redirects to the specified page amd stops execution of the latter
      * @param string $dest The Destination of the redirect
-     * @return bool `true` on success, `false` on error
+     * @return bool `false` on error (redirects on success)
      */
     static public function delete_session(string $dest) :bool {
         try {
             session_unset(); // Data Dissociation
             session_destroy(); // Current Session Deletion
-            header(`Location: $dest`); // Redirecting
-            return true;
+            header('Location: ' . $dest); // Redirecting
+            exit;
         } catch (\Throwable $error) {
             return false;
         }
@@ -1606,11 +1614,14 @@ class strumenti {
         $config = include ROOT . '/config/database.php';
 
         switch ($user_type) {
-            case ADMIN_USER:
+            case PUBLIC_USER:
                 $user = $config['public_user'];
                 break;
-            case PUBLIC_USER:
+            case ADMIN_USER:
                 $user = $config['admin_user'];
+                break;
+            default:
+                return "Wrong User Type.";
         }
 
         $connection = strumenti::create_connection(EXTENSION_MYSQLI, $user['host'], $user['database'], $user['username'], $user['password']);

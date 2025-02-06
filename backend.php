@@ -6,7 +6,7 @@ use assets\strumenti;
 /* Session Check */
 session_start(); // Session Initialiization
 // Session Check
-if (!isset($_SESSION) || !isset($_SESSION['is_auth']) || $_SESSION['is_auth'] != true || $_SESSION['role'] != 'admin') {
+if (empty($_SESSION['is_auth']) || $_SESSION['is_auth'] != true || $_SESSION['role'] != 'admin') {
     strumenti::delete_session('login.php');
     exit;
 }

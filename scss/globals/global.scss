@@ -111,20 +111,26 @@ div#navLogo a {
 
 div#menuIcon {
     display: none;
-    visibility: hidden; /* Nascondi l'icona del Menu Hamburger */
+    // visibility: hidden; /* Nascondi l'icona del Menu Hamburger */
     color: var.$textColor;
-    width: 100px;
     margin: 0px 5px;
     text-align: center;
     cursor: pointer;
 }
 
 @media screen and (max-width: 768px) {
+    li.navSides {
+        width: 30%;
+    }
 
     div#menuIcon {
-        display: block;
         visibility: visible; /* Show menu icon */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
     }
+
     li#navSections {
         position: absolute;
         top: var.$navHeight;

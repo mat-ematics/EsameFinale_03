@@ -241,8 +241,10 @@ function handleWorkCreate($data, $connection, $regexWorkName, $regexWorkDesc, $r
     }
 
     $image_full_path = $image_response['full_path'];
+    // echo $image_full_path;
     
-    $create_result = strumenti::create_work($connection, $work_category_id, $work_name, $work_description, $work_date, $image_full_path, $work_languages);
+    $create_result = strumenti::create_work($connection, $work_category_id, $work_name, $work_description, $work_date, $image_full_path, $work_languages, true);
+    // $create_result = false;
     if ($create_result === true) {
         return strumenti::createResponse(201, 'Work successfully created.');
     }
