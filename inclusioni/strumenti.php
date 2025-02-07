@@ -1627,4 +1627,16 @@ class strumenti {
         $connection = strumenti::create_connection(EXTENSION_MYSQLI, $user['host'], $user['database'], $user['username'], $user['password']);
         return $connection;
     }
+
+    /**
+     * Converts a JSON string value into an imploded single string with given glue separated values (default: comma+space-separated)
+     * @param string $json The JSON encoded String to implode
+     * @param string $glue [optional] The Separator of the Values in the final string (defaults to comma with space ", ")
+     * @return string The Imploded string with values separated with the given glue
+     */
+    static public function json_implode(string $json, $glue = ', ') :string {
+        $json_decoded = json_decode($json);
+        $imploded_string = implode($glue, $json_decoded);
+        return $imploded_string;
+    }
 }

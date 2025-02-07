@@ -397,5 +397,15 @@
                 "500": "Failed to Delete Work"
             }
         }
+    }, 
+
+    "error_page": {
+        "page_title": "Error",
+        "style_sheet": "error_page.min.css",
+        "errors": {
+            "200": "No Error Here.",
+            "404": "Page not found.",
+            "default": "Something Bad Happened."
+        }
     }
 }

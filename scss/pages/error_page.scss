@@ -1,0 +1,72 @@
+@use '../variables' as var;
+
+$errorColor: var.$errorColor;
+$errorCodeSize: 50px;
+$errorMsgSize: 30px;
+
+body{
+    background: var.$gradientBgColor;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+main {
+    height: calc(100% - var.$navHeight);
+}
+
+/* Stile corpo principale - posizionamento del form */
+
+div#errorWrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-height: 937px;
+    height: 100%;
+}
+div#errorBg {
+    margin: 10px auto;
+    border: none;
+    border-radius: 5px;
+    width: 50%;
+    max-width: 600px;
+    padding: 40px 80px;
+    max-height: 937px;
+    background-color: var.$secondaryBgColor;
+    color: $errorColor;
+    text-align: center;
+
+    h1#errorCode {
+        font-size: $errorCodeSize;
+    }
+    p#errorMsg {
+        font-size: $errorMsgSize;
+    }
+}
+
+@media screen and (max-width: 920px) {
+    div#errorBg {
+        h1#errorCode {
+            font-size: 30px;
+        }
+        p#errorMsg {
+            font-size: 20px;
+        }
+    }
+}
+
+@media screen and (max-width: 650px) {
+    div#errorBg {
+        padding: 10px 0;
+    }  
+}
+@media screen and (max-width: 375px) {
+    div#errorBg {
+        h1#errorCode {
+            font-size: 20px;
+        }
+        p#errorMsg {
+            font-size: 15px;
+        }
+    }
+}

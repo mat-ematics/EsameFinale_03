@@ -15,15 +15,15 @@ require_once('inclusioni/security/login_validation.php');
 
 <!DOCTYPE html>
 <html lang="en">
-    <!-- Head incluso da inclusioni/head.php -->
-    <?php require_once("inclusioni/head.php") ?> 
+    <head>
+        <!-- Head incluso da inclusioni/head.php -->
+        <?php require_once("inclusioni/head.php") ?> 
+        <!-- Form Content Style -->
+        <link rel="stylesheet" href="css/account_form.min.css">
+    </head>
     <body>
-        <head>
-            <!-- Barra di navigazione inclusa da navbar.php -->
-            <?php require_once('inclusioni/navbar.php') ?>
-            <!-- Form Content Style -->
-            <link rel="stylesheet" href="css/account_form.min.css">
-        </head>
+        <!-- Barra di navigazione inclusa da navbar.php -->
+        <?php require_once('inclusioni/navbar.php') ?>
         <main>
             <!-- Contenitore Form -->
             <div id="contactsWrapper">

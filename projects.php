@@ -39,7 +39,8 @@ exit; */
                     <div class="singleProject">
                         <!-- Immagine -->
                         <div class="cards">
-                            <a href="single_project.php?id=<?php echo $project['idWork'] ?>" title="Go to the page of project '<?php echo $project['name'] ?>'">
+                            <?php $project_name_url = str_replace(' ', '-', $project['name']) ?>
+                            <a href="single_project.php?work=<?php echo $project_name_url ?>" title="Go to the page of project '<?php echo $project['name'] ?>'">
                                 <img src="<?php echo $project['image_path'] ?>" alt="Image of project '<?php echo $project['name'] ?>'">
                             </a>
                         </div>
