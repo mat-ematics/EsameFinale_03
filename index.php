@@ -27,17 +27,21 @@ exit; */
             <div id="columnWrapper">
                 <div id="title" class="mainColumns">
                     <h1>
-                        <?php foreach ($data['main']['title'] as $line) { ?>
-                        <span><?php echo $line ?></span>
-                        <?php } ?>
+                        <span>I'm Cringy,</span>
+                        <span>but my code isn't</span>
                     </h1>
-                    <?php foreach ($data['main']['subtitle'] as $line) { ?>
-                        <p><?php echo $line ?></p>
-                    <?php } ?>
+                    <div class="subtitle">
+                        <p>
+                            Certified <span class="barred">Copy Paster
+                        </p>
+                        <p>
+                            Full Stack Developer
+                        </p>
+                    </div>
                 </div>
                 <div id="image" class="mainColumns">
                     <!-- Logo -->
-                    <h1 id="<?php echo $data['main']['logo']['id'] ?>"><?php echo $data['main']['logo']['image'] ?></h1>
+                    <img src="images/logo.png" alt="Logo">
                 </div>
             </div>
             <!-- Bottone per scorrere sotto -->

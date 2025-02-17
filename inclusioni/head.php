@@ -14,9 +14,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="UTF-8">
 <!-- Meta Tag -->
-<meta name="keywords" content="Cringe.devs, C.devs, c.devs, cringe.devs, Matt.devs, M.devs, m.devs, matt.devs">
+<meta name="keywords" content="Cringe.devs, C.devs, c.devs, cringe.devs, cringe_dev, cringe_devs, cringydev, cringedev, cringydev">
 <!-- Descrizione del Sito -->
-<meta name="description" content="Matt's Portfolio - <?php echo $data['page_title'] ?>">
+<meta name="description" content="Cringy's Portfolio - <?php echo $data['page_title'] ?>">
 <!-- Autore del Sito -->
-<meta name="author" content="Matt">
+<meta name="author" content="Cringy">
 </style>

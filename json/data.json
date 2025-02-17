@@ -1,7 +1,7 @@
 {
     "header" : {
         "logo" : { 
-            "image" : "Matt.devs",
+            "image" : "cringe_dev",
             "link" : "index.php"
             },
         "navbar" : {
@@ -53,17 +53,6 @@
         "page_title" : "Home",
         "style_sheet": "index.min.css",
         "main" : {
-            "title": [
-                "I'm Matt",
-                "a Hard Worker"
-            ],
-            "subtitle": [
-                "Certified Full Stack Developer"
-            ],
-            "logo": {
-                "image": "C.devs",
-                "id": "logo"
-            },
             "button_down": {
                 "location": "#workSection",
                 "content": {
