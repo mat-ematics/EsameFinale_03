@@ -1,8 +1,8 @@
 /* Imports */
-import initializeForm from "./modules/form_handlers/_form_toggle";
+import initializeForm from "./modules/form_handlers/_form_toggle.js";
 // Shared Imports
-import DOMUtils from "./modules/_shared/_dom_utils";
-import manageMultitagDropdown from "./modules/_shared/multitag_dropdown";
+import DOMUtils from "./modules/_shared/_dom_utils.js";
+import manageMultitagDropdown from "./modules/_shared/multitag_dropdown.js";
 
 /* Menu delle Visualizzazioni */
 const areaNavItems = document.querySelectorAll(".area");

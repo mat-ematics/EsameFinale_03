@@ -1,5 +1,5 @@
 //Imports
-import DOMUtils from "../../_shared/_dom_utils"; 
+import DOMUtils from "../../_shared/_dom_utils.js"; 
 
 /**
  * List of Error Messages for User/Admin Deletion
