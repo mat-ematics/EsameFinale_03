@@ -1,5 +1,5 @@
 /* Imports */
-import DOMUtils from "./_dom_utils";
+import DOMUtils from "./_dom_utils.js";
 
 /**
  * Function that intializes and manages a MultiTag Dropdown Behaviour
