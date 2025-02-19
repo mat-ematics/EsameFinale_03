@@ -58,7 +58,8 @@ exit; */
             <div class="works">
                 <?php foreach ($work_list as $project) { ?>
                     <!-- Singola Card progetto -->
-                    <a href="single_project.php?id=<?php echo $project['idWork'] ?>">
+                    <?php $project_name_url = str_replace(' ', '-', $project['name']) ?>
+                    <a href="single_project.php?work=<?php echo $project_name_url ?>">
                         <div class="cards">
                             <img src="<?php echo $project['image_path'] ?>" alt="<?php echo $project['name'] ?>'s Image" title="Go to the  page of '<?php echo $project['image']['title'] ?>'">
                             <!-- Overlay-on-hover -->

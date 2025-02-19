@@ -149,6 +149,7 @@ div.works  {
     flex-wrap: wrap;
     padding: 0px 50px;
     justify-content: space-evenly;
+    column-gap: 10px;
 }
 /* Stile titolo */
 h1.title {
@@ -210,7 +211,7 @@ div.cards {
 
 /* Modifica posizionamento nel main per adattamento a schermo stretto */
 
-@media screen and (max-width: 920px) {
+@media screen and (max-width: 970px) {
     div#columnWrapper {
         flex-direction: column;
     }
