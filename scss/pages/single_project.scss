@@ -1,16 +1,21 @@
 @use '../variables' as var;
 
+$previewHeight: 80%;
+
 /* Stile del main */
 main {
     position: relative;
     align-items: stretch;
+    height: calc(100% - var.$navHeight);
 }
 /* Stile immagine progetto principale */
 div.preview {
     position: relative;
     overflow: hidden;
+    height: $previewHeight;
+
     img {
-        height: 500px;
+        transform: translateY(-50%);
         width: 100%;
         transition: all 0.8s ease;
     }
@@ -33,7 +38,6 @@ div.overlay {
         ~ {
             img {
                 filter: blur(3px);
-                transform: scaleX(1.01);
             }
         }
     }
@@ -56,6 +60,7 @@ button#visitProject {
 div.projectInfo {
     padding: 0px 20px;
     color: white;
+
     h1 {
         font-size: 50px;
     }
@@ -64,4 +69,6 @@ div.projectInfo {
     }
 }
 
-
+footer {
+    height: 20%;
+}
