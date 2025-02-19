@@ -1,4 +1,6 @@
 <?php
+/* THIS IS AN EXAMPLE: IT DOES NOT REFLECT THE TRUE STRUCTURE OF THIS FILE
+FOR SECURITY REASONS */
 return [
     'public_user' => [
         'host' => 'localhost',
