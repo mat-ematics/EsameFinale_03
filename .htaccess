@@ -1,2 +1,3 @@
-# Accesso Negato alla Directory Config
+# Access Refused URLs
 RedirectMatch 403 ^/config/
+RedirectMatch 403 (?i)/backup_db\.sql$

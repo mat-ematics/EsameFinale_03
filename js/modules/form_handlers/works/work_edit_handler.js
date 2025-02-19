@@ -67,14 +67,14 @@ export default function initializeValidationWorkEdit(form) {
     selectWork.addEventListener("change", function() {
         const selectedOption = this.options[this.selectedIndex];
         const workCategory = selectedOption.dataset.categoryId || null;
-        console.log(workCategory);
+        // console.log(workCategory);
         selectCategory.value = workCategory;
     })
 
     const observer = new MutationObserver(() => {
         if (allowEnable) {
             const pushInputs = [...Array.from(inputs), selectCategory];
-            console.log(pushInputs);
+            // console.log(pushInputs);
             DOMUtils.updateButtonState(pushInputs, submitButton, false);
         }
     });

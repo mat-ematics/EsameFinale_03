@@ -282,7 +282,7 @@ export default class DOMUtils {
                 return result;
             });
 
-            console.log(allInputsEmpty)
+            // console.log(allInputsEmpty)
 
             hasErrors = hasInvalidInputs || allInputsEmpty;
         } 
