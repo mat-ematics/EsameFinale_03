@@ -146,6 +146,7 @@ button#down {
 div.works  {
     display: flex;
     flex-direction: row;
+    align-items: center;
     flex-wrap: wrap;
     padding: 0px 50px;
     justify-content: space-evenly;
@@ -221,6 +222,12 @@ div.cards {
     h1#logo {
         margin-top: 0;
     }
+}
+
+@media screen and (max-width: 620px) {
+    div.works {
+        flex-direction: column;
+    }   
 }
 
 @media screen and (max-width: 500px) {
